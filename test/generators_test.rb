@@ -33,6 +33,6 @@ class GeneratorsTest < Minitest::Test
 
   def test_types
     content = File.read(Vulkan.root.join('generated/types.rb'))
-    assert content[/typealias\s*['"]VkSampleMask['"],\s*['"]uint32_t['"]/]
+    assert content[/typealias\s*['"]VkSampleMask['"]\s*,\s*['"]uint32_t['"]/]
   end
 end

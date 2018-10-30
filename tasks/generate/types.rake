@@ -1,9 +1,4 @@
-NAME_PADDING = 55
-TYPE_PADDING = 23
-
-def pad_type(type_name)
-  type_name.rjust(TYPE_PADDING)
-end
+NAME_PADDING = 56
 
 def pad_name(name)
   name.ljust(NAME_PADDING)
@@ -39,7 +34,7 @@ end
 
 def generate_type_map(out)
   base_types.each do |name, type|
-    out.puts "  typealias '#{name}', '#{type}'"
+    out.puts "  typealias #{pad_name name.inspect}, '#{type}'"
   end
   @types = {}.tap do |processed_types|
     vk_xml.xpath('//types/type').each do |type|
@@ -57,12 +52,12 @@ def generate_type_map(out)
           raise "unknown base type: #{type.to_s.inspect} (#{btype.to_s.inspect})" unless base_types[btype]
           # btype = base_types[btype]
         end
-        out.puts "  typealias #{name.inspect}, #{base_types[btype].inspect}"
+        out.puts "  typealias #{pad_name name.inspect}, #{base_types[btype].inspect}"
         processed_types[name] = btype
       elsif type.attributes['category']&.value == 'handle'
         name = (type.xpath('name').first&.text) || (type.attributes['name']&.value)
         raise "type has no name: #{type.to_s.inspect}" unless name
-        out.puts "  typealias #{name.inspect}, 'void *'"
+        out.puts "  typealias #{pad_name name.inspect}, 'void *'"
         processed_types[name] = 'void *'
       elsif type.attributes['category']&.value == 'funcpointer'
         # we'll just treat function pointers as void pointers, shouldn't matter
@@ -70,13 +65,13 @@ def generate_type_map(out)
         # responsibility.
         name = (type.xpath('name').first&.text) || (type.attributes['name']&.value)
         raise "type has no name: #{type.to_s.inspect}" unless name
-        out.puts "  typealias #{name.inspect}, 'void *'"
+        out.puts "  typealias #{pad_name name.inspect}, 'void *'"
         processed_types[name] = 'void *'
       end
     end
   end
   @types.each do |name, alias_name_or_type|
-    out.puts "  typealias #{name.inspect}, #{alias_name_or_type.inspect}"
+    out.puts "  typealias #{pad_name name.inspect}, #{alias_name_or_type.inspect}"
   end
             
   # out.puts '    }'
