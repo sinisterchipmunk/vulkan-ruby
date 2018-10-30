@@ -1,0 +1,11 @@
+# vulkan-ruby 1.0.83.0
+#
+#   => https://github.com/sinisterchipmunk/vulkan-ruby
+#
+# [NOTICE] This is an automatically generated file.
+
+module Vulkan
+  VK_NV_FRAGMENT_COVERAGE_TO_COLOR_SPEC_VERSION = 1 unless defined?(VK_NV_FRAGMENT_COVERAGE_TO_COLOR_SPEC_VERSION)
+  VK_NV_FRAGMENT_COVERAGE_TO_COLOR_EXTENSION_NAME = "VK_NV_fragment_coverage_to_color" unless defined?(VK_NV_FRAGMENT_COVERAGE_TO_COLOR_EXTENSION_NAME)
+  VK_STRUCTURE_TYPE_PIPELINE_COVERAGE_TO_COLOR_STATE_CREATE_INFO_NV = 1000149000 unless defined?(VK_STRUCTURE_TYPE_PIPELINE_COVERAGE_TO_COLOR_STATE_CREATE_INFO_NV)
+end

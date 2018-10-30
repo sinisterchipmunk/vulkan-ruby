@@ -1,0 +1,12 @@
+# vulkan-ruby 1.0.83.0
+#
+#   => https://github.com/sinisterchipmunk/vulkan-ruby
+#
+# [NOTICE] This is an automatically generated file.
+
+module Vulkan
+  VK_EXT_GLOBAL_PRIORITY_SPEC_VERSION = 2 unless defined?(VK_EXT_GLOBAL_PRIORITY_SPEC_VERSION)
+  VK_EXT_GLOBAL_PRIORITY_EXTENSION_NAME = "VK_EXT_global_priority" unless defined?(VK_EXT_GLOBAL_PRIORITY_EXTENSION_NAME)
+  VK_STRUCTURE_TYPE_DEVICE_QUEUE_GLOBAL_PRIORITY_CREATE_INFO_EXT = 1000174000 unless defined?(VK_STRUCTURE_TYPE_DEVICE_QUEUE_GLOBAL_PRIORITY_CREATE_INFO_EXT)
+  VK_ERROR_NOT_PERMITTED_EXT = -1000174001 unless defined?(VK_ERROR_NOT_PERMITTED_EXT)
+end

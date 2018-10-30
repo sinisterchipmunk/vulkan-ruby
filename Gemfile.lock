@@ -1,0 +1,43 @@
+GIT
+  remote: https://github.com/sinisterchipmunk/fiddle
+  revision: d0ce3419868d13e495b4873b29189a122af79c97
+  branch: nested-structs
+  specs:
+    fiddle (1.0.0)
+
+GIT
+  remote: https://github.com/sinisterchipmunk/sdl2_vulkan
+  revision: 191a632d0e57d130526ce94071c0df0d2925e4e7
+  specs:
+    sdl2_vulkan (0.1.0)
+      ruby-sdl2 (~> 0.3)
+
+PATH
+  remote: .
+  specs:
+    vulkan-ruby (1.0.83.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    mini_portile2 (2.3.0)
+    minitest (5.11.3)
+    nokogiri (1.8.4)
+      mini_portile2 (~> 2.3.0)
+    rake (10.5.0)
+    ruby-sdl2 (0.3.4)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (~> 1.16)
+  fiddle!
+  minitest (~> 5.0)
+  nokogiri (~> 1.8)
+  rake (~> 10.0)
+  sdl2_vulkan!
+  vulkan-ruby!
+
+BUNDLED WITH
+   1.17.1

@@ -1,0 +1,11 @@
+# vulkan-ruby 1.0.83.0
+#
+#   => https://github.com/sinisterchipmunk/vulkan-ruby
+#
+# [NOTICE] This is an automatically generated file.
+
+module Vulkan
+  VK_NV_SHADER_IMAGE_FOOTPRINT_SPEC_VERSION = 1 unless defined?(VK_NV_SHADER_IMAGE_FOOTPRINT_SPEC_VERSION)
+  VK_NV_SHADER_IMAGE_FOOTPRINT_EXTENSION_NAME = "VK_NV_shader_image_footprint" unless defined?(VK_NV_SHADER_IMAGE_FOOTPRINT_EXTENSION_NAME)
+  VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_IMAGE_FOOTPRINT_FEATURES_NV = 1000204000 unless defined?(VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_IMAGE_FOOTPRINT_FEATURES_NV)
+end
