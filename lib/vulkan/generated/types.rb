@@ -9,167 +9,167 @@ module Vulkan
   typealias 'VkBool32', 'uint32_t'
   typealias 'VkFlags', 'uint32_t'
   typealias 'VkDeviceSize', 'uint64_t'
-  VkFramebufferCreateFlags                                =       -Fiddle::TYPE_INT
-  VkQueryPoolCreateFlags                                  =       -Fiddle::TYPE_INT
-  VkRenderPassCreateFlags                                 =       -Fiddle::TYPE_INT
-  VkSamplerCreateFlags                                    =       -Fiddle::TYPE_INT
-  VkPipelineLayoutCreateFlags                             =       -Fiddle::TYPE_INT
-  VkPipelineCacheCreateFlags                              =       -Fiddle::TYPE_INT
-  VkPipelineDepthStencilStateCreateFlags                  =       -Fiddle::TYPE_INT
-  VkPipelineDynamicStateCreateFlags                       =       -Fiddle::TYPE_INT
-  VkPipelineColorBlendStateCreateFlags                    =       -Fiddle::TYPE_INT
-  VkPipelineMultisampleStateCreateFlags                   =       -Fiddle::TYPE_INT
-  VkPipelineRasterizationStateCreateFlags                 =       -Fiddle::TYPE_INT
-  VkPipelineViewportStateCreateFlags                      =       -Fiddle::TYPE_INT
-  VkPipelineTessellationStateCreateFlags                  =       -Fiddle::TYPE_INT
-  VkPipelineInputAssemblyStateCreateFlags                 =       -Fiddle::TYPE_INT
-  VkPipelineVertexInputStateCreateFlags                   =       -Fiddle::TYPE_INT
-  VkPipelineShaderStageCreateFlags                        =       -Fiddle::TYPE_INT
-  VkDescriptorSetLayoutCreateFlags                        =       -Fiddle::TYPE_INT
-  VkBufferViewCreateFlags                                 =       -Fiddle::TYPE_INT
-  VkInstanceCreateFlags                                   =       -Fiddle::TYPE_INT
-  VkDeviceCreateFlags                                     =       -Fiddle::TYPE_INT
-  VkDeviceQueueCreateFlags                                =       -Fiddle::TYPE_INT
-  VkQueueFlags                                            =       -Fiddle::TYPE_INT
-  VkMemoryPropertyFlags                                   =       -Fiddle::TYPE_INT
-  VkMemoryHeapFlags                                       =       -Fiddle::TYPE_INT
-  VkAccessFlags                                           =       -Fiddle::TYPE_INT
-  VkBufferUsageFlags                                      =       -Fiddle::TYPE_INT
-  VkBufferCreateFlags                                     =       -Fiddle::TYPE_INT
-  VkShaderStageFlags                                      =       -Fiddle::TYPE_INT
-  VkImageUsageFlags                                       =       -Fiddle::TYPE_INT
-  VkImageCreateFlags                                      =       -Fiddle::TYPE_INT
-  VkImageViewCreateFlags                                  =       -Fiddle::TYPE_INT
-  VkPipelineCreateFlags                                   =       -Fiddle::TYPE_INT
-  VkColorComponentFlags                                   =       -Fiddle::TYPE_INT
-  VkFenceCreateFlags                                      =       -Fiddle::TYPE_INT
-  VkSemaphoreCreateFlags                                  =       -Fiddle::TYPE_INT
-  VkFormatFeatureFlags                                    =       -Fiddle::TYPE_INT
-  VkQueryControlFlags                                     =       -Fiddle::TYPE_INT
-  VkQueryResultFlags                                      =       -Fiddle::TYPE_INT
-  VkShaderModuleCreateFlags                               =       -Fiddle::TYPE_INT
-  VkEventCreateFlags                                      =       -Fiddle::TYPE_INT
-  VkCommandPoolCreateFlags                                =       -Fiddle::TYPE_INT
-  VkCommandPoolResetFlags                                 =       -Fiddle::TYPE_INT
-  VkCommandBufferResetFlags                               =       -Fiddle::TYPE_INT
-  VkCommandBufferUsageFlags                               =       -Fiddle::TYPE_INT
-  VkQueryPipelineStatisticFlags                           =       -Fiddle::TYPE_INT
-  VkMemoryMapFlags                                        =       -Fiddle::TYPE_INT
-  VkImageAspectFlags                                      =       -Fiddle::TYPE_INT
-  VkSparseMemoryBindFlags                                 =       -Fiddle::TYPE_INT
-  VkSparseImageFormatFlags                                =       -Fiddle::TYPE_INT
-  VkSubpassDescriptionFlags                               =       -Fiddle::TYPE_INT
-  VkPipelineStageFlags                                    =       -Fiddle::TYPE_INT
-  VkSampleCountFlags                                      =       -Fiddle::TYPE_INT
-  VkAttachmentDescriptionFlags                            =       -Fiddle::TYPE_INT
-  VkStencilFaceFlags                                      =       -Fiddle::TYPE_INT
-  VkCullModeFlags                                         =       -Fiddle::TYPE_INT
-  VkDescriptorPoolCreateFlags                             =       -Fiddle::TYPE_INT
-  VkDescriptorPoolResetFlags                              =       -Fiddle::TYPE_INT
-  VkDependencyFlags                                       =       -Fiddle::TYPE_INT
-  VkSubgroupFeatureFlags                                  =       -Fiddle::TYPE_INT
-  VkIndirectCommandsLayoutUsageFlagsNVX                   =       -Fiddle::TYPE_INT
-  VkObjectEntryUsageFlagsNVX                              =       -Fiddle::TYPE_INT
-  VkGeometryFlagsNVX                                      =       -Fiddle::TYPE_INT
-  VkGeometryInstanceFlagsNVX                              =       -Fiddle::TYPE_INT
-  VkBuildAccelerationStructureFlagsNVX                    =       -Fiddle::TYPE_INT
-  VkDescriptorUpdateTemplateCreateFlags                   =       -Fiddle::TYPE_INT
-  VkDescriptorUpdateTemplateCreateFlagsKHR                =       -Fiddle::TYPE_INT
-  VkCompositeAlphaFlagsKHR                                =       -Fiddle::TYPE_INT
-  VkDisplayPlaneAlphaFlagsKHR                             =       -Fiddle::TYPE_INT
-  VkSurfaceTransformFlagsKHR                              =       -Fiddle::TYPE_INT
-  VkSwapchainCreateFlagsKHR                               =       -Fiddle::TYPE_INT
-  VkDisplayModeCreateFlagsKHR                             =       -Fiddle::TYPE_INT
-  VkDisplaySurfaceCreateFlagsKHR                          =       -Fiddle::TYPE_INT
-  VkAndroidSurfaceCreateFlagsKHR                          =       -Fiddle::TYPE_INT
-  VkMirSurfaceCreateFlagsKHR                              =       -Fiddle::TYPE_INT
-  VkViSurfaceCreateFlagsNN                                =       -Fiddle::TYPE_INT
-  VkWaylandSurfaceCreateFlagsKHR                          =       -Fiddle::TYPE_INT
-  VkWin32SurfaceCreateFlagsKHR                            =       -Fiddle::TYPE_INT
-  VkXlibSurfaceCreateFlagsKHR                             =       -Fiddle::TYPE_INT
-  VkXcbSurfaceCreateFlagsKHR                              =       -Fiddle::TYPE_INT
-  VkIOSSurfaceCreateFlagsMVK                              =       -Fiddle::TYPE_INT
-  VkMacOSSurfaceCreateFlagsMVK                            =       -Fiddle::TYPE_INT
-  VkImagePipeSurfaceCreateFlagsFUCHSIA                    =       -Fiddle::TYPE_INT
-  VkPeerMemoryFeatureFlags                                =       -Fiddle::TYPE_INT
-  VkPeerMemoryFeatureFlagsKHR                             =       -Fiddle::TYPE_INT
-  VkMemoryAllocateFlags                                   =       -Fiddle::TYPE_INT
-  VkMemoryAllocateFlagsKHR                                =       -Fiddle::TYPE_INT
-  VkDeviceGroupPresentModeFlagsKHR                        =       -Fiddle::TYPE_INT
-  VkDebugReportFlagsEXT                                   =       -Fiddle::TYPE_INT
-  VkCommandPoolTrimFlags                                  =       -Fiddle::TYPE_INT
-  VkCommandPoolTrimFlagsKHR                               =       -Fiddle::TYPE_INT
-  VkExternalMemoryHandleTypeFlagsNV                       =       -Fiddle::TYPE_INT
-  VkExternalMemoryFeatureFlagsNV                          =       -Fiddle::TYPE_INT
-  VkExternalMemoryHandleTypeFlags                         =       -Fiddle::TYPE_INT
-  VkExternalMemoryHandleTypeFlagsKHR                      =       -Fiddle::TYPE_INT
-  VkExternalMemoryFeatureFlags                            =       -Fiddle::TYPE_INT
-  VkExternalMemoryFeatureFlagsKHR                         =       -Fiddle::TYPE_INT
-  VkExternalSemaphoreHandleTypeFlags                      =       -Fiddle::TYPE_INT
-  VkExternalSemaphoreHandleTypeFlagsKHR                   =       -Fiddle::TYPE_INT
-  VkExternalSemaphoreFeatureFlags                         =       -Fiddle::TYPE_INT
-  VkExternalSemaphoreFeatureFlagsKHR                      =       -Fiddle::TYPE_INT
-  VkSemaphoreImportFlags                                  =       -Fiddle::TYPE_INT
-  VkSemaphoreImportFlagsKHR                               =       -Fiddle::TYPE_INT
-  VkExternalFenceHandleTypeFlags                          =       -Fiddle::TYPE_INT
-  VkExternalFenceHandleTypeFlagsKHR                       =       -Fiddle::TYPE_INT
-  VkExternalFenceFeatureFlags                             =       -Fiddle::TYPE_INT
-  VkExternalFenceFeatureFlagsKHR                          =       -Fiddle::TYPE_INT
-  VkFenceImportFlags                                      =       -Fiddle::TYPE_INT
-  VkFenceImportFlagsKHR                                   =       -Fiddle::TYPE_INT
-  VkSurfaceCounterFlagsEXT                                =       -Fiddle::TYPE_INT
-  VkPipelineViewportSwizzleStateCreateFlagsNV             =       -Fiddle::TYPE_INT
-  VkPipelineDiscardRectangleStateCreateFlagsEXT           =       -Fiddle::TYPE_INT
-  VkPipelineCoverageToColorStateCreateFlagsNV             =       -Fiddle::TYPE_INT
-  VkPipelineCoverageModulationStateCreateFlagsNV          =       -Fiddle::TYPE_INT
-  VkValidationCacheCreateFlagsEXT                         =       -Fiddle::TYPE_INT
-  VkDebugUtilsMessageSeverityFlagsEXT                     =       -Fiddle::TYPE_INT
-  VkDebugUtilsMessageTypeFlagsEXT                         =       -Fiddle::TYPE_INT
-  VkDebugUtilsMessengerCreateFlagsEXT                     =       -Fiddle::TYPE_INT
-  VkDebugUtilsMessengerCallbackDataFlagsEXT               =       -Fiddle::TYPE_INT
-  VkPipelineRasterizationConservativeStateCreateFlagsEXT  =       -Fiddle::TYPE_INT
-  VkDescriptorBindingFlagsEXT                             =       -Fiddle::TYPE_INT
-  VkConditionalRenderingFlagsEXT                          =       -Fiddle::TYPE_INT
-  VkPipelineRasterizationStateStreamCreateFlagsEXT        =       -Fiddle::TYPE_INT
-  VkInstance                                              =      Fiddle::TYPE_VOIDP
-  VkPhysicalDevice                                        =      Fiddle::TYPE_VOIDP
-  VkDevice                                                =      Fiddle::TYPE_VOIDP
-  VkQueue                                                 =      Fiddle::TYPE_VOIDP
-  VkCommandBuffer                                         =      Fiddle::TYPE_VOIDP
-  VkDeviceMemory                                          =      Fiddle::TYPE_VOIDP
-  VkCommandPool                                           =      Fiddle::TYPE_VOIDP
-  VkBuffer                                                =      Fiddle::TYPE_VOIDP
-  VkBufferView                                            =      Fiddle::TYPE_VOIDP
-  VkImage                                                 =      Fiddle::TYPE_VOIDP
-  VkImageView                                             =      Fiddle::TYPE_VOIDP
-  VkShaderModule                                          =      Fiddle::TYPE_VOIDP
-  VkPipeline                                              =      Fiddle::TYPE_VOIDP
-  VkPipelineLayout                                        =      Fiddle::TYPE_VOIDP
-  VkSampler                                               =      Fiddle::TYPE_VOIDP
-  VkDescriptorSet                                         =      Fiddle::TYPE_VOIDP
-  VkDescriptorSetLayout                                   =      Fiddle::TYPE_VOIDP
-  VkDescriptorPool                                        =      Fiddle::TYPE_VOIDP
-  VkFence                                                 =      Fiddle::TYPE_VOIDP
-  VkSemaphore                                             =      Fiddle::TYPE_VOIDP
-  VkEvent                                                 =      Fiddle::TYPE_VOIDP
-  VkQueryPool                                             =      Fiddle::TYPE_VOIDP
-  VkFramebuffer                                           =      Fiddle::TYPE_VOIDP
-  VkRenderPass                                            =      Fiddle::TYPE_VOIDP
-  VkPipelineCache                                         =      Fiddle::TYPE_VOIDP
-  VkObjectTableNVX                                        =      Fiddle::TYPE_VOIDP
-  VkIndirectCommandsLayoutNVX                             =      Fiddle::TYPE_VOIDP
-  VkDescriptorUpdateTemplate                              =      Fiddle::TYPE_VOIDP
-  VkDescriptorUpdateTemplateKHR                           =      Fiddle::TYPE_VOIDP
-  VkSamplerYcbcrConversion                                =      Fiddle::TYPE_VOIDP
-  VkSamplerYcbcrConversionKHR                             =      Fiddle::TYPE_VOIDP
-  VkValidationCacheEXT                                    =      Fiddle::TYPE_VOIDP
-  VkAccelerationStructureNVX                              =      Fiddle::TYPE_VOIDP
-  VkDisplayKHR                                            =      Fiddle::TYPE_VOIDP
-  VkDisplayModeKHR                                        =      Fiddle::TYPE_VOIDP
-  VkSurfaceKHR                                            =      Fiddle::TYPE_VOIDP
-  VkSwapchainKHR                                          =      Fiddle::TYPE_VOIDP
-  VkDebugReportCallbackEXT                                =      Fiddle::TYPE_VOIDP
-  VkDebugUtilsMessengerEXT                                =      Fiddle::TYPE_VOIDP
+  typealias "VkFramebufferCreateFlags", "uint32_t"
+  typealias "VkQueryPoolCreateFlags", "uint32_t"
+  typealias "VkRenderPassCreateFlags", "uint32_t"
+  typealias "VkSamplerCreateFlags", "uint32_t"
+  typealias "VkPipelineLayoutCreateFlags", "uint32_t"
+  typealias "VkPipelineCacheCreateFlags", "uint32_t"
+  typealias "VkPipelineDepthStencilStateCreateFlags", "uint32_t"
+  typealias "VkPipelineDynamicStateCreateFlags", "uint32_t"
+  typealias "VkPipelineColorBlendStateCreateFlags", "uint32_t"
+  typealias "VkPipelineMultisampleStateCreateFlags", "uint32_t"
+  typealias "VkPipelineRasterizationStateCreateFlags", "uint32_t"
+  typealias "VkPipelineViewportStateCreateFlags", "uint32_t"
+  typealias "VkPipelineTessellationStateCreateFlags", "uint32_t"
+  typealias "VkPipelineInputAssemblyStateCreateFlags", "uint32_t"
+  typealias "VkPipelineVertexInputStateCreateFlags", "uint32_t"
+  typealias "VkPipelineShaderStageCreateFlags", "uint32_t"
+  typealias "VkDescriptorSetLayoutCreateFlags", "uint32_t"
+  typealias "VkBufferViewCreateFlags", "uint32_t"
+  typealias "VkInstanceCreateFlags", "uint32_t"
+  typealias "VkDeviceCreateFlags", "uint32_t"
+  typealias "VkDeviceQueueCreateFlags", "uint32_t"
+  typealias "VkQueueFlags", "uint32_t"
+  typealias "VkMemoryPropertyFlags", "uint32_t"
+  typealias "VkMemoryHeapFlags", "uint32_t"
+  typealias "VkAccessFlags", "uint32_t"
+  typealias "VkBufferUsageFlags", "uint32_t"
+  typealias "VkBufferCreateFlags", "uint32_t"
+  typealias "VkShaderStageFlags", "uint32_t"
+  typealias "VkImageUsageFlags", "uint32_t"
+  typealias "VkImageCreateFlags", "uint32_t"
+  typealias "VkImageViewCreateFlags", "uint32_t"
+  typealias "VkPipelineCreateFlags", "uint32_t"
+  typealias "VkColorComponentFlags", "uint32_t"
+  typealias "VkFenceCreateFlags", "uint32_t"
+  typealias "VkSemaphoreCreateFlags", "uint32_t"
+  typealias "VkFormatFeatureFlags", "uint32_t"
+  typealias "VkQueryControlFlags", "uint32_t"
+  typealias "VkQueryResultFlags", "uint32_t"
+  typealias "VkShaderModuleCreateFlags", "uint32_t"
+  typealias "VkEventCreateFlags", "uint32_t"
+  typealias "VkCommandPoolCreateFlags", "uint32_t"
+  typealias "VkCommandPoolResetFlags", "uint32_t"
+  typealias "VkCommandBufferResetFlags", "uint32_t"
+  typealias "VkCommandBufferUsageFlags", "uint32_t"
+  typealias "VkQueryPipelineStatisticFlags", "uint32_t"
+  typealias "VkMemoryMapFlags", "uint32_t"
+  typealias "VkImageAspectFlags", "uint32_t"
+  typealias "VkSparseMemoryBindFlags", "uint32_t"
+  typealias "VkSparseImageFormatFlags", "uint32_t"
+  typealias "VkSubpassDescriptionFlags", "uint32_t"
+  typealias "VkPipelineStageFlags", "uint32_t"
+  typealias "VkSampleCountFlags", "uint32_t"
+  typealias "VkAttachmentDescriptionFlags", "uint32_t"
+  typealias "VkStencilFaceFlags", "uint32_t"
+  typealias "VkCullModeFlags", "uint32_t"
+  typealias "VkDescriptorPoolCreateFlags", "uint32_t"
+  typealias "VkDescriptorPoolResetFlags", "uint32_t"
+  typealias "VkDependencyFlags", "uint32_t"
+  typealias "VkSubgroupFeatureFlags", "uint32_t"
+  typealias "VkIndirectCommandsLayoutUsageFlagsNVX", "uint32_t"
+  typealias "VkObjectEntryUsageFlagsNVX", "uint32_t"
+  typealias "VkGeometryFlagsNVX", "uint32_t"
+  typealias "VkGeometryInstanceFlagsNVX", "uint32_t"
+  typealias "VkBuildAccelerationStructureFlagsNVX", "uint32_t"
+  typealias "VkDescriptorUpdateTemplateCreateFlags", "uint32_t"
+  typealias "VkDescriptorUpdateTemplateCreateFlagsKHR", "uint32_t"
+  typealias "VkCompositeAlphaFlagsKHR", "uint32_t"
+  typealias "VkDisplayPlaneAlphaFlagsKHR", "uint32_t"
+  typealias "VkSurfaceTransformFlagsKHR", "uint32_t"
+  typealias "VkSwapchainCreateFlagsKHR", "uint32_t"
+  typealias "VkDisplayModeCreateFlagsKHR", "uint32_t"
+  typealias "VkDisplaySurfaceCreateFlagsKHR", "uint32_t"
+  typealias "VkAndroidSurfaceCreateFlagsKHR", "uint32_t"
+  typealias "VkMirSurfaceCreateFlagsKHR", "uint32_t"
+  typealias "VkViSurfaceCreateFlagsNN", "uint32_t"
+  typealias "VkWaylandSurfaceCreateFlagsKHR", "uint32_t"
+  typealias "VkWin32SurfaceCreateFlagsKHR", "uint32_t"
+  typealias "VkXlibSurfaceCreateFlagsKHR", "uint32_t"
+  typealias "VkXcbSurfaceCreateFlagsKHR", "uint32_t"
+  typealias "VkIOSSurfaceCreateFlagsMVK", "uint32_t"
+  typealias "VkMacOSSurfaceCreateFlagsMVK", "uint32_t"
+  typealias "VkImagePipeSurfaceCreateFlagsFUCHSIA", "uint32_t"
+  typealias "VkPeerMemoryFeatureFlags", "uint32_t"
+  typealias "VkPeerMemoryFeatureFlagsKHR", "uint32_t"
+  typealias "VkMemoryAllocateFlags", "uint32_t"
+  typealias "VkMemoryAllocateFlagsKHR", "uint32_t"
+  typealias "VkDeviceGroupPresentModeFlagsKHR", "uint32_t"
+  typealias "VkDebugReportFlagsEXT", "uint32_t"
+  typealias "VkCommandPoolTrimFlags", "uint32_t"
+  typealias "VkCommandPoolTrimFlagsKHR", "uint32_t"
+  typealias "VkExternalMemoryHandleTypeFlagsNV", "uint32_t"
+  typealias "VkExternalMemoryFeatureFlagsNV", "uint32_t"
+  typealias "VkExternalMemoryHandleTypeFlags", "uint32_t"
+  typealias "VkExternalMemoryHandleTypeFlagsKHR", "uint32_t"
+  typealias "VkExternalMemoryFeatureFlags", "uint32_t"
+  typealias "VkExternalMemoryFeatureFlagsKHR", "uint32_t"
+  typealias "VkExternalSemaphoreHandleTypeFlags", "uint32_t"
+  typealias "VkExternalSemaphoreHandleTypeFlagsKHR", "uint32_t"
+  typealias "VkExternalSemaphoreFeatureFlags", "uint32_t"
+  typealias "VkExternalSemaphoreFeatureFlagsKHR", "uint32_t"
+  typealias "VkSemaphoreImportFlags", "uint32_t"
+  typealias "VkSemaphoreImportFlagsKHR", "uint32_t"
+  typealias "VkExternalFenceHandleTypeFlags", "uint32_t"
+  typealias "VkExternalFenceHandleTypeFlagsKHR", "uint32_t"
+  typealias "VkExternalFenceFeatureFlags", "uint32_t"
+  typealias "VkExternalFenceFeatureFlagsKHR", "uint32_t"
+  typealias "VkFenceImportFlags", "uint32_t"
+  typealias "VkFenceImportFlagsKHR", "uint32_t"
+  typealias "VkSurfaceCounterFlagsEXT", "uint32_t"
+  typealias "VkPipelineViewportSwizzleStateCreateFlagsNV", "uint32_t"
+  typealias "VkPipelineDiscardRectangleStateCreateFlagsEXT", "uint32_t"
+  typealias "VkPipelineCoverageToColorStateCreateFlagsNV", "uint32_t"
+  typealias "VkPipelineCoverageModulationStateCreateFlagsNV", "uint32_t"
+  typealias "VkValidationCacheCreateFlagsEXT", "uint32_t"
+  typealias "VkDebugUtilsMessageSeverityFlagsEXT", "uint32_t"
+  typealias "VkDebugUtilsMessageTypeFlagsEXT", "uint32_t"
+  typealias "VkDebugUtilsMessengerCreateFlagsEXT", "uint32_t"
+  typealias "VkDebugUtilsMessengerCallbackDataFlagsEXT", "uint32_t"
+  typealias "VkPipelineRasterizationConservativeStateCreateFlagsEXT", "uint32_t"
+  typealias "VkDescriptorBindingFlagsEXT", "uint32_t"
+  typealias "VkConditionalRenderingFlagsEXT", "uint32_t"
+  typealias "VkPipelineRasterizationStateStreamCreateFlagsEXT", "uint32_t"
+  typealias "VkInstance", 'void *'
+  typealias "VkPhysicalDevice", 'void *'
+  typealias "VkDevice", 'void *'
+  typealias "VkQueue", 'void *'
+  typealias "VkCommandBuffer", 'void *'
+  typealias "VkDeviceMemory", 'void *'
+  typealias "VkCommandPool", 'void *'
+  typealias "VkBuffer", 'void *'
+  typealias "VkBufferView", 'void *'
+  typealias "VkImage", 'void *'
+  typealias "VkImageView", 'void *'
+  typealias "VkShaderModule", 'void *'
+  typealias "VkPipeline", 'void *'
+  typealias "VkPipelineLayout", 'void *'
+  typealias "VkSampler", 'void *'
+  typealias "VkDescriptorSet", 'void *'
+  typealias "VkDescriptorSetLayout", 'void *'
+  typealias "VkDescriptorPool", 'void *'
+  typealias "VkFence", 'void *'
+  typealias "VkSemaphore", 'void *'
+  typealias "VkEvent", 'void *'
+  typealias "VkQueryPool", 'void *'
+  typealias "VkFramebuffer", 'void *'
+  typealias "VkRenderPass", 'void *'
+  typealias "VkPipelineCache", 'void *'
+  typealias "VkObjectTableNVX", 'void *'
+  typealias "VkIndirectCommandsLayoutNVX", 'void *'
+  typealias "VkDescriptorUpdateTemplate", 'void *'
+  typealias "VkDescriptorUpdateTemplateKHR", 'void *'
+  typealias "VkSamplerYcbcrConversion", 'void *'
+  typealias "VkSamplerYcbcrConversionKHR", 'void *'
+  typealias "VkValidationCacheEXT", 'void *'
+  typealias "VkAccelerationStructureNVX", 'void *'
+  typealias "VkDisplayKHR", 'void *'
+  typealias "VkDisplayModeKHR", 'void *'
+  typealias "VkSurfaceKHR", 'void *'
+  typealias "VkSwapchainKHR", 'void *'
+  typealias "VkDebugReportCallbackEXT", 'void *'
+  typealias "VkDebugUtilsMessengerEXT", 'void *'
   typealias "PFN_vkInternalAllocationNotification", 'void *'
   typealias "PFN_vkInternalFreeNotification", 'void *'
   typealias "PFN_vkReallocationFunction", 'void *'

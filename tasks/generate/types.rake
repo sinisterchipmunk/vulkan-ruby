@@ -57,12 +57,12 @@ def generate_type_map(out)
           raise "unknown base type: #{type.to_s.inspect} (#{btype.to_s.inspect})" unless base_types[btype]
           # btype = base_types[btype]
         end
-        out.puts "  #{pad_name name} = #{pad_type platform_type_map[base_types[btype]]}"
+        out.puts "  typealias #{name.inspect}, #{base_types[btype].inspect}"
         processed_types[name] = btype
       elsif type.attributes['category']&.value == 'handle'
         name = (type.xpath('name').first&.text) || (type.attributes['name']&.value)
         raise "type has no name: #{type.to_s.inspect}" unless name
-        out.puts "  #{pad_name name} = #{pad_type platform_type_map['void *']}"
+        out.puts "  typealias #{name.inspect}, 'void *'"
         processed_types[name] = 'void *'
       elsif type.attributes['category']&.value == 'funcpointer'
         # we'll just treat function pointers as void pointers, shouldn't matter
