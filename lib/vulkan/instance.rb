@@ -29,18 +29,28 @@ module Vulkan
           container.properties.map { |prop| struct_to_hash(prop) }
         end
       end
+
+      def extension_names
+        extensions.map { |ext| ext[:extension_name] }
+      end
+
+      def layer_names
+        layers.map { |layer| layer[:layer_name] }
+      end
     end
 
     def initialize(application_name: $0,         application_version: '1.0.0',
                    engine_name: 'vulkan-ruby',   engine_version: Vulkan::VERSION,
                    api_version: Vulkan::VERSION, extensions: ,
-                   layers: ENV['DEBUG'] ? [] : self.class.layers)
+                   layers: [])
+      extensions << 'VK_EXT_debug_utils' if ENV['DEBUG'] && self.class.extension_names.include?('VK_EXT_debug_utils')
       extensions_p = Vulkan.struct("names[#{extensions.size}]" => ['char *name']).malloc
       extensions.each_with_index do |ext, i|
         extname = ext.kind_of?(String) ? ext : ext[:extension_name]
         extensions_p.names[i].name = Fiddle::Pointer[extname.b + "\x00"]
       end
 
+      layers << 'VK_LAYER_LUNARG_standard_validation' if ENV['DEBUG'] && self.class.layer_names.include?('VK_LAYER_LUNARG_standard_validation')
       layers_p = Vulkan.struct("names[#{layers.size}]" => ['char *name']).malloc
       layers.each_with_index do |layer, i|
         layer_name = layer.kind_of?(String) ? layer : layer[:layer_name]
@@ -71,6 +81,36 @@ module Vulkan
       @handle = instance_wrapper.value
       @vk = Vulkan[self, nil]
       finalize_with @vk, :vkDestroyInstance, @handle, nil
+
+      hook_debug_callback if extensions.include?('VK_EXT_debug_utils')
+    end
+
+    def hook_debug_callback
+      name, return_type, param_types = Vulkan.parse_signature('VkBool32 debug_callback(int   messageSeverity,' +
+                                                                                      'int   messageType,' +
+                                                                                      'void *pCallbackData,' +
+                                                                                      'void *pUserData)')
+      @debug_callback = Fiddle::Closure::BlockCaller.new(return_type, param_types) do |msg_severity, msg_type, cb_data_addr, user_arg_addr|
+        data     = VkDebugUtilsMessengerCallbackDataEXT.new(cb_data_addr)
+        type     = const_to_symbol(msg_type,     /^VK_DEBUG_UTILS_MESSAGE_TYPE_(.*?)_BIT_EXT$/)
+        severity = const_to_symbol(msg_severity, /^VK_DEBUG_UTILS_MESSAGE_SEVERITY_(.*?)_BIT_EXT$/)
+        puts [type, severity, data.pMessage].join("\t")
+      end
+
+      create_info = VkDebugUtilsMessengerCreateInfoEXT.malloc
+      create_info.sType           = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT
+      create_info.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
+                                    VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
+                                    VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT
+      create_info.messageType     = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT    |
+                                    VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
+                                    VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT
+      create_info.pUserData       = nil
+      create_info.pfnUserCallback = @debug_callback
+
+      callback_p = Vulkan.create_value('void *', nil)
+      check_result @vk.vkCreateDebugUtilsMessengerEXT(to_ptr, create_info, nil, callback_p)
+      finalize_with @vk, :vkDestroyDebugUtilsMessengerEXT, to_ptr, callback_p.value, nil
     end
 
     def create_window_surface(window)

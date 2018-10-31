@@ -34,5 +34,9 @@ module Vulkan
     def root
       Pathname.new(__dir__).join('vulkan')
     end
+
+    def parse_signature(sig)
+      super(sig, @type_alias)
+    end
   end
 end
