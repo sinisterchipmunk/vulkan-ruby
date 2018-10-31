@@ -1,15 +1,11 @@
-require 'fiddle'
-require 'fiddle/import'
-require 'rbconfig'
-
 module Vulkan
-  extend Fiddle::Importer
-  dlload case RbConfig::CONFIG['host_os']
-         when /mswin|msys|mingw|cygwin|bccwin|wince|emc/ then 'vulkan-1.dll'
-         when /darwin|mac os/                            then 'libMoltenVK.dylib'
-         when /linux/, /solaris|bsd/                     then 'libvulkan.so.1'
-         else raise 'could not determine vulkan library to load for this OS'
+  dlload case os
+         when :windows then 'vulkan-1.dll'
+         when :osx     then 'libMoltenVK.dylib'
+         when :linux   then 'libvulkan.so.1'
+         else raise "could not determine vulkan library to load for this OS (#{os.inspect})"
          end
+
   typealias 'int8_t',   'char'
   typealias 'int16_t',  'short'
   typealias 'int32_t',  'int'
@@ -84,7 +80,7 @@ module Vulkan
   require_relative 'generated/enums'
   require_relative 'generated/structs'
 
-  extern "PFN_vkVoidFunction vkGetInstanceProcAddr(VkInstance instance, const char* pName)"
+  extern "PFN_vkVoidFunction vkGetInstanceProcAddr(VkInstance instance, const char* pName)", :stdcall
   require_relative 'generated/commands'
   require_relative 'generated/extensions'
 end

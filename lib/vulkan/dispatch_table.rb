@@ -1,5 +1,9 @@
+require 'vulkan/platform'
+
 module Vulkan
   class DispatchTable
+    include Vulkan::Platform
+
     attr_reader :instance, :device
     
     def initialize(instance, device)
@@ -13,18 +17,19 @@ module Vulkan
       super || Vulkan.function_registry.key?(method_name)
     end
 
-    def call_trace(name, *params)
+    def call_trace(name, calling_convention, *params)
       if ENV['CALL_TRACE']
         args_s = params.map do |arg|
           arg = arg.to_ptr if arg.respond_to?(:to_ptr)
           arg.kind_of?(Fiddle::Pointer) ? arg.to_i.to_s(16) : arg.inspect
         end
-        puts "CALL: #{@instance.to_i.to_s(16)}/#{@device.to_i.to_s(16)}/#{name}(#{args_s.join(', ')})"
+        suffix = " as #{calling_convention}" if calling_convention != :default
+        puts "CALL: #{@instance.to_i.to_s(16)}/#{@device.to_i.to_s(16)}/#{name}(#{args_s.join(', ')})#{suffix}"
       end
     end
 
     def vkGetInstanceProcAddr(*args)
-      call_trace(:vkGetInstanceProcAddr, *args)
+      call_trace(:vkGetInstanceProcAddr, calling_convention_human, *args)
       Vulkan.vkGetInstanceProcAddr(*args)
     end
 
@@ -47,9 +52,9 @@ module Vulkan
       end
 
       super if addr.to_i == 0 # method not found
-      func = Fiddle::Function.new(addr, function_info[:params_types], function_info[:return_type])
+      func = Fiddle::Function.new(addr, function_info[:params_types], function_info[:return_type], calling_convention, name: name)
       define_singleton_method(name) do |*params|
-        call_trace(name, *params)
+        call_trace(name, calling_convention_human, *params)
         func.call(*params)
       end
       send(name, *args)
