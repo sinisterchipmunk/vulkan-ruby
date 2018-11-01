@@ -1,6 +1,14 @@
 require "test_helper"
 
 class GeneratorsTest < Minitest::Test
+  def test_uint32_pointer_in_swapchain_create_info_struct
+    content = File.read(Vulkan.root.join('generated/structs.rb'))
+    content[/VkSwapchainCreateInfoKHR\s*=\s*struct\s*\[(.*?)\]/m]
+    struct_content = $1
+    refute_nil struct_content
+    assert_match /uint32_t\s*\*\s*pQueueFamilyIndices/, struct_content
+  end
+
   def test_extensions_discovered
     assert File.exist?(Vulkan.root.join('generated/extensions/vk_nvx_raytracing.rb'))
 

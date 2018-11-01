@@ -31,9 +31,9 @@ namespace :generate do
                 members = struct.xpath('member').map do |m|
                   type = m.xpath('type').text.to_s.strip
                   is_pointer = m.to_s[/<\/type>\s*\*/]
-                  type = 'void' if is_pointer
+                  # type = 'void' if is_pointer
                   array = m.text[/\[[0-9+]\]$/]
-                  if processed[type]
+                  if processed[type] && !is_pointer
                     nested_name = m.xpath('name').text.to_s.strip
                     { nested_name => type }
                   else
