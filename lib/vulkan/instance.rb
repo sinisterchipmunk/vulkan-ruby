@@ -56,7 +56,6 @@ module Vulkan
         extension_names = self.class.extension_names
         %w(
           VK_EXT_debug_utils
-          VK_EXT_debug_report
         ).each { |ext_name| extensions << ext_name if extension_names.include?(ext_name) }
 
         layer_names = self.class.layer_names
