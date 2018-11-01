@@ -30,7 +30,7 @@ module Vulkan
 
       create_info = VkSwapchainCreateInfoKHR.malloc
       create_info.sType                 = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR
-      create_info.surface               = p(surface.to_ptr)
+      create_info.surface               = surface.to_ptr
       create_info.minImageCount         = builder.image_count
       create_info.imageFormat           = format[:format]
       create_info.imageColorSpace       = format[:color_space]
