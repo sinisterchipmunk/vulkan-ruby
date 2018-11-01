@@ -24,13 +24,10 @@ module Vulkan
         family_index = queue_family_to_index(queue_info[:family])
         priorities   = queue_info[:priorities]   || raise(ArgumentError, 'queue :priorities (array of floats) is required')
 
-        if priorities.size == 0
-          queue_priorities_p = nil
-        else
-          queue_priorities_p = Fiddle::Pointer.malloc(Fiddle::SIZEOF_FLOAT * priorities.size)
-          priorities.each_with_index do |priority, i|
-            queue_priorities_p[i * Fiddle::SIZEOF_FLOAT, Fiddle::SIZEOF_FLOAT] = [priority].pack(Fiddle::PackInfo::PACK_MAP[Fiddle::TYPE_FLOAT])
-          end
+        priorities = [1.0] if priorities.size == 0
+        queue_priorities_p = Fiddle::Pointer.malloc(Fiddle::SIZEOF_FLOAT * priorities.size)
+        priorities.each_with_index do |priority, i|
+          queue_priorities_p[i * Fiddle::SIZEOF_FLOAT, Fiddle::SIZEOF_FLOAT] = [priority].pack(Fiddle::PackInfo::PACK_MAP[Fiddle::TYPE_FLOAT])
         end
 
         device_queue_info = VkDeviceQueueCreateInfo.malloc
