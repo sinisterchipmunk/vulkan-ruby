@@ -7,7 +7,7 @@ module Vulkan
   # Vulkan instance.
   class WindowSurface < Surface
     def initialize(instance, window)
-      super(instance, Fiddle::Pointer.new(window.vk_create_surface(instance.to_ptr.to_i)))
+      super(instance, window.vk_create_surface(instance.to_ptr.to_i))
     end
   end
 end

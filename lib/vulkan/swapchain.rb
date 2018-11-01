@@ -28,17 +28,14 @@ module Vulkan
       @format = format[:format]
       @color_space = format[:color_space]
 
-      extent = VkExtent2D.malloc
-      extent.width  = @extent[:width]
-      extent.height = @extent[:height]
-
       create_info = VkSwapchainCreateInfoKHR.malloc
       create_info.sType                 = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR
-      create_info.surface               = surface.to_ptr
+      create_info.surface               = p(surface.to_ptr)
       create_info.minImageCount         = builder.image_count
       create_info.imageFormat           = format[:format]
       create_info.imageColorSpace       = format[:color_space]
-      create_info.imageExtent           = extent
+      create_info.imageExtent.width     = @extent[:width]
+      create_info.imageExtent.height    = @extent[:height]
       create_info.imageArrayLayers      = image_array_layers
       create_info.imageUsage            = image_usage
       create_info.imageSharingMode      = sharing_mode
