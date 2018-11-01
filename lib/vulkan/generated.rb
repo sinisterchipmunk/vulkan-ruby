@@ -1,11 +1,5 @@
 module Vulkan
-  dlload ENV['PATH_TO_VULKAN'] ||
-         case os
-         when :windows then 'vulkan-1.dll'
-         when :osx     then 'libMoltenVK.dylib'
-         when :linux   then 'libvulkan.so.1'
-         else raise "could not determine vulkan library to load for this OS (#{os.inspect})"
-         end
+  load_vulkan_library
 
   typealias 'int8_t',   'char'
   typealias 'int16_t',  'short'

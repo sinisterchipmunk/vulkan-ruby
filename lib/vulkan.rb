@@ -41,6 +41,28 @@ module Vulkan
     def parse_signature(sig, type_alias = @type_alias)
       super(sig, type_alias)
     end
+
+    def vulkan_library_candidates
+      [
+        ENV['PATH_TO_VULKAN'],
+        *case os
+         when :windows then ['vulkan-1.dll']
+         when :osx     then ['libvulkan.dylib', 'libvulkan.1.dylib', 'libMoltenVK.dylib']
+         when :linux   then ['libvulkan.so', 'libvulkan.so.1']
+         else               []
+         end
+      ].compact
+    end
+
+    def load_vulkan_library
+      candidates = vulkan_library_candidates
+      begin
+        dlload candidates.shift
+      rescue
+        retry if candidates.any?
+        raise "could not determine vulkan library to load for this OS (#{os.inspect}): try passing PATH_TO_VULKAN"
+      end
+    end
   end
 
   require 'vulkan/generated'
