@@ -16,32 +16,33 @@ module Vulkan
       extensions.concat ENV['DEVICE_EXTENSIONS'].split(/\:\s/) if ENV['DEVICE_EXTENSIONS']
 
       if queues.size == 0
-        queue_infos_p = nil
-      else
-        queues_p = queues.each_with_index.map do |queue_info, index|
-          family_index = queue_family_to_index(queue_info[:family])
-          priorities   = queue_info[:priorities]   || raise(ArgumentError, 'queue :priorities (array of floats) is required')
-
-          if priorities.size == 0
-            queue_priorities_p = nil
-          else
-            queue_priorities_p = Fiddle::Pointer.malloc(Fiddle::SIZEOF_FLOAT * priorities.size)
-            priorities.each_with_index do |priority, i|
-              queue_priorities_p[i * Fiddle::SIZEOF_FLOAT, Fiddle::SIZEOF_FLOAT] = [priority].pack(Fiddle::PackInfo::PACK_MAP[Fiddle::TYPE_FLOAT])
-            end
-          end
-
-          device_queue_info = VkDeviceQueueCreateInfo.malloc
-          device_queue_info.sType                   = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO
-          device_queue_info.pNext                   = nil
-          device_queue_info.flags                   = 0
-          device_queue_info.queueFamilyIndex        = family_index
-          device_queue_info.queueCount              = priorities.size
-          device_queue_info.pQueuePriorities        = queue_priorities_p
-          device_queue_info
-        end
-        queue_infos_p = array_of_structures(queues_p)
+        # take the first available queue, to satisfy the spec (must request a queue)
+        queues = [{ family: physical_device.queue_families.first, priorities: [1.0] }]
       end
+
+      queues_p = queues.each_with_index.map do |queue_info, index|
+        family_index = queue_family_to_index(queue_info[:family])
+        priorities   = queue_info[:priorities]   || raise(ArgumentError, 'queue :priorities (array of floats) is required')
+
+        if priorities.size == 0
+          queue_priorities_p = nil
+        else
+          queue_priorities_p = Fiddle::Pointer.malloc(Fiddle::SIZEOF_FLOAT * priorities.size)
+          priorities.each_with_index do |priority, i|
+            queue_priorities_p[i * Fiddle::SIZEOF_FLOAT, Fiddle::SIZEOF_FLOAT] = [priority].pack(Fiddle::PackInfo::PACK_MAP[Fiddle::TYPE_FLOAT])
+          end
+        end
+
+        device_queue_info = VkDeviceQueueCreateInfo.malloc
+        device_queue_info.sType                   = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO
+        device_queue_info.pNext                   = nil
+        device_queue_info.flags                   = 0
+        device_queue_info.queueFamilyIndex        = family_index
+        device_queue_info.queueCount              = priorities.size
+        device_queue_info.pQueuePriorities        = queue_priorities_p
+        device_queue_info
+      end
+      queue_infos_p = array_of_structures(queues_p)
 
       extensions_p = Vulkan.struct("names[#{extensions.size}]" => ['char *name']).malloc
       extensions.each_with_index do |ext, i|
