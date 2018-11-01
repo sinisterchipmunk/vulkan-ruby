@@ -126,7 +126,7 @@ module Vulkan
         data     = VkDebugUtilsMessengerCallbackDataEXT.new(cb_data_addr)
         type     = const_to_symbol(msg_type,     /^VK_DEBUG_UTILS_MESSAGE_TYPE_(.*?)_BIT_EXT$/)
         severity = const_to_symbol(msg_severity, /^VK_DEBUG_UTILS_MESSAGE_SEVERITY_(.*?)_BIT_EXT$/)
-        puts ["[#{severity}]", "[#{type}]", data.pMessage.to_s].join("\t")
+        puts ['[UTIL]', "[#{severity}]", "[#{type}]", data.pMessage.to_s].join("\t")
         VK_FALSE # don't bail
       end
 
@@ -158,7 +158,7 @@ module Vulkan
                                                                                       'void       *               pUserData)')
 
       @debug_report_callback = Fiddle::Closure::BlockCaller.new(return_type, param_types) do |flags, object_type, object, location, message_code, layer_prefix, message, user_data|
-        puts [cstr_to_rbstr(layer_prefix), cstr_to_rbstr(message)].join(": ")
+        puts ['[REPORT]', cstr_to_rbstr(layer_prefix), cstr_to_rbstr(message)].join(": ")
         VK_FALSE # don't abort the call
       end
 
