@@ -146,31 +146,6 @@ module Vulkan
       finalize_with @vk, :vkDestroyDebugUtilsMessengerEXT, to_ptr, @debug_util_callback_handle, nil
     end
 
-    def hook_debug_report_callback
-      name, return_type, param_types = Vulkan.parse_signature('VkBool32 debug_callback(VkDebugReportFlagsEXT      flags,' +
-                                                                                      'VkDebugReportObjectTypeEXT objectType,' +
-                                                                                      'uint64_t                   object,' +
-                                                                                      'size_t                     location,' +
-                                                                                      'int32_t                    messageCode,' +
-                                                                                      'const char *               pLayerPrefix,'+
-                                                                                      'const char *               pMessage,' +
-                                                                                      'void       *               pUserData)')
-
-      @debug_report_callback = Fiddle::Closure::BlockCaller.new(return_type, param_types) do |flags, object_type, object, location, message_code, layer_prefix, message, user_data|
-        puts ['[REPORT]', cstr_to_rbstr(layer_prefix), cstr_to_rbstr(message)].join(": ")
-        VK_FALSE # don't abort the call
-      end
-
-      callback = VkDebugReportCallbackCreateInfoEXT.malloc
-      callback.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT,
-      callback.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT
-      callback.pfnCallback = @debug_report_callback
-      callback_p = Vulkan.create_value('void *', nil)
-      check_result @vk.vkCreateDebugReportCallbackEXT(to_ptr, callback, nil, callback_p)
-      @debug_report_callback_handle = callback_p.value
-      finalize_with @vk, :vkDestroyDebugReportCallbackEXT, to_ptr, @debug_report_callback_handle, nil
-    end
-
     def create_window_surface(window)
       WindowSurface.new(self, window)
     end
