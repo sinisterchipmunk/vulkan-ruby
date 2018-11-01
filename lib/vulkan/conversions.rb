@@ -201,8 +201,11 @@ module Vulkan
 
     # Converts a byte array (array of numbers) representing a null-terminated
     # C-string into a Ruby string.
-    def cstr_to_rbstr(byte_array)
-      byte_array.pack('C*').sub(/\x00*\z/, '')
+    def cstr_to_rbstr(byte_array_or_ptr)
+      case byte_array_or_ptr
+      when Fiddle::Pointer then byte_array_or_ptr.to_s
+      else byte_array_or_ptr.pack('C*').sub(/\x00*\z/, '')
+      end
     end
 
     # Takes a version string and constructs a Vulkan packed version number

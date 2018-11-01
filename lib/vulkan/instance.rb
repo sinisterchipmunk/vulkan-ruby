@@ -43,10 +43,32 @@ module Vulkan
                    engine_name: 'vulkan-ruby',   engine_version: Vulkan::VERSION,
                    api_version: Vulkan::VERSION, extensions: ,
                    layers: [])
+      layers.concat     ENV['LAYERS'].split(/\:\s/)              if ENV['LAYERS']
+      extensions.concat ENV['INSTANCE_EXTENSIONS'].split(/\:\s/) if ENV['INSTANCE_EXTENSIONS']
+
       if ENV['DEBUG']
         extension_names = self.class.extension_names
-        extensions << 'VK_EXT_debug_utils'  if extension_names.include?('VK_EXT_debug_utils')
-        extensions << 'VK_EXT_debug_report' if extension_names.include?('VK_EXT_debug_report')
+        %w(
+          VK_EXT_debug_utils
+          VK_EXT_debug_report
+        ).each { |ext_name| extensions << ext_name if extension_names.include?(ext_name) }
+
+        layer_names = self.class.layer_names
+        %w(
+          VK_LAYER_LUNARG_standard_validation
+          VK_LAYER_LUNARG_parameter_validation
+          VK_LAYER_LUNARG_assistant_layer
+          VK_LAYER_LUNARG_api_dump
+          VK_LAYER_GOOGLE_unique_objects
+          VK_LAYER_LUNARG_demo_layer
+          VK_LAYER_GOOGLE_threading
+          VK_LAYER_LUNARG_monitor
+          VK_LAYER_LUNARG_starter_layer
+          VK_LAYER_LUNARG_core_validation
+          VK_LAYER_LUNARG_object_tracker
+        ).each do |layer_name|
+          layers << layer_name if layer_names.include?(layer_name)
+        end
       end
 
       extensions_p = Vulkan.struct("names[#{extensions.size}]" => ['char *name']).malloc
@@ -55,7 +77,6 @@ module Vulkan
         extensions_p.names[i].name = Fiddle::Pointer[extname.b + "\x00"]
       end
 
-      layers << 'VK_LAYER_LUNARG_standard_validation' if ENV['DEBUG'] && self.class.layer_names.include?('VK_LAYER_LUNARG_standard_validation')
       layers_p = Vulkan.struct("names[#{layers.size}]" => ['char *name']).malloc
       layers.each_with_index do |layer, i|
         layer_name = layer.kind_of?(String) ? layer : layer[:layer_name]
@@ -100,7 +121,7 @@ module Vulkan
         data     = VkDebugUtilsMessengerCallbackDataEXT.new(cb_data_addr)
         type     = const_to_symbol(msg_type,     /^VK_DEBUG_UTILS_MESSAGE_TYPE_(.*?)_BIT_EXT$/)
         severity = const_to_symbol(msg_severity, /^VK_DEBUG_UTILS_MESSAGE_SEVERITY_(.*?)_BIT_EXT$/)
-        puts [type, severity, data.pMessage].join("\t")
+        puts ["[#{severity}]", "[#{type}]", data.pMessage.to_s].join("\t")
         VK_FALSE # don't bail
       end
 
@@ -130,7 +151,7 @@ module Vulkan
                                                                                       'const char *               pMessage,' +
                                                                                       'void       *               pUserData)')
 
-      @debug_report_callback = Fiddle::Closure::BlockCaller.new(return_type, param_types) do |flags, objectType, object, location, messageCode, pLayerPrefix, pMessage, pUserData|
+      @debug_report_callback = Fiddle::Closure::BlockCaller.new(return_type, param_types) do |flags, object_type, object, location, message_code, layer_prefix, message, user_data|
         puts [cstr_to_rbstr(layer_prefix), cstr_to_rbstr(message)].join(": ")
         VK_FALSE # don't abort the call
       end

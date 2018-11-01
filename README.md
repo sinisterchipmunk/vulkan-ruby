@@ -28,6 +28,40 @@ This library is intended to be a rather shallow wrapper around the Vulkan APIs. 
 
 You are encouraged to [check out the examples](https://github.com/sinisterchipmunk/vulkan-ruby/tree/master/examples/) for some specific usage examples.
 
+### Extensions and Layers
+
+If the environment variable `DEBUG` is set, the following extensions and layers will be added (only if supported by the underlying implementation):
+
+* Instance Extensions
+
+```
+    VK_EXT_debug_utils
+    VK_EXT_debug_report
+```
+
+* Layers
+
+```
+    VK_LAYER_GOOGLE_threading
+    VK_LAYER_GOOGLE_unique_objects
+    VK_LAYER_LUNARG_api_dump
+    VK_LAYER_LUNARG_assistant_layer
+    VK_LAYER_LUNARG_core_validation
+    VK_LAYER_LUNARG_demo_layer
+    VK_LAYER_LUNARG_monitor
+    VK_LAYER_LUNARG_object_tracker
+    VK_LAYER_LUNARG_parameter_validation
+    VK_LAYER_LUNARG_standard_validation
+    VK_LAYER_LUNARG_starter_layer
+```
+
+In addition to the usual mechanisms for explicit and implicit Vulkan extensions, you can also provide the following environment variables to list extensions/layers to be activated. These get injected into the lists provided by the application to Vulkan, rather than interpreted by Vulkan itself. Multiple entries can be separated by spaces (` `) or by colons (`:`).
+
+      LAYERS
+      INSTANCE_EXTENSIONS
+      DEVICE_EXTENSIONS
+
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

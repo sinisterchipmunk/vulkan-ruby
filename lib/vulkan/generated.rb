@@ -1,5 +1,6 @@
 module Vulkan
-  dlload case os
+  dlload ENV['PATH_TO_VULKAN'] ||
+         case os
          when :windows then 'vulkan-1.dll'
          when :osx     then 'libMoltenVK.dylib'
          when :linux   then 'libvulkan.so.1'

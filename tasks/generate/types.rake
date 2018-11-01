@@ -73,7 +73,7 @@ def generate_type_map(out)
   @types.each do |name, alias_name_or_type|
     out.puts "  typealias #{pad_name name.inspect}, #{alias_name_or_type.inspect}"
   end
-            
+
   # out.puts '    }'
 end
 

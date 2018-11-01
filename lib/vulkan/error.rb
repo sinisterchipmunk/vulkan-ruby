@@ -16,7 +16,7 @@ module Vulkan
       VK_ERROR_LAYER_NOT_PRESENT     => "Layer specified does not exist",
       VK_ERROR_EXTENSION_NOT_PRESENT => "Extension specified does not exist",
       VK_ERROR_FEATURE_NOT_PRESENT   => "Requested feature is not available on this device",
-      VK_ERROR_INCOMPATIBLE_DRIVER   => "Unable to find a Vulkan driver",
+      VK_ERROR_INCOMPATIBLE_DRIVER   => "Unable to find a compatible Vulkan driver",
       VK_ERROR_TOO_MANY_OBJECTS      => "Too many objects of the type have already been created",
       VK_ERROR_FORMAT_NOT_SUPPORTED  => "Requested format is not supported on this device",
       VK_ERROR_FRAGMENTED_POOL       => "A requested pool allocation has failed due to fragmentation of the pool's memory",

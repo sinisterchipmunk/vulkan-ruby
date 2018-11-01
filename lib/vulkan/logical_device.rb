@@ -13,6 +13,8 @@ module Vulkan
       @instance = instance
       @physical_device = physical_device
 
+      extensions.concat ENV['DEVICE_EXTENSIONS'].split(/\:\s/) if ENV['DEVICE_EXTENSIONS']
+
       if queues.size == 0
         queue_infos_p = nil
       else
