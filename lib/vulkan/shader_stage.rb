@@ -9,12 +9,13 @@ module Vulkan
                        file_path: nil,
                        entry_point: 'main',
                        stage:)
-      code ||= File.read(file_path)
+      code ||= File.open(file_path, 'rb') { |file| file.read }
       @vk = vk
       @entry_point = entry_point
       @stage = stage
 
-      code_p = Fiddle::Pointer[code]
+      code_p = Fiddle::Pointer.malloc(code.size + 1)
+      code_p[0, code.size] = code
       create_info = VkShaderModuleCreateInfo.malloc
       create_info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO
       create_info.codeSize = code.size
