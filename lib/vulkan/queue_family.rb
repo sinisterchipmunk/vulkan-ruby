@@ -21,7 +21,7 @@ module Vulkan
                                                                    @family_index,
                                                                    surface.to_ptr,
                                                                    supported_p)
-      return supported_p.value == 1
+      return supported_p.value == VK_TRUE
     end
   end
 end
