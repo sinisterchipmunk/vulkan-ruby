@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/sinisterchipmunk/fiddle
-  revision: d0ce3419868d13e495b4873b29189a122af79c97
+  revision: c4db0daa07a45210bbef8023f9bb627668011f1f
   branch: nested-structs
   specs:
     fiddle (1.0.0)
@@ -15,7 +15,7 @@ GIT
 PATH
   remote: .
   specs:
-    vulkan-ruby (1.0.83.0)
+    vulkan-ruby (0.1.0)
 
 GEM
   remote: https://rubygems.org/

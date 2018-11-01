@@ -260,7 +260,7 @@ module Vulkan
         type = struct.class.types[index]
         hash.tap do |h|
           val = struct.send(member)
-          val = struct_to_hash(val) if val.respond_to?(:to_ptr)
+          val = struct_to_hash(val) if val.respond_to?(:to_ptr) && !val.kind_of?(Array)
           h[member_name] = val
           h[member_name] = cstr_to_rbstr(h[member_name]) if type.kind_of?(Array) && type[0] == Fiddle::TYPE_CHAR
         end
