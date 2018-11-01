@@ -143,7 +143,8 @@ module Vulkan
 
       callback_p = Vulkan.create_value('void *', nil)
       check_result @vk.vkCreateDebugUtilsMessengerEXT(to_ptr, create_info, nil, callback_p)
-      finalize_with @vk, :vkDestroyDebugUtilsMessengerEXT, to_ptr, callback_p.value, nil
+      @debug_util_callback_handle = callback_p.value
+      finalize_with @vk, :vkDestroyDebugUtilsMessengerEXT, to_ptr, @debug_util_callback_handle, nil
     end
 
     def hook_debug_report_callback
@@ -167,8 +168,8 @@ module Vulkan
       callback.pfnCallback = @debug_report_callback
       callback_p = Vulkan.create_value('void *', nil)
       check_result @vk.vkCreateDebugReportCallbackEXT(to_ptr, callback, nil, callback_p)
-      @debug_report_callback = callback_p.value
-      finalize_with @vk, :vkDestroyDebugReportCallbackEXT, to_ptr, @debug_report_callback, nil
+      @debug_report_callback_handle = callback_p.value
+      finalize_with @vk, :vkDestroyDebugReportCallbackEXT, to_ptr, @debug_report_callback_handle, nil
     end
 
     def create_window_surface(window)
