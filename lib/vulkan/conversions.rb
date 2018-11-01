@@ -216,6 +216,15 @@ module Vulkan
       (((major) << 22) | ((minor || 0) << 12) | (patch || 0))
     end
 
+    # returns a Gem::Version from the specified numeric Vulkan packed version
+    # number.
+    def vk_parse_version(version)
+      major = (version >> 22) & 0x3ff
+      minor = (version >> 12) & 0x3ff
+      patch = (version      ) & 0xfff
+      Gem::Version.new([major, minor, patch].join('.'))
+    end
+
     # Using the specified regular expression, scans the list of Vulkan
     # constants, looking for the first constant whose name matches the regular
     # expression AND whose value matches the given value. The return value is

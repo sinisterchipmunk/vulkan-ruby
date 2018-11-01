@@ -37,11 +37,17 @@ module Vulkan
       def layer_names
         layers.map { |layer| layer[:layer_name] }
       end
+
+      def version
+        ver_p = Vulkan.create_value('uint32_t', 0)
+        check_result Vulkan[nil, nil].vkEnumerateInstanceVersion(ver_p)
+        vk_parse_version ver_p.value
+      end
     end
 
-    def initialize(application_name: $0,         application_version: '1.0.0',
-                   engine_name: 'vulkan-ruby',   engine_version: Vulkan::VERSION,
-                   api_version: Vulkan::VERSION, extensions: ,
+    def initialize(application_name: $0,            application_version: '1.0.0',
+                   engine_name: 'vulkan-ruby',      engine_version: Vulkan::VERSION,
+                   api_version: self.class.version, extensions: ,
                    layers: [])
       layers.concat     ENV['LAYERS'].split(/\:\s/)              if ENV['LAYERS']
       extensions.concat ENV['INSTANCE_EXTENSIONS'].split(/\:\s/) if ENV['INSTANCE_EXTENSIONS']
@@ -106,10 +112,9 @@ module Vulkan
       check_result Vulkan[nil, nil].vkCreateInstance(instance_info, nil, instance_wrapper)
       @handle = instance_wrapper.value
       @vk = Vulkan[self, nil]
-      finalize_with @vk, :vkDestroyInstance, @handle, nil
-
       hook_debug_utils_callback if extensions.include?('VK_EXT_debug_utils')
       hook_debug_report_callback if extensions.include?('VK_EXT_debug_report')
+      finalize_with @vk, :vkDestroyInstance, @handle, nil
     end
 
     def hook_debug_utils_callback
@@ -163,7 +168,7 @@ module Vulkan
       callback_p = Vulkan.create_value('void *', nil)
       check_result @vk.vkCreateDebugReportCallbackEXT(to_ptr, callback, nil, callback_p)
       @debug_report_callback = callback_p.value
-      finalize_with @vk, :vkDestroyDebugReportCallbackEXT, to_ptr, @debug_report_callback
+      finalize_with @vk, :vkDestroyDebugReportCallbackEXT, to_ptr, @debug_report_callback, nil
     end
 
     def create_window_surface(window)
