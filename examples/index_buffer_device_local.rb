@@ -140,9 +140,10 @@ in_flight_fences           = MAX_FRAMES_IN_FLIGHT.times.map { device.create_fenc
 current_frame = 0
 frame_counter = 0
 last_time = Time.now
+done = false
 
 # Begin main event loop & drawing
-loop do
+until done
   frame_counter += 1
   break if ENV['MAX_FRAMES'].to_i == frame_counter
   # dump some FPS infos
@@ -154,7 +155,7 @@ loop do
   end
   while event = SDL2::Event.poll
     case event
-    when SDL2::Event::Quit, SDL2::Event::KeyDown then ENV['MAX_FRAMES'] = (frame_counter + 1).to_s
+    when SDL2::Event::Quit, SDL2::Event::KeyDown then done = true
     when SDL2::Event::Window::RESIZED then rebuild_swap_chain.call
     end
   end
@@ -170,7 +171,7 @@ loop do
     presentation_queue.present(swapchains:      [$swapchain],
                                image_indices:   [image_index],
                                wait_semaphores: [render_finished_semaphores[current_frame]])
-    currentFrame = (current_frame + 1) % MAX_FRAMES_IN_FLIGHT
+    current_frame = (current_frame + 1) % MAX_FRAMES_IN_FLIGHT
   rescue Vulkan::Error
     case $!.code
     when Vulkan::VK_ERROR_OUT_OF_DATE_KHR, Vulkan::VK_SUBOPTIMAL_KHR
