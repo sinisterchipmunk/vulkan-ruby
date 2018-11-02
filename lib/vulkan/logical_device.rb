@@ -75,6 +75,10 @@ module Vulkan
       end
     end
 
+    def create_vertex_buffer(**args)
+      Vulkan::VertexBuffer.new(@vk, physical_device, **args)
+    end
+
     def create_shader_stage(**args)
       Vulkan::ShaderStage.new(@vk, **args)
     end

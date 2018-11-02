@@ -34,7 +34,9 @@ namespace :generate do
                   # type = 'void' if is_pointer
                   array = m.text[/\[[0-9+]\]$/]
                   if processed[type] && !is_pointer
-                    nested_name = m.xpath('name').text.to_s.strip
+                    arylen = ''
+                    arylen = "[#{m.xpath('enum').text.to_s.strip}]" if m.xpath('enum').any?
+                    nested_name = m.xpath('name').text.to_s.strip + arylen
                     { nested_name => type }
                   else
                     # comment = m.xpath('comment').text.to_s.strip
@@ -93,7 +95,7 @@ namespace :generate do
                 members = members_or_alias.map do |member|
                   if member.kind_of?(Hash)
                     member = member.to_a[0]
-                    "{ #{member[0].inspect} => #{member[1]} }"
+                    "{ \"#{member[0]}\" => #{member[1]} }"
                   else
                     member.compact.join(' ').inspect.gsub(/\\\#/, '#')
                   end

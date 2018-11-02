@@ -6,7 +6,9 @@ module Vulkan
     include Vulkan::Conversions
 
     class << self
-      def create(vk, command_pool, count: 1, level: :primary, &block)
+      def create(vk, command_pool, count: 1, level: :primary, usage: :simultaneous, &block)
+        @usage = usage
+
         alloc_info = VkCommandBufferAllocateInfo.malloc
         alloc_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO
         alloc_info.commandPool = command_pool.to_ptr
@@ -36,7 +38,7 @@ module Vulkan
     def start_recording
       @begin_info = VkCommandBufferBeginInfo.malloc
       @begin_info.sType            = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO
-      @begin_info.flags            = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT
+      @begin_info.flags            = sym_to_command_buffer_usage(@usage)
       @begin_info.pInheritanceInfo = nil
       check_result @vk.vkBeginCommandBuffer(to_ptr, @begin_info)
       @recording = true
@@ -61,6 +63,17 @@ module Vulkan
       yield self if block_given?
     ensure
       end_render_pass
+    end
+
+    def copy_buffer(src, dst, regions: [{size: src.size}])
+      copy_regions_p = Vulkan.struct("regions[#{regions.size}]" => VkBufferCopy).malloc
+      @refs << copy_regions_p
+      regions.each_with_index do |region, i|
+        copy_regions_p.regions[i].srcOffset = region[:src_offset] if region[:src_offset]
+        copy_regions_p.regions[i].dstOffset = region[:dst_offset] if region[:dst_offset]
+        copy_regions_p.regions[i].size      = region[:size] || raise(ArgumentError, 'region[:size] is required')
+      end
+      @vk.vkCmdCopyBuffer(to_ptr, src, dst, regions.size, copy_regions_p)
     end
 
     def begin_render_pass(render_pass, framebuffer:,
@@ -99,8 +112,35 @@ module Vulkan
       @vk.vkCmdBindPipeline(to_ptr, sym_to_pipeline_bind_point(binding_point), pipeline)
     end
 
+    def bind_vertex_buffer(vertex_buffer, binding_index: 0, offset: 0)
+      bind_vertex_buffers vertex_buffers: [vertex_buffer],
+                          first_binding: binding_index,
+                          offsets: [offset]
+    end
+
+    def bind_vertex_buffers(vertex_buffers:,
+                            offsets: nil,
+                            first_binding: 0,
+                            binding_count: vertex_buffers.size)
+      offsets ||= vertex_buffers.map { 0 }
+      @refs.concat vertex_buffers
+      buffers_p = array_of_pointers(vertex_buffers)
+      offsets_p = Vulkan.struct("VkDeviceSize offsets[#{offsets.size}]").malloc
+      offsets.each_with_index { |o, i| offsets_p.offsets[i] = o }
+      @vk.vkCmdBindVertexBuffers(to_ptr, first_binding, binding_count, buffers_p, offsets_p)
+    end
+
+    def bind_index_buffer(index_buffer, offset: 0, type:)
+      @refs << index_buffer
+      @vk.vkCmdBindIndexBuffer(to_ptr, index_buffer, offset, sym_to_index_type(type))
+    end
+
     def draw(vertex_count, instance_count, first_vertex_index, first_instance_index)
       @vk.vkCmdDraw(to_ptr, vertex_count, instance_count, first_vertex_index, first_instance_index)
+    end
+
+    def draw_indexed(index_count, instance_count, first_index, vertex_offset, first_instance)
+      @vk.vkCmdDrawIndexed(to_ptr, index_count, instance_count, first_index, vertex_offset, first_instance)
     end
 
     # def submit(queue, wait_semaphores: [], wait_stages: [], signal_semaphores: [], fence: nil)

@@ -27,6 +27,7 @@ module Vulkan
     attr_reader :code
 
     def initialize(code)
+      raise 'BUG: error code is nil, probably a in this gem' if code.nil?
       @code = code
       super(CODES[code] || "Unknown error code: 0x#{code.to_s(16)} (#{code})")
     end

@@ -48,6 +48,14 @@ module Vulkan
 
     alias create create_logical_device
 
+    def memory_properties
+      @memory_properties ||= begin
+        memory_properties = VkPhysicalDeviceMemoryProperties.malloc
+        @vk.vkGetPhysicalDeviceMemoryProperties(to_ptr, memory_properties)
+        struct_to_hash(memory_properties)
+      end
+    end
+
     def queue_families
       @queue_families ||= begin
         count_ptr = Vulkan.create_value("uint32_t", 0)

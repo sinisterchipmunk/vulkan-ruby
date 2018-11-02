@@ -36,6 +36,10 @@ module Vulkan
       check_result @vk.vkQueueSubmit(to_ptr, submit_infos.size, submit_infos_p, fence)
     end
 
+    def wait_until_idle
+      @vk.vkQueueWaitIdle(to_ptr)
+    end
+
     def submit(command_buffers, wait_semaphores: [], wait_stages: [], signal_semaphores: [], fence: nil)
       wait_stages_p = @wait_stages_buffers[wait_stages.size] ||= Vulkan.struct(["VkPipelineStageFlags stages[#{wait_stages.size}]"]).malloc
       wait_stages.each_with_index { |stage, index| wait_stages_p.stages[index] = stage }

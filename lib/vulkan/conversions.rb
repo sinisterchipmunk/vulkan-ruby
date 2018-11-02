@@ -20,6 +20,23 @@ module Vulkan
       end
     end
 
+    def sym_to_command_buffer_usage(sym)
+      case sym
+      when :simultaneous         then VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT
+      when :one_time_submit      then VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT
+      when :render_pass_continue then VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
+      else sym
+      end
+    end
+
+    def sym_to_index_type(sym)
+      case sym
+      when :uint16 then VK_INDEX_TYPE_UINT16
+      when :uint32 then VK_INDEX_TYPE_UINT32
+      else sym
+      end
+    end
+
     def queue_family_to_index(family)
       case family
       when Numeric then family
@@ -261,6 +278,15 @@ module Vulkan
         hash.tap do |h|
           val = struct.send(member)
           val = struct_to_hash(val) if val.respond_to?(:to_ptr) && !val.kind_of?(Array)
+          if val.kind_of?(Array)
+            val = val.map do |v|
+              if v.respond_to?(:to_ptr) && v.to_ptr.kind_of?(Fiddle::CStructEntity)
+                struct_to_hash(v)
+              else
+                v
+              end
+            end
+          end
           h[member_name] = val
           h[member_name] = cstr_to_rbstr(h[member_name]) if type.kind_of?(Array) && type[0] == Fiddle::TYPE_CHAR
         end

@@ -67,6 +67,25 @@ module Vulkan
         color_op: :add,
         alpha_op: :add
       }
+      @binding_descriptions = []
+      @attribute_descriptions = []
+    end
+
+    def add_binding_description(binding:, stride:, input_rate:)
+      binding_description = VkVertexInputBindingDescription.malloc
+      binding_description.binding   = binding
+      binding_description.stride    = stride
+      binding_description.inputRate = input_rate
+      @binding_descriptions << binding_description
+    end
+
+    def add_attribute_description(binding:, location:, format:, offset:)
+      attribute_description = VkVertexInputAttributeDescription.malloc
+      attribute_description.binding  = binding
+      attribute_description.location = location
+      attribute_description.format   = format
+      attribute_description.offset   = offset
+      @attribute_descriptions << attribute_description
     end
 
     def add_shader_stage(shader_stage)
@@ -78,15 +97,15 @@ module Vulkan
 
       # TODO uniforms and attributes
       vertex_input_info = VkPipelineVertexInputStateCreateInfo.malloc
-      vertex_input_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO
-      vertex_input_info.vertexBindingDescriptionCount = 0
-      vertex_input_info.pVertexBindingDescriptions = nil
-      vertex_input_info.vertexAttributeDescriptionCount = 0
-      vertex_input_info.pVertexAttributeDescriptions = nil
+      vertex_input_info.sType                           = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO
+      vertex_input_info.vertexBindingDescriptionCount   = @binding_descriptions.size
+      vertex_input_info.pVertexBindingDescriptions      = array_of_structures(@binding_descriptions)
+      vertex_input_info.vertexAttributeDescriptionCount = @attribute_descriptions.size
+      vertex_input_info.pVertexAttributeDescriptions    = array_of_structures(@attribute_descriptions)
 
       input_assembly = VkPipelineInputAssemblyStateCreateInfo.malloc
-      input_assembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
-      input_assembly.topology = sym_to_topology(@input[:topology])
+      input_assembly.sType                  = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
+      input_assembly.topology               = sym_to_topology(@input[:topology])
       input_assembly.primitiveRestartEnable = bool_to_vk(@input[:primitive_restart])
 
       viewport = VkViewport.malloc
@@ -104,15 +123,15 @@ module Vulkan
       scissor.extent.height = @scissor[:height]
 
       viewport_state = VkPipelineViewportStateCreateInfo.malloc
-      viewport_state.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO
+      viewport_state.sType         = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO
       # TODO support multiple viewports and scissors
       viewport_state.viewportCount = 1
-      viewport_state.pViewports = viewport
-      viewport_state.scissorCount = 1
-      viewport_state.pScissors = scissor
+      viewport_state.pViewports    = viewport
+      viewport_state.scissorCount  = 1
+      viewport_state.pScissors     = scissor
 
       rasterizer = VkPipelineRasterizationStateCreateInfo.malloc
-      rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO
+      rasterizer.sType                   = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO
       rasterizer.depthClampEnable        = bool_to_vk(@rasterizer[:depth_clamp])
       rasterizer.rasterizerDiscardEnable = bool_to_vk(@rasterizer[:discard_all])
       rasterizer.polygonMode             = sym_to_polygon_mode(@rasterizer[:polygon_mode])
@@ -146,11 +165,11 @@ module Vulkan
       color_blend_attachment.alphaBlendOp        = sym_to_blend_op(@blending[:alpha_op])
 
       color_blending = VkPipelineColorBlendStateCreateInfo.malloc
-      color_blending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-      color_blending.logicOpEnable = VK_FALSE;
-      color_blending.logicOp = VK_LOGIC_OP_COPY; # TODO
-      color_blending.attachmentCount = 1 # TODO multiple blend attachments
-      color_blending.pAttachments = color_blend_attachment
+      color_blending.sType             = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+      color_blending.logicOpEnable     = VK_FALSE;
+      color_blending.logicOp           = VK_LOGIC_OP_COPY; # TODO
+      color_blending.attachmentCount   = 1 # TODO multiple blend attachments
+      color_blending.pAttachments      = color_blend_attachment
       color_blending.blendConstants[0] = 0.0 # TODO
       color_blending.blendConstants[1] = 0.0 # TODO
       color_blending.blendConstants[2] = 0.0 # TODO
@@ -159,11 +178,11 @@ module Vulkan
       # TODO dynamic states
 
       pipeline_layout_info = VkPipelineLayoutCreateInfo.malloc
-      pipeline_layout_info.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO
-      pipeline_layout_info.setLayoutCount = 0 # @layouts.size
-      pipeline_layout_info.pSetLayouts = nil # FIXME
+      pipeline_layout_info.sType                  = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO
+      pipeline_layout_info.setLayoutCount         = 0 # @layouts.size
+      pipeline_layout_info.pSetLayouts            = nil # FIXME
       pipeline_layout_info.pushConstantRangeCount = 0 # @constant_ranges.size
-      pipeline_layout_info.pPushConstantRanges = nil # FIXME
+      pipeline_layout_info.pPushConstantRanges    = nil # FIXME
       raise NotImplemented, 'layouts not implemented' if @layouts.any?
       raise NotImplemented, 'push constant ranges not implemented' if @constant_ranges.any?
 

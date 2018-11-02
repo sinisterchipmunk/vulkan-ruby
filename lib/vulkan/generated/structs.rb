@@ -1808,9 +1808,9 @@ module Vulkan
   VkPhysicalDeviceMaintenance3PropertiesKHR = VkPhysicalDeviceMaintenance3Properties
 
   VkPhysicalDeviceMemoryProperties = struct ["uint32_t  memoryTypeCount",
-                                             { "memoryTypes" => VkMemoryType },
+                                             { "memoryTypes[#{VK_MAX_MEMORY_TYPES}]" => VkMemoryType },
                                              "uint32_t  memoryHeapCount",
-                                             { "memoryHeaps" => VkMemoryHeap }]
+                                             { "memoryHeaps[#{VK_MAX_MEMORY_HEAPS}]" => VkMemoryHeap }]
 
   VkPhysicalDeviceMemoryProperties2 = struct ["VkStructureType  sType",
                                               "void * pNext",
