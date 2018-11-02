@@ -35,11 +35,17 @@ end
 raise 'no graphics queue family available' unless presentation_queue_family
 
 # Create a logical device along with the needed extensions and chosen queues
-device = dev.create queues: [{ family: graphics_queue_family,     priorities: [1.0] },
-                             { family: presentation_queue_family, priorities: [1.0] }],
-                    extensions: ['VK_KHR_swapchain']
-graphics_queue     = device.queue_families[0][:queues][0]
-presentation_queue = device.queue_families[1][:queues][0]
+if graphics_queue_family == presentation_queue_family
+  device = dev.create queues: [{ family: graphics_queue_family,     priorities: [1.0] }],
+                      extensions: ['VK_KHR_swapchain']
+  presentation_queue = graphics_queue = device.queue_families[0][:queues][0]
+else
+  device = dev.create queues: [{ family: graphics_queue_family,     priorities: [1.0] },
+                               { family: presentation_queue_family, priorities: [1.0] }],
+                      extensions: ['VK_KHR_swapchain']
+  graphics_queue     = device.queue_families[0][:queues][0]
+  presentation_queue = device.queue_families[1][:queues][0]
+end
 
 command_pool = device.create_command_pool queue_family: graphics_queue_family
 
