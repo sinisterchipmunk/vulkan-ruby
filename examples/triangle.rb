@@ -100,7 +100,7 @@ loop do
   break if ENV['MAX_FRAMES'].to_i == frame_counter
   while event = SDL2::Event.poll
     case event
-    when SDL2::Event::Quit, SDL2::Event::KeyDown then exit
+    when SDL2::Event::Quit, SDL2::Event::KeyDown then break
     when SDL2::Event::Window::RESIZED then rebuild_swap_chain.call
     end
   end
@@ -125,3 +125,5 @@ loop do
     end
   end
 end
+
+in_flight_fences.each { |fence| fence.wait_and_reset }
