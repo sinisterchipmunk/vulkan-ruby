@@ -143,38 +143,6 @@ module Vulkan
       @vk.vkCmdDrawIndexed(to_ptr, index_count, instance_count, first_index, vertex_offset, first_instance)
     end
 
-    # def submit(queue, wait_semaphores: [], wait_stages: [], signal_semaphores: [], fence: nil)
-    #   wait_stages_p = @wait_stages_buffers[wait_stages.size] ||= Vulkan.struct(["VkPipelineStageFlags stages[#{wait_stages.size}]"]).malloc
-    #   wait_stages.each_with_index { |stage, index| wait_stages_p.stages[index] = stage }
-
-    #   wait_semaphores_p = @wait_semaphores_buffers[wait_semaphores.size] ||= Fiddle::Pointer.malloc(wait_semaphores.size * Fiddle::SIZEOF_VOIDP)
-    #   array_of_pointers(wait_semaphores, wait_semaphores_p)
-
-    #   signal_semaphores_p = @signal_semaphores_buffers[signal_semaphores.size] ||= Fiddle::Pointer.malloc(signal_semaphores.size * Fiddle::SIZEOF_VOIDP)
-    #   array_of_pointers(signal_semaphores, signal_semaphores_p)
-
-    #   @submit_info.waitSemaphoreCount   = wait_semaphores.size
-    #   @submit_info.pWaitSemaphores      = wait_semaphores_p
-    #   @submit_info.pWaitDstStageMask    = wait_stages_p
-    #   @submit_info.commandBufferCount   = 1
-    #   @submit_info.pCommandBuffers      = @self_p
-    #   @submit_info.signalSemaphoreCount = signal_semaphores.size
-    #   @submit_info.pSignalSemaphores    = signal_semaphores_p
-    #   check_result @vk.vkQueueSubmit(queue, 1, @submit_info, fence)
-    # end
-
-    # def present(swapchain, image_index, queue)
-    #   @image_index_p.value = image_index
-    #   @swapchain_p.value = swapchain.to_ptr
-    #   @present_info.waitSemaphoreCount = @submit_info.signalSemaphoreCount
-    #   @present_info.pWaitSemaphores = @submit_info.pSignalSemaphores
-    #   @present_info.swapchainCount = 1
-    #   @present_info.pSwapchains = @swapchain_p
-    #   @present_info.pImageIndices = @image_index_p
-    #   @present_info.pResults = nil
-    #   check_result @vk.vkQueuePresentKHR(queue.to_ptr, @present_info)
-    # end
-
     def to_ptr
       @handle
     end
