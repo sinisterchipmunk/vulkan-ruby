@@ -1,6 +1,7 @@
 module Vulkan
   class ImageView
     include Vulkan::Checks
+    include Vulkan::Finalizer
 
     def initialize(vk, image_handle, image_format,
                    view_type: VK_IMAGE_VIEW_TYPE_2D,
@@ -31,6 +32,7 @@ module Vulkan
       view_p = Vulkan.create_value("void *", nil)
       check_result @vk.vkCreateImageView(vk.device, create_info, nil, view_p)
       @handle = view_p.value
+      finalize_with @vk, :vkDestroyImageView, vk.device, @handle, nil
     end
 
     def create_framebuffer(**args)
