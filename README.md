@@ -36,7 +36,6 @@ If the environment variable `DEBUG` is set, the following extensions and layers 
 
 ```
     VK_EXT_debug_utils
-    VK_EXT_debug_report
 ```
 
 * Layers

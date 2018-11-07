@@ -112,7 +112,6 @@ module Vulkan
       @handle = instance_wrapper.value
       @vk = Vulkan[self, nil]
       hook_debug_utils_callback if extensions.include?('VK_EXT_debug_utils')
-      hook_debug_report_callback if extensions.include?('VK_EXT_debug_report')
       finalize_with @vk, :vkDestroyInstance, @handle, nil
     end
 
