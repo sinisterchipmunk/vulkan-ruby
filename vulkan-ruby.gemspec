@@ -35,4 +35,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "minitest",      "~> 5.0"
   spec.add_development_dependency "nokogiri",      '~> 1.8' # used to process vk.xml
   spec.add_development_dependency 'sdl2_vulkan',   '~> 0.1' # used by the examples
+  spec.add_development_dependency 'cglm',          '~> 0.1'
+  spec.add_development_dependency 'simplecov',     '~> 0.16'
 end

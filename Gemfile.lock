@@ -1,4 +1,10 @@
 GIT
+  remote: https://github.com/sinisterchipmunk/cglm-ruby
+  revision: f8db1b83a5e52fea60eec5399f51a20d292cd93e
+  specs:
+    cglm (0.1.0)
+
+GIT
   remote: https://github.com/sinisterchipmunk/fiddle
   revision: c4db0daa07a45210bbef8023f9bb627668011f1f
   branch: nested-structs
@@ -20,23 +26,32 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    docile (1.3.1)
+    json (2.1.0)
     mini_portile2 (2.3.0)
     minitest (5.11.3)
     nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
     rake (10.5.0)
     ruby-sdl2 (0.3.4)
+    simplecov (0.16.1)
+      docile (~> 1.1)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   bundler (~> 1.16)
+  cglm!
   fiddle!
   minitest (~> 5.0)
   nokogiri (~> 1.8)
   rake (~> 10.0)
   sdl2_vulkan!
+  simplecov (~> 0.16)
   vulkan-ruby!
 
 BUNDLED WITH

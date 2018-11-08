@@ -7,3 +7,4 @@ gemspec
 gem 'fiddle',      git: 'https://github.com/sinisterchipmunk/fiddle',
                    branch: 'nested-structs'
 gem 'sdl2_vulkan', git: 'https://github.com/sinisterchipmunk/sdl2_vulkan'
+gem 'cglm',        git: 'https://github.com/sinisterchipmunk/cglm-ruby'

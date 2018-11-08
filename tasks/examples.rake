@@ -6,6 +6,7 @@ namespace :examples do
     examples << "examples:#{basename}"
     desc "run the '#{basename}' example script. Influential vars: DEBUG=1, CALL_TRACE=1, MAX_FRAMES=N"
     task basename do
+      ENV['COVERAGE'] = basename
       sh 'bundle', 'exec', 'ruby', filename
     end
   end
