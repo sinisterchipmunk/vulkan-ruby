@@ -7,6 +7,17 @@ module Vulkan
     attr_reader :instance, :device
     
     def initialize(instance, device)
+      # NOTE it's important we keep handles to both instance and device to
+      # avoid garbage collection of those objects if they should go out of
+      # scope in the greater program. As long as anyone keeps a handle to
+      # this dispatch table, they are still using both the device and
+      # instance, and premature GC of those objects can be catastrophic
+      # (segfaults). Because of the #to_ptr below, this may constitute a bit
+      # of a refactor later on, for clarity's sake -- but for now merely
+      # keeping the handles around is good enough.
+      @_instance = instance
+      @_device   = device
+
       @instance = instance.respond_to?(:to_ptr) ? instance.to_ptr : instance
       @device   = device.respond_to?(:to_ptr)   ? device.to_ptr   : device
       raise ArgumentError, "instance must be a pointer or nil" unless @instance.nil? || @instance.kind_of?(Fiddle::Pointer)
