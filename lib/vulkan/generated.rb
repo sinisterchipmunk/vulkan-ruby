@@ -18,9 +18,6 @@ module Vulkan
   typealias 'XID',      'unsigned long'
   typealias 'Window',   'XID'
   typealias 'RROutput', 'XID'
-  # Mir Toolkit
-  typealias 'MirConnection', 'void' # HACK: since only pointers to this type are used, its size need not be known
-  typealias 'MirSurface',    'void' # HACK: since only pointers to this type are used, its size need not be known
   # Wayland
   typealias 'wl_display', 'void' # HACK: since only pointers to this type are used, its size need not be known
   typealias 'wl_surface', 'void' # HACK: since only pointers to this type are used, its size need not be known

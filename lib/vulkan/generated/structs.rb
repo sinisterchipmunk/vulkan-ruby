@@ -5,44 +5,48 @@
 # [NOTICE] This is an automatically generated file.
 
 module Vulkan
-  VkGeometryTrianglesNVX = struct ["VkStructureType  sType",
-                                   "void * pNext",
-                                   "VkBuffer  vertexData",
-                                   "VkDeviceSize  vertexOffset",
-                                   "uint32_t  vertexCount",
-                                   "VkDeviceSize  vertexStride",
-                                   "VkFormat  vertexFormat",
-                                   "VkBuffer  indexData",
-                                   "VkDeviceSize  indexOffset",
-                                   "uint32_t  indexCount",
-                                   "VkIndexType  indexType",
-                                   "VkBuffer  transformData",
-                                   "VkDeviceSize  transformOffset"]
-  VkGeometryAABBNVX = struct ["VkStructureType  sType",
-                              "void * pNext",
-                              "VkBuffer  aabbData",
-                              "uint32_t  numAABBs",
-                              "uint32_t  stride",
-                              "VkDeviceSize  offset"]
-  VkGeometryDataNVX = struct [{ "triangles" => VkGeometryTrianglesNVX },
-                              { "aabbs" => VkGeometryAABBNVX }]
-  VkGeometryNVX = struct ["VkStructureType  sType",
-                          "void * pNext",
-                          "VkGeometryTypeNVX  geometryType",
-                          { "geometry" => VkGeometryDataNVX },
-                          "VkGeometryFlagsNVX  flags"]
-  VkAccelerationStructureCreateInfoNVX = struct ["VkStructureType  sType",
-                                                 "void * pNext",
-                                                 "VkAccelerationStructureTypeNVX  type",
-                                                 "VkBuildAccelerationStructureFlagsNVX  flags",
-                                                 "VkDeviceSize  compactedSize",
-                                                 "uint32_t  instanceCount",
-                                                 "uint32_t  geometryCount",
-                                                 "VkGeometryNVX * pGeometries"]
+  VkGeometryTrianglesNV = struct ["VkStructureType  sType",
+                                  "void * pNext",
+                                  "VkBuffer  vertexData",
+                                  "VkDeviceSize  vertexOffset",
+                                  "uint32_t  vertexCount",
+                                  "VkDeviceSize  vertexStride",
+                                  "VkFormat  vertexFormat",
+                                  "VkBuffer  indexData",
+                                  "VkDeviceSize  indexOffset",
+                                  "uint32_t  indexCount",
+                                  "VkIndexType  indexType",
+                                  "VkBuffer  transformData",
+                                  "VkDeviceSize  transformOffset"]
+  VkGeometryAABBNV = struct ["VkStructureType  sType",
+                             "void * pNext",
+                             "VkBuffer  aabbData",
+                             "uint32_t  numAABBs",
+                             "uint32_t  stride",
+                             "VkDeviceSize  offset"]
+  VkGeometryDataNV = struct [{ "triangles" => VkGeometryTrianglesNV },
+                             { "aabbs" => VkGeometryAABBNV }]
+  VkGeometryNV = struct ["VkStructureType  sType",
+                         "void * pNext",
+                         "VkGeometryTypeNV  geometryType",
+                         { "geometry" => VkGeometryDataNV },
+                         "VkGeometryFlagsNV  flags"]
+  VkAccelerationStructureInfoNV = struct ["VkStructureType  sType",
+                                          "void * pNext",
+                                          "VkAccelerationStructureTypeNV  type",
+                                          "VkBuildAccelerationStructureFlagsNV  flags",
+                                          "uint32_t  instanceCount",
+                                          "uint32_t  geometryCount",
+                                          "VkGeometryNV * pGeometries"]
+  VkAccelerationStructureCreateInfoNV = struct ["VkStructureType  sType",
+                                                "void * pNext",
+                                                "VkDeviceSize  compactedSize",
+                                                { "info" => VkAccelerationStructureInfoNV }]
 
-  VkAccelerationStructureMemoryRequirementsInfoNVX = struct ["VkStructureType  sType",
-                                                             "void * pNext",
-                                                             "VkAccelerationStructureNVX  accelerationStructure"]
+  VkAccelerationStructureMemoryRequirementsInfoNV = struct ["VkStructureType  sType",
+                                                            "void * pNext",
+                                                            "VkAccelerationStructureMemoryRequirementsTypeNV  type",
+                                                            "VkAccelerationStructureNV  accelerationStructure"]
 
   VkAcquireNextImageInfoKHR = struct ["VkStructureType  sType",
                                       "void * pNext",
@@ -146,13 +150,13 @@ module Vulkan
   VkBaseOutStructure = struct ["VkStructureType  sType",
                                "VkBaseOutStructure * pNext"]
 
-  VkBindAccelerationStructureMemoryInfoNVX = struct ["VkStructureType  sType",
-                                                     "void * pNext",
-                                                     "VkAccelerationStructureNVX  accelerationStructure",
-                                                     "VkDeviceMemory  memory",
-                                                     "VkDeviceSize  memoryOffset",
-                                                     "uint32_t  deviceIndexCount",
-                                                     "uint32_t * pDeviceIndices"]
+  VkBindAccelerationStructureMemoryInfoNV = struct ["VkStructureType  sType",
+                                                    "void * pNext",
+                                                    "VkAccelerationStructureNV  accelerationStructure",
+                                                    "VkDeviceMemory  memory",
+                                                    "VkDeviceSize  memoryOffset",
+                                                    "uint32_t  deviceIndexCount",
+                                                    "uint32_t * pDeviceIndices"]
 
   VkBindBufferMemoryDeviceGroupInfo = struct ["VkStructureType  sType",
                                               "void * pNext",
@@ -503,11 +507,6 @@ module Vulkan
                                                       "VkImage  image",
                                                       "VkBuffer  buffer"]
 
-  VkDescriptorAccelerationStructureInfoNVX = struct ["VkStructureType  sType",
-                                                     "void * pNext",
-                                                     "uint32_t  accelerationStructureCount",
-                                                     "VkAccelerationStructureNVX * pAccelerationStructures"]
-
   VkDescriptorBufferInfo = struct ["VkBuffer  buffer",
                                    "VkDeviceSize  offset",
                                    "VkDeviceSize  range"]
@@ -729,6 +728,10 @@ module Vulkan
   VkDeviceGroupSwapchainCreateInfoKHR = struct ["VkStructureType  sType",
                                                 "void * pNext",
                                                 "VkDeviceGroupPresentModeFlagsKHR  modes"]
+
+  VkDeviceMemoryOverallocationCreateInfoAMD = struct ["VkStructureType  sType",
+                                                      "void * pNext",
+                                                      "VkMemoryOverallocationBehaviorAMD  overallocationBehavior"]
 
   VkDeviceQueueGlobalPriorityCreateInfoEXT = struct ["VkStructureType  sType",
                                                      "void * pNext",
@@ -1422,12 +1425,6 @@ module Vulkan
                                              "void * pNext",
                                              "uint32_t  memoryTypeBits"]
 
-  VkMirSurfaceCreateInfoKHR = struct ["VkStructureType  sType",
-                                      "void * pNext",
-                                      "VkMirSurfaceCreateFlagsKHR  flags",
-                                      "MirConnection * connection",
-                                      "MirSurface * mirSurface"]
-
   VkMultisamplePropertiesEXT = struct ["VkStructureType  sType",
                                        "void * pNext",
                                        { "maxSampleLocationGridSize" => VkExtent2D }]
@@ -1904,11 +1901,16 @@ module Vulkan
                                                         "void * pNext",
                                                         "uint32_t  maxPushDescriptors"]
 
-  VkPhysicalDeviceRaytracingPropertiesNVX = struct ["VkStructureType  sType",
-                                                    "void * pNext",
-                                                    "uint32_t  shaderHeaderSize",
-                                                    "uint32_t  maxRecursionDepth",
-                                                    "uint32_t  maxGeometryCount"]
+  VkPhysicalDeviceRayTracingPropertiesNV = struct ["VkStructureType  sType",
+                                                   "void * pNext",
+                                                   "uint32_t  shaderGroupHandleSize",
+                                                   "uint32_t  maxRecursionDepth",
+                                                   "uint32_t  maxShaderGroupStride",
+                                                   "uint32_t  shaderGroupBaseAlignment",
+                                                   "uint64_t  maxGeometryCount",
+                                                   "uint64_t  maxInstanceCount",
+                                                   "uint64_t  maxTriangleCount",
+                                                   "uint32_t  maxDescriptorSetAccelerationStructures"]
 
   VkPhysicalDeviceRepresentativeFragmentTestFeaturesNV = struct ["VkStructureType  sType",
                                                                  "void * pNext",
@@ -2206,16 +2208,24 @@ module Vulkan
 
   VkQueueFamilyProperties2KHR = VkQueueFamilyProperties2
 
-  VkRaytracingPipelineCreateInfoNVX = struct ["VkStructureType  sType",
-                                              "void * pNext",
-                                              "VkPipelineCreateFlags  flags",
-                                              "uint32_t  stageCount",
-                                              "VkPipelineShaderStageCreateInfo * pStages",
-                                              "uint32_t * pGroupNumbers",
-                                              "uint32_t  maxRecursionDepth",
-                                              "VkPipelineLayout  layout",
-                                              "VkPipeline  basePipelineHandle",
-                                              "int32_t  basePipelineIndex"]
+  VkRayTracingShaderGroupCreateInfoNV = struct ["VkStructureType  sType",
+                                                "void * pNext",
+                                                "VkRayTracingShaderGroupTypeNV  type",
+                                                "uint32_t  generalShader",
+                                                "uint32_t  closestHitShader",
+                                                "uint32_t  anyHitShader",
+                                                "uint32_t  intersectionShader"]
+  VkRayTracingPipelineCreateInfoNV = struct ["VkStructureType  sType",
+                                             "void * pNext",
+                                             "VkPipelineCreateFlags  flags",
+                                             "uint32_t  stageCount",
+                                             "VkPipelineShaderStageCreateInfo * pStages",
+                                             "uint32_t  groupCount",
+                                             "VkRayTracingShaderGroupCreateInfoNV * pGroups",
+                                             "uint32_t  maxRecursionDepth",
+                                             "VkPipelineLayout  layout",
+                                             "VkPipeline  basePipelineHandle",
+                                             "int32_t  basePipelineIndex"]
 
   VkRefreshCycleDurationGOOGLE = struct ["uint64_t  refreshDuration"]
 
@@ -2564,6 +2574,11 @@ module Vulkan
                                  "VkDescriptorImageInfo * pImageInfo",
                                  "VkDescriptorBufferInfo * pBufferInfo",
                                  "VkBufferView * pTexelBufferView"]
+
+  VkWriteDescriptorSetAccelerationStructureNV = struct ["VkStructureType  sType",
+                                                        "void * pNext",
+                                                        "uint32_t  accelerationStructureCount",
+                                                        "VkAccelerationStructureNV * pAccelerationStructures"]
 
   VkWriteDescriptorSetInlineUniformBlockEXT = struct ["VkStructureType  sType",
                                                       "void * pNext",

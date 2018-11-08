@@ -70,9 +70,9 @@ module Vulkan
   typealias "VkSubgroupFeatureFlags"                                , "uint32_t"
   typealias "VkIndirectCommandsLayoutUsageFlagsNVX"                 , "uint32_t"
   typealias "VkObjectEntryUsageFlagsNVX"                            , "uint32_t"
-  typealias "VkGeometryFlagsNVX"                                    , "uint32_t"
-  typealias "VkGeometryInstanceFlagsNVX"                            , "uint32_t"
-  typealias "VkBuildAccelerationStructureFlagsNVX"                  , "uint32_t"
+  typealias "VkGeometryFlagsNV"                                     , "uint32_t"
+  typealias "VkGeometryInstanceFlagsNV"                             , "uint32_t"
+  typealias "VkBuildAccelerationStructureFlagsNV"                   , "uint32_t"
   typealias "VkDescriptorUpdateTemplateCreateFlags"                 , "uint32_t"
   typealias "VkDescriptorUpdateTemplateCreateFlagsKHR"              , "uint32_t"
   typealias "VkCompositeAlphaFlagsKHR"                              , "uint32_t"
@@ -82,7 +82,6 @@ module Vulkan
   typealias "VkDisplayModeCreateFlagsKHR"                           , "uint32_t"
   typealias "VkDisplaySurfaceCreateFlagsKHR"                        , "uint32_t"
   typealias "VkAndroidSurfaceCreateFlagsKHR"                        , "uint32_t"
-  typealias "VkMirSurfaceCreateFlagsKHR"                            , "uint32_t"
   typealias "VkViSurfaceCreateFlagsNN"                              , "uint32_t"
   typealias "VkWaylandSurfaceCreateFlagsKHR"                        , "uint32_t"
   typealias "VkWin32SurfaceCreateFlagsKHR"                          , "uint32_t"
@@ -163,7 +162,7 @@ module Vulkan
   typealias "VkSamplerYcbcrConversion"                              , 'void *'
   typealias "VkSamplerYcbcrConversionKHR"                           , 'void *'
   typealias "VkValidationCacheEXT"                                  , 'void *'
-  typealias "VkAccelerationStructureNVX"                            , 'void *'
+  typealias "VkAccelerationStructureNV"                             , 'void *'
   typealias "VkDisplayKHR"                                          , 'void *'
   typealias "VkDisplayModeKHR"                                      , 'void *'
   typealias "VkSurfaceKHR"                                          , 'void *'
@@ -239,9 +238,9 @@ module Vulkan
   typealias "VkSubgroupFeatureFlags"                                , "VkFlags"
   typealias "VkIndirectCommandsLayoutUsageFlagsNVX"                 , "VkFlags"
   typealias "VkObjectEntryUsageFlagsNVX"                            , "VkFlags"
-  typealias "VkGeometryFlagsNVX"                                    , "VkFlags"
-  typealias "VkGeometryInstanceFlagsNVX"                            , "VkFlags"
-  typealias "VkBuildAccelerationStructureFlagsNVX"                  , "VkFlags"
+  typealias "VkGeometryFlagsNV"                                     , "VkFlags"
+  typealias "VkGeometryInstanceFlagsNV"                             , "VkFlags"
+  typealias "VkBuildAccelerationStructureFlagsNV"                   , "VkFlags"
   typealias "VkDescriptorUpdateTemplateCreateFlags"                 , "VkFlags"
   typealias "VkDescriptorUpdateTemplateCreateFlagsKHR"              , "VkFlags"
   typealias "VkCompositeAlphaFlagsKHR"                              , "VkFlags"
@@ -251,7 +250,6 @@ module Vulkan
   typealias "VkDisplayModeCreateFlagsKHR"                           , "VkFlags"
   typealias "VkDisplaySurfaceCreateFlagsKHR"                        , "VkFlags"
   typealias "VkAndroidSurfaceCreateFlagsKHR"                        , "VkFlags"
-  typealias "VkMirSurfaceCreateFlagsKHR"                            , "VkFlags"
   typealias "VkViSurfaceCreateFlagsNN"                              , "VkFlags"
   typealias "VkWaylandSurfaceCreateFlagsKHR"                        , "VkFlags"
   typealias "VkWin32SurfaceCreateFlagsKHR"                          , "VkFlags"
@@ -332,7 +330,7 @@ module Vulkan
   typealias "VkSamplerYcbcrConversion"                              , "void *"
   typealias "VkSamplerYcbcrConversionKHR"                           , "void *"
   typealias "VkValidationCacheEXT"                                  , "void *"
-  typealias "VkAccelerationStructureNVX"                            , "void *"
+  typealias "VkAccelerationStructureNV"                             , "void *"
   typealias "VkDisplayKHR"                                          , "void *"
   typealias "VkDisplayModeKHR"                                      , "void *"
   typealias "VkSurfaceKHR"                                          , "void *"

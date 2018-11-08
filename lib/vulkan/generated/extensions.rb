@@ -1,4 +1,4 @@
-# vulkan-ruby 1.0.83.0
+# vulkan-ruby 0.1.0
 #
 #   => https://github.com/sinisterchipmunk/vulkan-ruby
 #
@@ -169,7 +169,7 @@ require 'vulkan/generated/extensions/vk_ext_descriptor_indexing'
 require 'vulkan/generated/extensions/vk_ext_shader_viewport_index_layer'
 require 'vulkan/generated/extensions/vk_nv_extension_164'
 require 'vulkan/generated/extensions/vk_nv_shading_rate_image'
-require 'vulkan/generated/extensions/vk_nvx_raytracing'
+require 'vulkan/generated/extensions/vk_nv_ray_tracing'
 require 'vulkan/generated/extensions/vk_nv_representative_fragment_test'
 require 'vulkan/generated/extensions/vk_nv_extension_168'
 require 'vulkan/generated/extensions/vk_khr_maintenance3'
@@ -193,7 +193,7 @@ require 'vulkan/generated/extensions/vk_amd_shader_core_properties'
 require 'vulkan/generated/extensions/vk_amd_extension_187'
 require 'vulkan/generated/extensions/vk_amd_extension_188'
 require 'vulkan/generated/extensions/vk_amd_extension_189'
-require 'vulkan/generated/extensions/vk_amd_extension_190'
+require 'vulkan/generated/extensions/vk_amd_memory_overallocation_behavior'
 require 'vulkan/generated/extensions/vk_ext_vertex_attribute_divisor'
 require 'vulkan/generated/extensions/vk_google_extension_192'
 require 'vulkan/generated/extensions/vk_google_extension_193'
@@ -247,3 +247,5 @@ require 'vulkan/generated/extensions/vk_khr_extension_240'
 require 'vulkan/generated/extensions/vk_nv_extension_241'
 require 'vulkan/generated/extensions/vk_nv_extension_242'
 require 'vulkan/generated/extensions/vk_intel_extension_243'
+require 'vulkan/generated/extensions/vk_mesa_extension_244'
+require 'vulkan/generated/extensions/vk_nv_extension_245'

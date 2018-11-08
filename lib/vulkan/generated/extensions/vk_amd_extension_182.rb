@@ -1,4 +1,4 @@
-# vulkan-ruby 1.0.83.0
+# vulkan-ruby 0.1.0
 #
 #   => https://github.com/sinisterchipmunk/vulkan-ruby
 #

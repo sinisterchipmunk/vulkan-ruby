@@ -7,6 +7,8 @@ end
 namespace :generate do
   desc 'generate extension enums, types, etc'
   task :extensions do
+    rm_rf generate_dir.join('extensions')
+    mkdir_p generate_dir.join('extensions')
     File.open(generate_dir.join('extensions.rb'), 'w') do |extout|
       extout.puts header_comment
       extout.puts

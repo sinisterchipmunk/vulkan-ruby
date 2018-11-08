@@ -18,10 +18,10 @@ class GeneratorsTest < Minitest::Test
   end
 
   def test_extensions_discovered
-    assert File.exist?(Vulkan.root.join('generated/extensions/vk_nvx_raytracing.rb'))
+    assert File.exist?(Vulkan.root.join('generated/extensions/vk_nv_ray_tracing.rb'))
 
     content = File.read(Vulkan.root.join('generated/extensions.rb'))
-    assert content[/require ['"]vulkan\/generated\/extensions\/vk_nvx_raytracing/]
+    assert content[/require ['"]vulkan\/generated\/extensions\/vk_nv_ray_tracing/]
   end
 
   def test_extension_enums_have_correct_values
