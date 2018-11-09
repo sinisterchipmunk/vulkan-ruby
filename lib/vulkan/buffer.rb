@@ -1,5 +1,5 @@
 module Vulkan
-  class VertexBuffer
+  class Buffer
     include Vulkan::Checks
     include Vulkan::Finalizer
 

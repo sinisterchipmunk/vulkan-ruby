@@ -4,6 +4,7 @@ module Vulkan
     include Vulkan::Conversions
     include Vulkan::Finalizer
 
+    attr_reader :layout
     attr_reader :input
     attr_reader :viewport
     attr_reader :scissor
@@ -12,6 +13,7 @@ module Vulkan
     attr_reader :blending
     attr_reader :layouts
     attr_reader :constant_ranges
+    attr_reader :descriptors
 
     def initialize(vk, swapchain)
       @vk = vk
@@ -19,6 +21,7 @@ module Vulkan
       @shader_stages = []
       @layouts = []
       @constant_ranges = []
+      @descriptors = []
       @input = {
         topology: :triangles,
         primitive_restart: false
@@ -26,8 +29,8 @@ module Vulkan
       @viewport = {
         left: 0,
         top: 0,
-        width: swapchain.extent[:width],
-        height: swapchain.extent[:height],
+        width: swapchain[:extent][:width],
+        height: swapchain[:extent][:height],
         min_depth: 0,
         max_depth: 1
       }
@@ -42,8 +45,8 @@ module Vulkan
         discard_all: false,
         polygon_mode: :fill,
         line_width: 1.0,
-        cull_mode: :back,
-        front_face: :clockwise,
+        cull_mode: :none,
+        front_face: :counter_clockwise,
         depth_bias: false,
         depth_bias_clamp: 0,
         depth_bias_constant: 0,
@@ -86,6 +89,10 @@ module Vulkan
       attribute_description.format   = format
       attribute_description.offset   = offset
       @attribute_descriptions << attribute_description
+    end
+
+    def add_descriptor_set_layout(*a, **b)
+      Vulkan::DescriptorSetLayout.new(@vk, *a, **b).tap { |layout| @layouts << layout }
     end
 
     def add_shader_stage(shader_stage)
@@ -179,17 +186,16 @@ module Vulkan
 
       pipeline_layout_info = VkPipelineLayoutCreateInfo.malloc
       pipeline_layout_info.sType                  = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO
-      pipeline_layout_info.setLayoutCount         = 0 # @layouts.size
-      pipeline_layout_info.pSetLayouts            = nil # FIXME
+      pipeline_layout_info.setLayoutCount         = @layouts.size
+      pipeline_layout_info.pSetLayouts            = array_of_structures(@layouts.map { |l| Vulkan.create_value('void *', l.to_ptr) })
       pipeline_layout_info.pushConstantRangeCount = 0 # @constant_ranges.size
       pipeline_layout_info.pPushConstantRanges    = nil # FIXME
-      raise NotImplemented, 'layouts not implemented' if @layouts.any?
       raise NotImplemented, 'push constant ranges not implemented' if @constant_ranges.any?
 
       pipeline_layout_p = Vulkan.create_value('void *', nil)
       check_result @vk.vkCreatePipelineLayout(@vk.device, pipeline_layout_info, nil, pipeline_layout_p)
-      @layout_handle = pipeline_layout_p.value
-      finalize_with @vk, :vkDestroyPipelineLayout, @vk.device, @layout_handle, nil
+      @layout = pipeline_layout_p.value
+      finalize_with @vk, :vkDestroyPipelineLayout, @vk.device, @layout, nil
 
       pipeline_info = VkGraphicsPipelineCreateInfo.malloc
       pipeline_info.sType               = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
@@ -203,7 +209,7 @@ module Vulkan
       pipeline_info.pDepthStencilState  = nil # TODO
       pipeline_info.pColorBlendState    = color_blending
       pipeline_info.pDynamicState       = nil
-      pipeline_info.layout              = @layout_handle
+      pipeline_info.layout              = @layout
       pipeline_info.renderPass          = render_pass.to_ptr
       pipeline_info.subpass             = first_subpass_index
       pipeline_info.basePipelineHandle  = nil # TODO

@@ -28,6 +28,10 @@ module Vulkan
       super || Vulkan.function_registry.key?(method_name)
     end
 
+    def inspect
+      "#<#{self.class} instance@#{instance.to_i.to_s(16)} device@#{device.to_i.to_s(16)}>"
+    end
+
     def call_trace(name, calling_convention, *params)
       if ENV['CALL_TRACE']
         args_s = params.map do |arg|

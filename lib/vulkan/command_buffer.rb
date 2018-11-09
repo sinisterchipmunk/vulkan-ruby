@@ -135,6 +135,26 @@ module Vulkan
       @vk.vkCmdBindIndexBuffer(to_ptr, index_buffer, offset, sym_to_index_type(type))
     end
 
+    def bind_descriptor_sets(bind_point, sets, pipeline_layout:,
+                                               set_count: sets.size,
+                                               first_set: 0,
+                                               dynamic_offsets: nil,
+                                               dynamic_offset_count: dynamic_offsets ? dynamic_offsets.size : 0)
+      @refs << sets
+      @vk.vkCmdBindDescriptorSets(to_ptr,
+                                  sym_to_pipeline_bind_point(bind_point),
+                                  pipeline_layout,
+                                  first_set,
+                                  set_count,
+                                  array_of_pointers(sets),
+                                  dynamic_offset_count,
+                                  dynamic_offsets);
+    end
+
+    def bind_descriptor_set(bind_point, set, pipeline_layout:)
+      bind_descriptor_sets(bind_point, [set], pipeline_layout: pipeline_layout)
+    end
+
     def draw(vertex_count, instance_count, first_vertex_index, first_instance_index)
       @vk.vkCmdDraw(to_ptr, vertex_count, instance_count, first_vertex_index, first_instance_index)
     end

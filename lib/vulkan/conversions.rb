@@ -4,6 +4,61 @@ module Vulkan
       bool ? VK_TRUE : VK_FALSE
     end
 
+    def syms_to_descriptor_set_layout_type_flags(syms)
+      flags = 0
+      syms.each do |sym|
+        flags |= case sym
+                 when :push                   then VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR
+                 when :update_after_bind_pool then VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT_EXT
+                 else sym
+                 end
+      end
+      flags
+    end
+
+    def sym_to_descriptor_type(sym)
+      case sym
+      when :sampler                then VK_DESCRIPTOR_TYPE_SAMPLER
+      when :combined_image_sampler then VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+      when :sampled_image          then VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE
+      when :storage_image          then VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+      when :uniform_texel_buffer   then VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
+      when :storage_texel_buffer   then VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER
+      when :uniform_buffer         then VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+      when :storage_buffer         then VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+      when :uniform_buffer_dynamic then VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC
+      when :storage_buffer_dynamic then VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC
+      when :input_attachment       then VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT
+      else sym
+      end
+    end
+
+    def syms_to_stage_flags(syms)
+      flags = 0
+      syms.each do |sym|
+        flags |= case sym
+                 when :vertex                  then VK_SHADER_STAGE_VERTEX_BIT
+                 when :tessellation_control    then VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
+                 when :tessellation_evaluation then VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
+                 when :geometry                then VK_SHADER_STAGE_GEOMETRY_BIT
+                 when :fragment                then VK_SHADER_STAGE_FRAGMENT_BIT
+                 when :compute                 then VK_SHADER_STAGE_COMPUTE_BIT
+                 when :all_graphics            then VK_SHADER_STAGE_ALL_GRAPHICS
+                 when :all                     then VK_SHADER_STAGE_ALL
+                 when :task                    then VK_SHADER_STAGE_TASK_BIT_NV
+                 when :mesh                    then VK_SHADER_STAGE_MESH_BIT_NV
+                 when :raygen                  then VK_SHADER_STAGE_RAYGEN_BIT_NV
+                 when :any_hit                 then VK_SHADER_STAGE_ANY_HIT_BIT_NV
+                 when :closest_hit             then VK_SHADER_STAGE_CLOSEST_HIT_BIT_NV
+                 when :miss                    then VK_SHADER_STAGE_MISS_BIT_NV
+                 when :intersection            then VK_SHADER_STAGE_INTERSECTION_BIT_NV
+                 when :callable                then VK_SHADER_STAGE_CALLABLE_BIT_NV
+                 else sym
+                 end
+      end
+      flags
+    end
+
     def sym_to_subpass_contents(sym)
       case sym
       when :inline                                then VK_SUBPASS_CONTENTS_INLINE
@@ -198,8 +253,10 @@ module Vulkan
     end
 
     def array_of_structures(ary)
+      return nil if ary.empty?
       size = ary.map { |struct| struct.to_ptr.size }.sum
       pointers = Fiddle::Pointer.malloc(size)
+      raise ArgumentError, "size is 0?, #{ary}" if size == 0
       offset = 0
       ary.each_with_index do |addr, i|
         (pointers + offset).memcpy(addr.to_ptr)

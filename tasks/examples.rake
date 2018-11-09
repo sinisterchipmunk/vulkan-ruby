@@ -15,7 +15,7 @@ end
 desc 'Run all examples. Influential vars: DEBUG=1, CALL_TRACE=1, MAX_FRAMES=N'
 task examples: examples
 
-task :test do
+task :default do
   # also run all examples as part of the tests
   ENV['MAX_FRAMES'] = '5'
   ENV['DEBUG'] = '1'

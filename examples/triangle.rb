@@ -1,4 +1,5 @@
 require 'bundler/setup'
+require 'simplecov'
 require 'vulkan'
 require 'sdl2_vulkan'
 

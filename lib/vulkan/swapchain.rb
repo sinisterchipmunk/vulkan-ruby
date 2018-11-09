@@ -61,6 +61,22 @@ module Vulkan
       @image_index_p = Vulkan.create_value('uint32_t', 0)
     end
 
+    def [](method_name)
+      send method_name
+    end
+
+    def width
+      @extent[:width]
+    end
+
+    def height
+      @extent[:height]
+    end
+
+    def size
+      image_views.size
+    end
+
     def next_image_index(semaphore: nil, fence: nil, timeout: 0xffffffffffffffff)
       @vk.vkAcquireNextImageKHR(@vk.device, to_ptr, timeout, semaphore, fence, @image_index_p)
       @image_index_p.value

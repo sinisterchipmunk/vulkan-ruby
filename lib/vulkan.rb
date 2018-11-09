@@ -29,7 +29,10 @@ require 'vulkan/fence'
 require 'vulkan/queue'
 require 'vulkan/platform'
 require 'vulkan/struct'
-require 'vulkan/vertex_buffer'
+require 'vulkan/buffer'
+require 'vulkan/descriptor_pool'
+require 'vulkan/descriptor_set'
+require 'vulkan/descriptor_set_layout'
 
 module Vulkan
   extend Fiddle::Importer

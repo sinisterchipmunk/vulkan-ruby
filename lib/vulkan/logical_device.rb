@@ -75,8 +75,8 @@ module Vulkan
       end
     end
 
-    def create_vertex_buffer(**args)
-      Vulkan::VertexBuffer.new(@vk, physical_device, **args)
+    def create_buffer(**args)
+      Vulkan::Buffer.new(@vk, physical_device, **args)
     end
 
     def create_shader_stage(**args)
@@ -105,6 +105,10 @@ module Vulkan
 
     def create_command_pool(**args)
       Vulkan::CommandPool.new(@vk, **args)
+    end
+
+    def create_descriptor_set_pool(**args)
+      Vulkan::DescriptorPool.new(@vk, **args)
     end
 
     def hexaddr

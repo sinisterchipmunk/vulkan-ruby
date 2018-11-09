@@ -1,3 +1,5 @@
+require 'fiddle/types'
+
 module Vulkan
   load_vulkan_library
 
@@ -22,10 +24,7 @@ module Vulkan
   typealias 'wl_display', 'void' # HACK: since only pointers to this type are used, its size need not be known
   typealias 'wl_surface', 'void' # HACK: since only pointers to this type are used, its size need not be known
   # Windows
-  typealias 'DWORD',     'unsigned long'
-  typealias 'HANDLE',    'void *'
-  typealias 'HINSTANCE', 'HANDLE'
-  typealias 'HWND',      'HANDLE'
+  include Fiddle::Win32Types
   typealias 'WCHAR',     'unsigned short'
   typealias 'LPCWSTR',   'WCHAR *'
   # XCB

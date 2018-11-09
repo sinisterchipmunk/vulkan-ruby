@@ -1,4 +1,5 @@
 require 'bundler/setup'
+require 'simplecov'
 require 'vulkan'
 require 'sdl2_vulkan'
 
@@ -55,15 +56,15 @@ end
 
 command_pool = device.create_command_pool queue_family: graphics_queue_family
 
-StagingBuffer = device.create_vertex_buffer size: VertexData.size,
-                                            usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_SRC_BIT
+StagingBuffer = device.create_buffer size: VertexData.size,
+                                     usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 StagingBuffer.map do |data|
   data[0, VertexData.size] = VertexData[0, VertexData.size]
 end
 
-VertexBuffer = device.create_vertex_buffer size: VertexData.size,
-                                           usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_DST_BIT | Vulkan::VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
-                                           properties: Vulkan::VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+VertexBuffer = device.create_buffer size: VertexData.size,
+                                    usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_DST_BIT | Vulkan::VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+                                    properties: Vulkan::VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 transfer_buffer = command_pool.create_command_buffer(usage: :one_time_submit) do |cmd|
   cmd.copy_buffer StagingBuffer, VertexBuffer
 end
