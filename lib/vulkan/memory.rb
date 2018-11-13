@@ -1,6 +1,7 @@
 module Vulkan
   class Memory
     include Vulkan::Checks
+    include Vulkan::Conversions
     include Vulkan::Finalizer
 
     attr_reader :requirements
@@ -8,11 +9,10 @@ module Vulkan
 
     def initialize(vk, physical_device,
                        owner:,
-                       properties: VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
-                                   VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
+                       properties: [:host_visible, :host_coherent])
       @vk = vk
       @physical_device = physical_device
-      @properties = properties
+      @properties = syms_to_memory_properties(properties)
       @owner = owner
       @mapped = Vulkan.create_value('void *', nil)
 
@@ -30,14 +30,23 @@ module Vulkan
     end
 
     def memory_type_index
+      properties = {}
       physical_device.memory_properties[:memory_type_count].times do |i|
-        if (requirements.memoryTypeBits & (1 << i)) != 0 &&
-           (physical_device.memory_properties[:memory_types][i][:property_flags] & @properties) == @properties
-          return i
+        if (requirements.memoryTypeBits & (1 << i)) != 0
+          if (physical_device.memory_properties[:memory_types][i][:property_flags] & @properties) == @properties
+            return i
+          else
+            properties[i] = "0x%x" % physical_device.memory_properties[:memory_types][i][:property_flags]
+          end
         end
       end
 
-      raise 'failed to find suitable memory type'
+      raise 'failed to find suitable memory type (needed properties == 0x%x, memory type count == %d, requrement memory type bits == 0b%s, available properties == %s)' % [
+        @properties,
+        physical_device.memory_properties[:memory_type_count],
+        requirements.memoryTypeBits.to_s(2),
+        properties.inspect
+      ]
     end
 
     def data

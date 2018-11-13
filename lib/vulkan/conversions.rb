@@ -17,6 +17,7 @@ module Vulkan
     SAMPLER_MIPMAP_MODES = {}
     COMPARE_OPS = {}
     BORDER_COLORS = {}
+    MEMORY_PROPERTIES = {}
 
     Vulkan.constants.each do |name|
       output = case name.to_s
@@ -37,6 +38,7 @@ module Vulkan
                when /^VK_COMPARE_OP_(.*?)$/            then COMPARE_OPS
                when /^VK_BORDER_COLOR_(.*?)$/          then BORDER_COLORS
                when /^VK_SAMPLER_MIPMAP_MODE_(.*?)$/   then SAMPLER_MIPMAP_MODES
+               when /^VK_MEMORY_PROPERTY_(.*?)_BIT/    then MEMORY_PROPERTIES
                else next
                end
       key = $1.downcase
@@ -61,6 +63,10 @@ module Vulkan
 
     def syms_to_access_mask(syms)
       syms_to_flags(syms, ACCESS_MASK_BITS)
+    end
+
+    def syms_to_memory_properties(syms)
+      syms_to_flags(syms, MEMORY_PROPERTIES)
     end
 
     def sym_to_compare_op(sym)

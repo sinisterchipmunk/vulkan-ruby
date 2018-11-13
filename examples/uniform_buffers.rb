@@ -77,7 +77,7 @@ staging_buffer = device.create_buffer size: VertexData.size, usage: Vulkan::VK_B
 staging_buffer.map { |data| data[0, VertexData.size] = VertexData[0, VertexData.size] }
 VertexBuffer = device.create_buffer size: VertexData.size,
                                     usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_DST_BIT | Vulkan::VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
-                                    properties: Vulkan::VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+                                    properties: :device_local
 vertex_transfer_buffer = command_pool.create_command_buffer(usage: :one_time_submit) { |cmd| cmd.copy_buffer staging_buffer, VertexBuffer }
 
 # Populate the index buffer
@@ -85,7 +85,7 @@ staging_buffer = device.create_buffer size: IndexData.size, usage: Vulkan::VK_BU
 staging_buffer.map { |data| data[0, IndexData.size] = IndexData[0, IndexData.size] }
 IndexBuffer = device.create_buffer size: IndexData.size,
                                    usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_DST_BIT | Vulkan::VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
-                                   properties: Vulkan::VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+                                   properties: :device_local
 index_transfer_buffer = command_pool.create_command_buffer(usage: :one_time_submit) { |cmd| cmd.copy_buffer staging_buffer, IndexBuffer }
 
 UniformBuffers = []
@@ -140,7 +140,7 @@ rebuild_swap_chain = proc do
   $swapchain.size.times do |i|
     UniformBuffers[i] = device.create_buffer size: UniformBufferStruct.size,
                                              usage: Vulkan::VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-                                             properties: Vulkan::VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | Vulkan::VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
+                                             properties: [:host_visible, :host_coherent]
   end
   descriptor_set_pool = device.create_descriptor_set_pool pool_sizes: [type: :uniform_buffer, count: $swapchain.size],
                                                           max_sets: $swapchain.size
