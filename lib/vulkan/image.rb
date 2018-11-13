@@ -32,7 +32,7 @@ module Vulkan
                        sharing:        :exclusive,
                        samples:        1,
                        flags:          [],
-                       **memory_args)
+                       properties:     :device_local)
       @vk             = vk
       @dimensions     = dimensions
       @width          = width
@@ -64,8 +64,7 @@ module Vulkan
       handle_p = Vulkan.create_value('VkImage')
       check_result @vk.vkCreateImage(@vk.device, image_info, nil, handle_p)
       @handle = handle_p.value
-      @memory = Vulkan::ImageMemory.new(@vk, physical_device, owner: self,
-                                                            **memory_args)
+      @memory = Vulkan::ImageMemory.new(@vk, physical_device, owner: self, properties: properties)
       finalize_with @vk, :vkDestroyImage, @vk.device, @handle, nil
     end
 
