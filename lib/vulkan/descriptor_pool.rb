@@ -32,7 +32,7 @@ module Vulkan
       alloc_info.pSetLayouts        = array_of_structures(layouts.map { |layout| Vulkan.create_value('void *', layout.to_ptr.to_i) })
       sets_p = Vulkan.struct(['VkDescriptorSet sets[%d]' % count]).malloc
       check_result @vk.vkAllocateDescriptorSets(@vk.device, alloc_info, sets_p)
-      count.times.map { |i| Vulkan::DescriptorSet.new(@vk, self, sets_p.sets[i], descriptor_sets_freeable?) }
+      count.times.map { |i| Vulkan::DescriptorSet.new(@vk, self, layouts[i], sets_p.sets[i], descriptor_sets_freeable?) }
     end
 
     def build_pool_size(type:, count:)

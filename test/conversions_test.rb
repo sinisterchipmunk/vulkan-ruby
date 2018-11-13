@@ -3,6 +3,63 @@ require "test_helper"
 class ConversionsTest < Minitest::Test
   include Vulkan::Conversions
 
+  def test_sym_to_samples
+    assert_equal VK_SAMPLE_COUNT_1_BIT,  sym_to_samples( 1)
+    assert_equal VK_SAMPLE_COUNT_2_BIT,  sym_to_samples( 2)
+    assert_equal VK_SAMPLE_COUNT_4_BIT,  sym_to_samples( 4)
+    assert_equal VK_SAMPLE_COUNT_8_BIT,  sym_to_samples( 8)
+    assert_equal VK_SAMPLE_COUNT_16_BIT, sym_to_samples(16)
+    assert_equal VK_SAMPLE_COUNT_32_BIT, sym_to_samples(32)
+    assert_equal VK_SAMPLE_COUNT_64_BIT, sym_to_samples(64)
+    assert_equal 99,                     sym_to_samples(99)
+  end
+
+  def test_array_of_pointers
+    assert_nil array_of_pointers(nil)
+    assert_nil array_of_pointers([])
+  end
+
+  def test_array_of_structures
+    assert_nil array_of_structures(nil)
+    assert_nil array_of_structures([])
+  end
+
+  def test_queue_family_to_index
+    assert_equal                       1, queue_family_to_index(1)
+    assert_equal                       1, queue_family_to_index({ index: 1 })
+    assert_equal VK_QUEUE_FAMILY_IGNORED, queue_family_to_index(nil)
+    assert_raises(ArgumentError) { queue_family_to_index(Object.new) }
+  end
+
+  def test_syms_to_image_usage_flags
+    assert_equal VK_IMAGE_USAGE_TRANSFER_SRC_BIT, syms_to_image_usage_flags([:transfer_src])
+    assert_equal VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+                 syms_to_image_usage_flags([:transfer_src, :depth_stencil_attachment])
+    assert_equal(-1, syms_to_image_usage_flags(-1))
+    assert_equal 1 | 2 | 4, syms_to_image_usage_flags([1, 2, 4])
+    assert_equal VK_IMAGE_USAGE_TRANSFER_SRC_BIT, syms_to_image_usage_flags(:transfer_src)
+  end
+
+  def test_sym_to_image_tiling
+    assert_equal VK_IMAGE_TILING_OPTIMAL, sym_to_image_tiling(:optimal)
+    assert_equal VK_IMAGE_TILING_LINEAR,  sym_to_image_tiling(:linear)
+    assert_equal 100,                     sym_to_image_tiling(100)
+  end
+
+  def test_sym_to_image_type
+    assert_equal VK_IMAGE_TYPE_1D, sym_to_image_type(:'1d')
+    assert_equal VK_IMAGE_TYPE_2D, sym_to_image_type(:'2d')
+    assert_equal VK_IMAGE_TYPE_3D, sym_to_image_type(:'3d')
+    assert_equal 100,              sym_to_image_type(100)
+  end
+
+  def test_sym_to_image_format
+    assert_equal VK_FORMAT_R8G8B8A8_UNORM,       sym_to_image_format(:r8g8b8a8_unorm)
+    assert_equal VK_FORMAT_R32G32B32A32_UINT,    sym_to_image_format(:r32g32b32a32_uint)
+    assert_equal VK_FORMAT_ASTC_8x6_UNORM_BLOCK, sym_to_image_format(:astc_8x6_unorm_block)
+    assert_equal(-1,                             sym_to_image_format(-1))
+  end
+
   def test_descriptor_set_layout_types
     assert_equal VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR,
                  syms_to_descriptor_set_layout_type_flags([:push])

@@ -116,10 +116,10 @@ module Vulkan
     end
 
     def hook_debug_utils_callback
-      name, return_type, param_types = Vulkan.parse_signature('VkBool32 debug_callback(int   messageSeverity,' +
-                                                                                      'int   messageType,' +
-                                                                                      'void *pCallbackData,' +
-                                                                                      'void *pUserData)')
+      _, return_type, param_types = Vulkan.parse_signature('VkBool32 debug_callback(int   messageSeverity,' +
+                                                                                   'int   messageType,' +
+                                                                                   'void *pCallbackData,' +
+                                                                                   'void *pUserData)')
       @debug_util_callback = Fiddle::Closure::BlockCaller.new(return_type, param_types) do |msg_severity, msg_type, cb_data_addr, user_arg_addr|
         data     = VkDebugUtilsMessengerCallbackDataEXT.new(cb_data_addr)
         type     = const_to_symbol(msg_type,     /^VK_DEBUG_UTILS_MESSAGE_TYPE_(.*?)_BIT_EXT$/)

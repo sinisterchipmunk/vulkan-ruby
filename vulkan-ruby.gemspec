@@ -37,4 +37,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'sdl2_vulkan',   '~> 0.1' # used by the examples
   spec.add_development_dependency 'cglm',          '~> 0.1'
   spec.add_development_dependency 'simplecov',     '~> 0.16'
+  spec.add_development_dependency 'chunky_png',    '~> 1.3'
 end

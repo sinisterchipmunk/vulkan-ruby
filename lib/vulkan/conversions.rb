@@ -1,7 +1,130 @@
 module Vulkan
   module Conversions
+    IMAGE_FORMATS = {}
+    IMAGE_TILING = {}
+    DESCRIPTOR_TYPES = {}
+    IMAGE_USAGE_BITS = {}
+    IMAGE_TYPES = {}
+    SHADER_STAGE_BITS = {}
+    SHARING_MODES = {}
+    IMAGE_CREATE_BITS = {}
+    PIPELINE_STAGE_BITS = {}
+    DEPENDENCY_FLAG_BITS = {}
+    IMAGE_ASPECT_BITS = {}
+    ACCESS_MASK_BITS = {}
+    FILTERS = {}
+    SAMPLER_ADDRESS_MODES = {}
+    SAMPLER_MIPMAP_MODES = {}
+    COMPARE_OPS = {}
+    BORDER_COLORS = {}
+
+    Vulkan.constants.each do |name|
+      output = case name.to_s
+               when /^VK_FORMAT_(.*?)$/                then IMAGE_FORMATS
+               when /^VK_IMAGE_TILING_(.*?)$/          then IMAGE_TILING
+               when /^VK_DESCRIPTOR_TYPE_(.*?)$/       then DESCRIPTOR_TYPES
+               when /^VK_IMAGE_USAGE_(.*?)_BIT/        then IMAGE_USAGE_BITS
+               when /^VK_IMAGE_TYPE_(.*?)$/            then IMAGE_TYPES
+               when /^VK_IMAGE_ASPECT_(.*?)_BIT/       then IMAGE_ASPECT_BITS
+               when /^VK_SHADER_STAGE_(.*?)(?:_BIT|$)/ then SHADER_STAGE_BITS
+               when /^VK_SHARING_MODE_(.*?)$/          then SHARING_MODES
+               when /^VK_IMAGE_CREATE_(.*?)_BIT/       then IMAGE_CREATE_BITS
+               when /^VK_PIPELINE_STAGE_(.*?)_BIT/     then PIPELINE_STAGE_BITS
+               when /^VK_DEPENDENCY_(.*?)_BIT/         then DEPENDENCY_FLAG_BITS
+               when /^VK_ACCESS_(.*?)_BIT/             then ACCESS_MASK_BITS
+               when /^VK_FILTER_(.*?)$/                then FILTERS
+               when /^VK_SAMPLER_ADDRESS_MODE_(.*?)$/  then SAMPLER_ADDRESS_MODES
+               when /^VK_COMPARE_OP_(.*?)$/            then COMPARE_OPS
+               when /^VK_BORDER_COLOR_(.*?)$/          then BORDER_COLORS
+               when /^VK_SAMPLER_MIPMAP_MODE_(.*?)$/   then SAMPLER_MIPMAP_MODES
+               else next
+               end
+      key = $1.downcase
+      raise 'BUG: two identical constant names? %s => %s' % [name, key] if output.include?(key)
+      output[key] = output[key.to_sym] = Vulkan.const_get(name)
+    end
+
+    def sym_to_samples(sym)
+      # 4 => 4 because VK_SAMPLE_COUNT_4_BIT == 4.
+      # But we'll keep this method here in case that changes or is not always
+      # true.
+      sym
+    end
+
+    def sym_to_val(sym, vals)
+      vals[sym] || sym
+    end
+
+    def syms_to_flags(syms, bits)
+      [syms].flatten.reduce(0) { |bit, sym| bit | sym_to_val(sym, bits) }
+    end
+
+    def syms_to_access_mask(syms)
+      syms_to_flags(syms, ACCESS_MASK_BITS)
+    end
+
+    def sym_to_compare_op(sym)
+      sym_to_val(sym, COMPARE_OPS)
+    end
+
+    def sym_to_border_color(sym)
+      sym_to_val(sym, BORDER_COLORS)
+    end
+
     def bool_to_vk(bool)
       bool ? VK_TRUE : VK_FALSE
+    end
+
+    def syms_to_pipeline_stage_flags(syms)
+      syms_to_flags(syms, PIPELINE_STAGE_BITS)
+    end
+
+    def syms_to_image_aspect_flags(syms)
+      syms_to_flags(syms, IMAGE_ASPECT_BITS)
+    end
+
+    def syms_to_dependency_flags(syms)
+      syms_to_flags(syms, DEPENDENCY_FLAG_BITS)
+    end
+
+    def syms_to_image_create_flags(syms)
+      syms_to_flags(syms, IMAGE_CREATE_BITS)
+    end
+
+    def sym_to_filter(sym)
+      sym_to_val sym, FILTERS
+    end
+
+    def sym_to_sampler_address_mode(sym)
+      sym_to_val sym, SAMPLER_ADDRESS_MODES
+    end
+
+    def sym_to_sampler_mipmap_mode(sym)
+      sym_to_val sym, SAMPLER_MIPMAP_MODES
+    end
+
+    def sym_to_image_tiling(sym)
+      sym_to_val sym, IMAGE_TILING
+    end
+
+    def syms_to_image_usage_flags(syms)
+      syms_to_flags(syms, IMAGE_USAGE_BITS)
+    end
+
+    def sym_to_image_format(sym)
+      sym_to_val sym, IMAGE_FORMATS
+    end
+
+    alias sym_to_format sym_to_image_format
+
+    def sym_to_image_type(sym)
+      # can't let it be a number because if it is numeric then it might
+      # need to be passed-through without transformation.
+      sym_to_val sym, IMAGE_TYPES
+    end
+
+    def sym_to_sharing_mode(sym)
+      sym_to_val sym, SHARING_MODES
     end
 
     def syms_to_descriptor_set_layout_type_flags(syms)
@@ -17,46 +140,11 @@ module Vulkan
     end
 
     def sym_to_descriptor_type(sym)
-      case sym
-      when :sampler                then VK_DESCRIPTOR_TYPE_SAMPLER
-      when :combined_image_sampler then VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-      when :sampled_image          then VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE
-      when :storage_image          then VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-      when :uniform_texel_buffer   then VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
-      when :storage_texel_buffer   then VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER
-      when :uniform_buffer         then VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-      when :storage_buffer         then VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-      when :uniform_buffer_dynamic then VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC
-      when :storage_buffer_dynamic then VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC
-      when :input_attachment       then VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT
-      else sym
-      end
+      DESCRIPTOR_TYPES[sym] || sym
     end
 
     def syms_to_stage_flags(syms)
-      flags = 0
-      syms.each do |sym|
-        flags |= case sym
-                 when :vertex                  then VK_SHADER_STAGE_VERTEX_BIT
-                 when :tessellation_control    then VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
-                 when :tessellation_evaluation then VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
-                 when :geometry                then VK_SHADER_STAGE_GEOMETRY_BIT
-                 when :fragment                then VK_SHADER_STAGE_FRAGMENT_BIT
-                 when :compute                 then VK_SHADER_STAGE_COMPUTE_BIT
-                 when :all_graphics            then VK_SHADER_STAGE_ALL_GRAPHICS
-                 when :all                     then VK_SHADER_STAGE_ALL
-                 when :task                    then VK_SHADER_STAGE_TASK_BIT_NV
-                 when :mesh                    then VK_SHADER_STAGE_MESH_BIT_NV
-                 when :raygen                  then VK_SHADER_STAGE_RAYGEN_BIT_NV
-                 when :any_hit                 then VK_SHADER_STAGE_ANY_HIT_BIT_NV
-                 when :closest_hit             then VK_SHADER_STAGE_CLOSEST_HIT_BIT_NV
-                 when :miss                    then VK_SHADER_STAGE_MISS_BIT_NV
-                 when :intersection            then VK_SHADER_STAGE_INTERSECTION_BIT_NV
-                 when :callable                then VK_SHADER_STAGE_CALLABLE_BIT_NV
-                 else sym
-                 end
-      end
-      flags
+      syms_to_flags syms, SHADER_STAGE_BITS
     end
 
     def sym_to_subpass_contents(sym)
@@ -94,8 +182,9 @@ module Vulkan
 
     def queue_family_to_index(family)
       case family
+      when nil     then VK_QUEUE_FAMILY_IGNORED
       when Numeric then family
-      when Hash then queue_family_to_index(family[:index])
+      when Hash    then queue_family_to_index(family[:index])
       else raise ArgumentError, 'queue family must be number or hash containing :index'
       end
     end
@@ -214,14 +303,13 @@ module Vulkan
         VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
       when :stencil_read_only_optimal, :stencil_ro_optimal, :stencil_read_only, :stencil_ro,
            :depth_read_only_optimal, :depth_ro_optimal, :depth_read_only, :depth_ro,
-           :depth_stencil_optimal, :depth_stencil_ro_optimal, :depth_stencil_read_only,
-           :depth_stencil_ro
+           :depth_stencil_ro_optimal, :depth_stencil_read_only, :depth_stencil_ro
         VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL
       when :shader_read_only_optimal, :shader_ro_optimal, :shader_read_only, :shader_ro
         VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-      when :transfer_src_optimal, :transfer_src
+      when :transfer_src_optimal, :transfer_src, :src_optimal
         VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-      when :transfer_dst_optimal, :transfer_dst
+      when :transfer_dst_optimal, :transfer_dst, :dst_optimal
         VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
       when :preinitialized
         VK_IMAGE_LAYOUT_PREINITIALIZED
@@ -253,7 +341,7 @@ module Vulkan
     end
 
     def array_of_structures(ary)
-      return nil if ary.empty?
+      return nil if ary.nil? || ary.empty?
       size = ary.map { |struct| struct.to_ptr.size }.sum
       pointers = Fiddle::Pointer.malloc(size)
       raise ArgumentError, "size is 0?, #{ary}" if size == 0
@@ -265,7 +353,9 @@ module Vulkan
       pointers
     end
 
-    def array_of_pointers(ary, pointers = Fiddle::Pointer.malloc(ary.size * Fiddle::SIZEOF_VOIDP))
+    def array_of_pointers(ary, pointers = nil)
+      return nil if ary.nil? || ary.empty?
+      pointers ||= Fiddle::Pointer.malloc(ary.size * Fiddle::SIZEOF_VOIDP)
       ary.each_with_index do |ptr, i|
         mem = [ptr.to_ptr.to_i].pack(Fiddle::PackInfo::PACK_MAP[Fiddle::TYPE_VOIDP])
         pointers[i * Fiddle::SIZEOF_VOIDP, Fiddle::SIZEOF_VOIDP] = mem

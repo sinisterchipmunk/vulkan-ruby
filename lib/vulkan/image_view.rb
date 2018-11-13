@@ -1,6 +1,7 @@
 module Vulkan
   class ImageView
     include Vulkan::Checks
+    include Vulkan::Conversions
     include Vulkan::Finalizer
 
     def initialize(vk, image_handle, image_format,
@@ -19,12 +20,12 @@ module Vulkan
       create_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO
       create_info.image = image_handle
       create_info.viewType = view_type
-      create_info.format = image_format
+      create_info.format = sym_to_image_format(image_format)
       create_info.components.r = red_swizzle
       create_info.components.g = green_swizzle
       create_info.components.b = blue_swizzle
       create_info.components.a = alpha_swizzle
-      create_info.subresourceRange.aspectMask = aspect_mask
+      create_info.subresourceRange.aspectMask = syms_to_image_aspect_flags(aspect_mask)
       create_info.subresourceRange.baseMipLevel = 0
       create_info.subresourceRange.levelCount = 1
       create_info.subresourceRange.baseArrayLayer = 0

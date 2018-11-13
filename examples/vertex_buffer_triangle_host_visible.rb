@@ -6,8 +6,8 @@ require 'sdl2_vulkan'
 Vertex = Vulkan.struct(['float pos[2]', 'float color[3]'])
 VertexData = Vulkan.struct('vertices[3]' => Vertex).malloc
 VertexData.vertices[0].pos = [ 0,  -0.5]; VertexData.vertices[0].color = [1, 0, 0]
-VertexData.vertices[1].pos = [ 0.5, 0.5]; VertexData.vertices[1].color = [0, 1, 0]
-VertexData.vertices[2].pos = [-0.5, 0.5]; VertexData.vertices[2].color = [0, 0, 1]
+VertexData.vertices[1].pos = [-0.5, 0.5]; VertexData.vertices[1].color = [0, 1, 0]
+VertexData.vertices[2].pos = [ 0.5, 0.5]; VertexData.vertices[2].color = [0, 0, 1]
 
 # Create a window that we plan to draw to
 SDL2.init(SDL2::INIT_EVERYTHING)

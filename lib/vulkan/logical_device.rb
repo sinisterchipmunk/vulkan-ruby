@@ -47,6 +47,9 @@ module Vulkan
         extensions_p.names[i].name = Fiddle::Pointer[extname.b + "\x00"]
       end
 
+      enabled_features = physical_device.features # enable all features, for now
+      @enabled_features = struct_to_hash(enabled_features).reject! { |name, enabled| enabled != VK_TRUE }
+
       device_create_info = VkDeviceCreateInfo.malloc
       device_create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO
       device_create_info.pNext = nil
@@ -57,7 +60,7 @@ module Vulkan
       device_create_info.ppEnabledLayerNames = nil
       device_create_info.enabledExtensionCount = extensions.size
       device_create_info.ppEnabledExtensionNames = extensions_p
-      device_create_info.pEnabledFeatures = physical_device.features
+      device_create_info.pEnabledFeatures = enabled_features
 
       device_wrapper = Vulkan.create_value("void *", nil)
       check_result Vulkan[instance, nil].vkCreateDevice(physical_device.to_ptr, device_create_info, nil, device_wrapper)
@@ -73,6 +76,10 @@ module Vulkan
         end
         queue[:family].merge queues: queues
       end
+    end
+
+    def feature_enabled?(feature_name)
+      @enabled_features.include?(feature_name)
     end
 
     def create_buffer(**args)
@@ -109,6 +116,14 @@ module Vulkan
 
     def create_descriptor_set_pool(**args)
       Vulkan::DescriptorPool.new(@vk, **args)
+    end
+
+    def create_image(**args)
+      Vulkan::Image.new(@vk, physical_device, **args)
+    end
+
+    def create_sampler(**args)
+      Vulkan::Sampler.new(@vk, self, **args)
     end
 
     def hexaddr

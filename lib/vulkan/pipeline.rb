@@ -45,7 +45,7 @@ module Vulkan
         discard_all: false,
         polygon_mode: :fill,
         line_width: 1.0,
-        cull_mode: :none,
+        cull_mode: :back,
         front_face: :counter_clockwise,
         depth_bias: false,
         depth_bias_clamp: 0,
@@ -86,7 +86,7 @@ module Vulkan
       attribute_description = VkVertexInputAttributeDescription.malloc
       attribute_description.binding  = binding
       attribute_description.location = location
-      attribute_description.format   = format
+      attribute_description.format   = sym_to_format(format)
       attribute_description.offset   = offset
       @attribute_descriptions << attribute_description
     end
@@ -102,7 +102,6 @@ module Vulkan
     def commit(render_pass, first_subpass_index: 0)
       @render_pass = render_pass
 
-      # TODO uniforms and attributes
       vertex_input_info = VkPipelineVertexInputStateCreateInfo.malloc
       vertex_input_info.sType                           = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO
       vertex_input_info.vertexBindingDescriptionCount   = @binding_descriptions.size

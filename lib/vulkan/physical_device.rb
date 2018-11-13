@@ -74,6 +74,10 @@ module Vulkan
       end
     end
 
+    def supports_feature?(feature_name)
+      features_hash[feature_name] == VK_TRUE
+    end
+
     def features_hash
       struct_to_hash features
     end

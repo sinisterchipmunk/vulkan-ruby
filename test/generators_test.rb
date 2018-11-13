@@ -6,7 +6,7 @@ class GeneratorsTest < Minitest::Test
     content[/VkSwapchainCreateInfoKHR\s*=\s*struct\s*\[(.*?)\]/m]
     struct_content = $1
     refute_nil struct_content
-    assert_match /uint32_t\s*\*\s*pQueueFamilyIndices/, struct_content
+    assert_match(/uint32_t\s*\*\s*pQueueFamilyIndices/, struct_content)
   end
 
   def test_structs_containing_arrays_with_enum_sizes
@@ -14,7 +14,7 @@ class GeneratorsTest < Minitest::Test
     content[/VkPhysicalDeviceMemoryProperties\s*=\s*struct\s*\[(.*?)\]$/m]
     struct_content = $1
     refute_nil struct_content
-    assert_match /memoryTypes\s*\[.*?=>\s*VkMemoryType/, struct_content
+    assert_match(/memoryTypes\s*\[.*?=>\s*VkMemoryType/, struct_content)
   end
 
   def test_extensions_discovered

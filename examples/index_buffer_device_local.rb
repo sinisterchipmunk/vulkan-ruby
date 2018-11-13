@@ -11,7 +11,7 @@ VertexData.vertices[2].pos = [ 0.5,  0.5]; VertexData.vertices[2].color = [0, 0,
 VertexData.vertices[3].pos = [-0.5,  0.5]; VertexData.vertices[3].color = [1, 1, 1]
 
 IndexData = Vulkan.struct(['uint16_t indices[6]']).malloc
-IndexData.indices = [0, 1, 2, 2, 3, 0]
+IndexData.indices = [1, 0, 2, 2, 0, 3]
 
 # Create a window that we plan to draw to
 SDL2.init(SDL2::INIT_EVERYTHING)
