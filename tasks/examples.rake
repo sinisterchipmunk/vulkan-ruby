@@ -9,6 +9,11 @@ namespace :examples do
       ENV['COVERAGE'] = basename
       sh 'bundle', 'exec', 'ruby', filename
     end
+
+    if basename[/^(.*?)_/]
+      # desc "alias for #{basename}"
+      task $1 => "examples:#{basename}"
+    end
   end
 end
 
