@@ -46,6 +46,14 @@ module Vulkan
         raise "could not determine vulkan library to load for this OS (#{os.inspect}): try passing PATH_TO_VULKAN"
       end
     end
+
+    def format_has_stencil_component?(format)
+      case format
+      when VK_FORMAT_D32_SFLOAT_S8_UINT, :d32_sfloat_s8_uint then true
+      when VK_FORMAT_D24_UNORM_S8_UINT,  :d24_unorm_s8_uint  then true
+      else false
+      end
+    end
   end
 
   require 'vulkan/generated'

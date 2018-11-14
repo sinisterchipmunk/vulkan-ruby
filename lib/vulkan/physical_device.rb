@@ -28,6 +28,21 @@ module Vulkan
       }
     end
 
+    def detect_supported_format(*candidates, usage:, tiling: :optimal)
+      usage  = syms_to_format_feature_flags(usage)
+      tiling = sym_to_image_tiling(tiling)
+      candidates.flatten.each do |candidate|
+        props = VkFormatProperties.malloc
+        @vk.vkGetPhysicalDeviceFormatProperties(to_ptr, sym_to_format(candidate), props)
+        if tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & usage) == usage
+          return candidate
+        elsif tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & usage) == usage
+          return candidate
+        end
+      end
+      nil
+    end
+
     # Returns the swapchain surface info if the `"VK_KHR_swapchain"` extension
     # is supported, `nil` otherwise.
     def swapchain_surface_info(surface)

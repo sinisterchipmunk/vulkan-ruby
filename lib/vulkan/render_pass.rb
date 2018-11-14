@@ -4,6 +4,8 @@ module Vulkan
     include Vulkan::Conversions
     include Vulkan::Finalizer
 
+    attr_reader :attachments
+
     def initialize(vk)
       @vk = vk
       @attachments = []
@@ -48,7 +50,7 @@ module Vulkan
                        initial_layout: nil,
                        final_layout: :presentation_src)
       attachment = VkAttachmentDescription.malloc
-      attachment.format         = format
+      attachment.format         = sym_to_image_format(format)
       attachment.samples        = num_to_samples(samples)
       attachment.loadOp         = sym_to_load_op(load_op)
       attachment.storeOp        = sym_to_store_op(store_op)

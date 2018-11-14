@@ -73,14 +73,14 @@ module Vulkan
                     level_count: mip_levels - base_mip_level,
                     base_array_layer: 0,
                     layer_count: array_layers - base_array_layer,
-                    aspect_mask: :color,
+                    aspects: :color,
                     **other_image_view_args)
-      ImageView.new(@vk, to_ptr, format,
+      ImageView.new(@vk, self, format,
                     base_mip_level:   base_mip_level,
                     level_count:      level_count,
                     base_array_layer: base_array_layer,
                     layer_count:      layer_count,
-                    aspect_mask:      aspect_mask,
+                    aspects:          aspects,
                     **other_image_view_args)
     end
 
@@ -103,6 +103,14 @@ module Vulkan
           src_stages:   :transfer,
           dst_stages:   :fragment_shader,
           dependencies: 0
+        }
+      elsif from == VK_IMAGE_LAYOUT_UNDEFINED &&
+            to   == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
+        return {
+          src_access: 0,
+          dst_access: [ :depth_stencil_attachment_read, :depth_stencil_attachment_write ],
+          src_stages: :top_of_pipe,
+          dst_stages: :early_fragment_tests
         }
       else
         raise ArgumentError, "unsupported layout transition (%s to %s)!" % [from.inspect, to.inspect]

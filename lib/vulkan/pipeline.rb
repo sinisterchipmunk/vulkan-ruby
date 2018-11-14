@@ -99,6 +99,27 @@ module Vulkan
       @shader_stages << shader_stage
     end
 
+    def depth(test: true,
+              write: true,
+              compare_op: :less,
+              bounds_test: false,
+              min_bounds: 0,
+              max_bounds: 1,
+              stencil_test: false,
+              stencil_front: nil,
+              stencil_back: nil)
+      @depth_stencil = VkPipelineDepthStencilStateCreateInfo.malloc
+      @depth_stencil.sType                 = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO
+      @depth_stencil.depthTestEnable       = bool_to_vk(test)
+      @depth_stencil.depthWriteEnable      = bool_to_vk(write)
+      @depth_stencil.depthCompareOp        = sym_to_compare_op(compare_op)
+      @depth_stencil.depthBoundsTestEnable = bool_to_vk(bounds_test)
+      @depth_stencil.minDepthBounds        = min_bounds
+      @depth_stencil.maxDepthBounds        = max_bounds
+      @depth_stencil.stencilTestEnable     = bool_to_vk(stencil_test)
+      # TODO stencil test options
+    end
+
     def commit(render_pass, first_subpass_index: 0)
       @render_pass = render_pass
 
@@ -205,7 +226,7 @@ module Vulkan
       pipeline_info.pViewportState      = viewport_state
       pipeline_info.pRasterizationState = rasterizer
       pipeline_info.pMultisampleState   = multisampling
-      pipeline_info.pDepthStencilState  = nil # TODO
+      pipeline_info.pDepthStencilState  = @depth_stencil
       pipeline_info.pColorBlendState    = color_blending
       pipeline_info.pDynamicState       = nil
       pipeline_info.layout              = @layout

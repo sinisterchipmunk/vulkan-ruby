@@ -82,8 +82,13 @@ module Vulkan
       @image_index_p.value
     end
 
-    def framebuffers(width: extent[:width], height: extent[:height], **args)
-      @framebuffers ||= @image_views.map { |v| v.create_framebuffer(width: width, height: height, **args) }
+    def framebuffers(width: extent[:width], height: extent[:height], depth: nil, **args)
+      @framebuffers ||= @image_views.map do |v|
+        v.create_framebuffer width: width,
+                             height: height,
+                             attachments: [depth].compact,
+                             **args
+      end
     end
   end
 end

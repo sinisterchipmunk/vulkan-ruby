@@ -18,9 +18,11 @@ module Vulkan
     COMPARE_OPS = {}
     BORDER_COLORS = {}
     MEMORY_PROPERTIES = {}
+    FORMAT_FEATURE_BITS = {}
 
     Vulkan.constants.each do |name|
       output = case name.to_s
+               when /^VK_FORMAT_FEATURE_(.*?)_BIT/     then FORMAT_FEATURE_BITS
                when /^VK_FORMAT_(.*?)$/                then IMAGE_FORMATS
                when /^VK_IMAGE_TILING_(.*?)$/          then IMAGE_TILING
                when /^VK_DESCRIPTOR_TYPE_(.*?)$/       then DESCRIPTOR_TYPES
@@ -61,16 +63,20 @@ module Vulkan
       [syms].flatten.reduce(0) { |bit, sym| bit | sym_to_val(sym, bits) }
     end
 
+    def sym_to_compare_op(sym)
+      sym_to_val(sym, COMPARE_OPS)
+    end
+
+    def syms_to_format_feature_flags(syms)
+      syms_to_flags(syms, FORMAT_FEATURE_BITS)
+    end
+
     def syms_to_access_mask(syms)
       syms_to_flags(syms, ACCESS_MASK_BITS)
     end
 
     def syms_to_memory_properties(syms)
       syms_to_flags(syms, MEMORY_PROPERTIES)
-    end
-
-    def sym_to_compare_op(sym)
-      sym_to_val(sym, COMPARE_OPS)
     end
 
     def sym_to_border_color(sym)
@@ -304,8 +310,8 @@ module Vulkan
         VK_IMAGE_LAYOUT_GENERAL
       when :color_optimal, :color
         VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
-      when :stencil_optimal, :depth_optimal, :depth_stencil_optimal,
-           :stencil,         :depth,         :depth_stencil
+      when :stencil_optimal, :depth_optimal, :depth_stencil_optimal, :depth_stencil_attachment_optimal,
+           :stencil,         :depth,         :depth_stencil,         :depth_stencil_attachment
         VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
       when :stencil_read_only_optimal, :stencil_ro_optimal, :stencil_read_only, :stencil_ro,
            :depth_read_only_optimal, :depth_ro_optimal, :depth_read_only, :depth_ro,

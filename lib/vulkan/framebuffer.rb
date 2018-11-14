@@ -13,6 +13,7 @@ module Vulkan
       @width = width
       @height = height
       @layers = layers
+      @attachments = attachments
 
       framebuffer_info = VkFramebufferCreateInfo.malloc
       framebuffer_info.sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO

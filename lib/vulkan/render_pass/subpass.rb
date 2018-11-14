@@ -30,7 +30,7 @@ module Vulkan
         @ptr.send(:"#{count_mbr}=", ary.size)
       end
 
-      def add_color_attachment_ref(index:, layout:)
+      def add_color_attachment_ref(index:, layout: :color)
         add_attachment_ref(@color_attachments, index: index,
                                                layout: layout,
                                                addr_mbr: :pColorAttachments,
@@ -51,8 +51,10 @@ module Vulkan
                                                   count_mbr: :preserveStencilAttachmentCount)
       end
 
-      def set_depth_stencil_attachment_ref(index:, layout:)
-        @ptr.pDepthStencilAttachment = create_attachment_ref(index, layout)
+      def set_depth_stencil_attachment_ref(index:, layout: :depth_stencil_attachment_optimal)
+        ref = create_attachment_ref(index, layout)
+        @depth_stencil_attachment = ref
+        @ptr.pDepthStencilAttachment = ref
       end
 
       def to_ptr

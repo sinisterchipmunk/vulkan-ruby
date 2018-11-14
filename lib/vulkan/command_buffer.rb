@@ -132,15 +132,28 @@ module Vulkan
                                        top: 0,
                                        width: framebuffer.width,
                                        height: framebuffer.height,
-                                       clear_color: [0, 0, 0, 1],
+                                       clear: nil,
                                        subpass_contents: :inline)
-      # FIXME
-      @clear_color_p = VkClearValue.malloc
-      # p clear_color_p.color.to_ptr
-      # clear_color_p.color[0] = clear_color[0]
-      # clear_color_p.color[1] = clear_color[1]
-      # clear_color_p.color[2] = clear_color[2]
-      # clear_color_p.color[3] = clear_color[3]
+      attachments = render_pass.attachments
+      @clear_values = attachments.size.times.map { VkClearValue.malloc }
+      attachments.each_with_index do |attachment, i|
+        clear_i = clear && clear[i]
+        if attachments[i].finalLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL ||
+           attachments[i].finalLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL
+          clear_i ||= [1, 0]
+          @clear_values[i].depthStencil.depth   = clear_i[0]
+          @clear_values[i].depthStencil.stencil = clear_i[1]
+        else
+          clear_i ||= [0, 0, 0, 1]
+          # FIXME use attachment.format (one of VK_FORMAT_*) to determine which
+          # accessor to use here
+          @clear_values[i].color.float32[0] = clear_i[0]
+          @clear_values[i].color.float32[1] = clear_i[1]
+          @clear_values[i].color.float32[2] = clear_i[2]
+          @clear_values[i].color.float32[3] = clear_i[3]
+        end
+      end
+      @clear_values_p = array_of_structures(@clear_values)
       @render_pass_info = VkRenderPassBeginInfo.malloc
       @render_pass_info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
       @render_pass_info.renderPass = render_pass.to_ptr
@@ -149,8 +162,8 @@ module Vulkan
       @render_pass_info.renderArea.offset.y = top
       @render_pass_info.renderArea.extent.width = width
       @render_pass_info.renderArea.extent.height = height
-      @render_pass_info.clearValueCount = 1
-      @render_pass_info.pClearValues = @clear_color_p
+      @render_pass_info.clearValueCount = attachments.size
+      @render_pass_info.pClearValues = @clear_values_p
       @vk.vkCmdBeginRenderPass(to_ptr, @render_pass_info, sym_to_subpass_contents(subpass_contents))
     end
 
