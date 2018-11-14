@@ -38,4 +38,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'cglm',          '~> 0.1'
   spec.add_development_dependency 'simplecov',     '~> 0.16'
   spec.add_development_dependency 'chunky_png',    '~> 1.3'
+  spec.add_development_dependency 'oily_png',      '~> 1.2'
+  spec.add_development_dependency 'tiny_obj',      '~> 0.1'
 end
