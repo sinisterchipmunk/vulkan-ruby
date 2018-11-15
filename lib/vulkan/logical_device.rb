@@ -6,8 +6,9 @@ module Vulkan
     
     attr_reader :physical_device
     attr_reader :queue_families
+    attr_reader :enabled_features
 
-    def initialize(instance, physical_device, queues:, extensions:)
+    def initialize(instance, physical_device, queues:, extensions:, features: physical_device.supported_features)
       raise ArgumentError, "instance can't be nil" unless instance
       raise ArgumentError, "physical_device can't be nil" unless physical_device
       @instance = instance
@@ -47,8 +48,19 @@ module Vulkan
         extensions_p.names[i].name = Fiddle::Pointer[extname.b + "\x00"]
       end
 
-      enabled_features = physical_device.features # enable all features, for now
-      @enabled_features = struct_to_hash(enabled_features).reject! { |name, enabled| enabled != VK_TRUE }
+      enabled_features = VkPhysicalDeviceFeatures.malloc
+      enabled_features.to_ptr.memcpy physical_device.features.to_ptr
+      enabled_features.class.members.each do |member|
+        member_name = member.gsub(/[0-9A-Z]+/) { |x| "_#{x.downcase}" }.to_sym
+        if features.include?(member_name)
+          if enabled_features[member] == VK_FALSE
+            raise Error::UnsupportedFeature.new(member_name, member)
+          end
+        else
+          enabled_features[member] = VK_FALSE
+        end
+      end
+      @enabled_features = struct_to_hash(enabled_features).reject! { |name, enabled| enabled != VK_TRUE }.keys
 
       device_create_info = VkDeviceCreateInfo.malloc
       device_create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO

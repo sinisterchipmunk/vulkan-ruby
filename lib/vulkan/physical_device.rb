@@ -28,6 +28,14 @@ module Vulkan
       }
     end
 
+    def supported_features
+      struct_to_hash(features).reject! { |k, v| v != VK_TRUE }.keys
+    end
+
+    def unsupported_features
+      struct_to_hash(features).reject! { |k, v| v == VK_TRUE }.keys
+    end
+
     def max_samples
       [max_color_samples, max_depth_samples].min
     end
