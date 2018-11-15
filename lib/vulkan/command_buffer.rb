@@ -149,10 +149,7 @@ module Vulkan
           clear_i ||= [0, 0, 0, 1]
           # FIXME use attachment.format (one of VK_FORMAT_*) to determine which
           # accessor to use here
-          @clear_values[i].color.float32[0] = clear_i[0]
-          @clear_values[i].color.float32[1] = clear_i[1]
-          @clear_values[i].color.float32[2] = clear_i[2]
-          @clear_values[i].color.float32[3] = clear_i[3]
+          @clear_values[i].color.float32 = clear_i
         end
       end
       @clear_values_p = array_of_structures(@clear_values)
