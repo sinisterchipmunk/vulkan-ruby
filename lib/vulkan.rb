@@ -54,6 +54,10 @@ module Vulkan
       else false
       end
     end
+
+    def num_mip_levels(*sizes)
+      Math.log2(sizes.max).floor + 1
+    end
   end
 
   require 'vulkan/generated'

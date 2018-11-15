@@ -27,10 +27,10 @@ module Vulkan
       create_info.components.b = blue_swizzle
       create_info.components.a = alpha_swizzle
       create_info.subresourceRange.aspectMask = syms_to_image_aspect_flags(aspects)
-      create_info.subresourceRange.baseMipLevel = 0
-      create_info.subresourceRange.levelCount = 1
-      create_info.subresourceRange.baseArrayLayer = 0
-      create_info.subresourceRange.layerCount = 1
+      create_info.subresourceRange.baseMipLevel = base_mip_level
+      create_info.subresourceRange.levelCount = level_count
+      create_info.subresourceRange.baseArrayLayer = base_array_layer
+      create_info.subresourceRange.layerCount = layer_count
       view_p = Vulkan.create_value("void *", nil)
       check_result @vk.vkCreateImageView(vk.device, create_info, nil, view_p)
       @handle = view_p.value
