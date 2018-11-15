@@ -198,7 +198,13 @@ rebuild_swap_chain = proc do
                                                               aspects: :depth
 
   # Create a framebuffer for each image in the swap chain, and associate each with the depth image
-  framebuffers = $swapchain.framebuffers(render_pass: render_pass, depth: depth_image_view)
+  framebuffers = $swapchain.image_views.map do |swapchain_image_view|
+    device.create_framebuffer(width: $swapchain.width,
+                              height: $swapchain.height,
+                              render_pass: render_pass,
+                              attachments: [depth_image_view,
+                                            swapchain_image_view])
+  end
 
   # Create graphic pipeline
   pipeline = device.create_pipeline($swapchain)

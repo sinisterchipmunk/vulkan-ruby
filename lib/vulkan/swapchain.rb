@@ -81,14 +81,5 @@ module Vulkan
       @vk.vkAcquireNextImageKHR(@vk.device, to_ptr, timeout, semaphore, fence, @image_index_p)
       @image_index_p.value
     end
-
-    def framebuffers(width: extent[:width], height: extent[:height], depth: nil, **args)
-      @framebuffers ||= @image_views.map do |v|
-        v.create_framebuffer width: width,
-                             height: height,
-                             attachments: [depth].compact,
-                             **args
-      end
-    end
   end
 end

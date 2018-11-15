@@ -37,11 +37,6 @@ module Vulkan
       finalize_with @vk, :vkDestroyImageView, vk.device, @handle, nil
     end
 
-    def create_framebuffer(attachments: [], **args)
-      attachments += [self]
-      Vulkan::Framebuffer.new(@vk, attachments: attachments, **args)
-    end
-
     def to_ptr
       @handle
     end

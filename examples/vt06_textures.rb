@@ -140,7 +140,12 @@ rebuild_swap_chain = proc do
   render_pass.commit
 
   # Create a framebuffer for each image in the swap chain
-  framebuffers = $swapchain.framebuffers(render_pass: render_pass)
+  framebuffers = $swapchain.image_views.map do |swapchain_image_view|
+    device.create_framebuffer(width: $swapchain.width,
+                              height: $swapchain.height,
+                              render_pass: render_pass,
+                              attachments: [swapchain_image_view])
+  end
 
   # Create graphic pipeline
   pipeline = device.create_pipeline($swapchain)
