@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/sinisterchipmunk/fiddle
-  revision: c4db0daa07a45210bbef8023f9bb627668011f1f
+  revision: 94dbbaf07b1fb400aebbf1deca9cee302fe80e30
   branch: nested-structs
   specs:
     fiddle (1.0.0)
