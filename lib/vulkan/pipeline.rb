@@ -55,7 +55,7 @@ module Vulkan
       @multisampling = {
         sample_shading: false,
         samples: 1,
-        min_sample_shading: 1,
+        min_sample_shading: 0.2,
         sample_mask: nil,
         alpha_to_coverage: false,
         alpha_to_one: false

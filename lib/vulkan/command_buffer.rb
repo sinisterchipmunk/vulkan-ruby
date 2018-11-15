@@ -135,6 +135,8 @@ module Vulkan
                                        clear: nil,
                                        subpass_contents: :inline)
       attachments = render_pass.attachments
+      @refs << render_pass
+      @refs << framebuffer
       @clear_values = attachments.size.times.map { VkClearValue.malloc }
       attachments.each_with_index do |attachment, i|
         clear_i = clear && clear[i]

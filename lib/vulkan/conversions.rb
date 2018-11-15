@@ -308,7 +308,7 @@ module Vulkan
         VK_IMAGE_LAYOUT_UNDEFINED
       when :general
         VK_IMAGE_LAYOUT_GENERAL
-      when :color_optimal, :color
+      when :color_optimal, :color, :color_attachment_optimal
         VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
       when :stencil_optimal, :depth_optimal, :depth_stencil_optimal, :depth_stencil_attachment_optimal,
            :stencil,         :depth,         :depth_stencil,         :depth_stencil_attachment

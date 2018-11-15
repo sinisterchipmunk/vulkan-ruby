@@ -6,6 +6,7 @@ module Vulkan
       def initialize(vk, bind_point: :graphics)
         @color_attachments    = []
         @input_attachments    = []
+        @resolve_attachments  = []
         @preserve_attachments = []
 
         @ptr = VkSubpassDescription.malloc
@@ -27,7 +28,7 @@ module Vulkan
 
       def update_attachment_refs(ary, addr_mbr:, count_mbr:)
         @ptr.send(:"#{addr_mbr}=",  array_of_structures(ary))
-        @ptr.send(:"#{count_mbr}=", ary.size)
+        @ptr.send(:"#{count_mbr}=", ary.size) if count_mbr
       end
 
       def add_color_attachment_ref(index:, layout: :color)
@@ -35,6 +36,13 @@ module Vulkan
                                                layout: layout,
                                                addr_mbr: :pColorAttachments,
                                                count_mbr: :colorAttachmentCount)
+      end
+
+      def add_resolve_attachment_ref(index:, layout: :color)
+        add_attachment_ref(@resolve_attachments, index: index,
+                                                 layout: layout,
+                                                 addr_mbr: :pResolveAttachments,
+                                                 count_mbr: nil)
       end
 
       def add_input_attachment_ref(index:, layout:)

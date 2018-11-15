@@ -110,7 +110,17 @@ module Vulkan
           src_access: 0,
           dst_access: [ :depth_stencil_attachment_read, :depth_stencil_attachment_write ],
           src_stages: :top_of_pipe,
-          dst_stages: :early_fragment_tests
+          dst_stages: :early_fragment_tests,
+          dependencies: 0
+        }
+      elsif from == VK_IMAGE_LAYOUT_UNDEFINED &&
+            to   == VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
+        return {
+          src_access: 0,
+          dst_access: [ :color_attachment_read, :color_attachment_write ],
+          src_stages: :top_of_pipe,
+          dst_stages: :color_attachment_output,
+          dependencies: 0
         }
       else
         raise ArgumentError, "unsupported layout transition (%s to %s)!" % [from.inspect, to.inspect]

@@ -78,6 +78,18 @@ module Vulkan
       end
     end
 
+    def max_samples
+      physical_device.max_samples
+    end
+
+    def max_color_samples
+      physical_device.max_color_samples
+    end
+
+    def max_depth_samples
+      physical_device.max_depth_samples
+    end
+
     def feature_enabled?(feature_name)
       @enabled_features.include?(feature_name)
     end
@@ -124,6 +136,10 @@ module Vulkan
 
     def create_sampler(**args)
       Vulkan::Sampler.new(@vk, self, **args)
+    end
+
+    def create_framebuffer(**args)
+      Vulkan::Framebuffer.new(@vk, **args)
     end
 
     def hexaddr

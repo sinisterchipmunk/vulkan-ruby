@@ -28,6 +28,28 @@ module Vulkan
       }
     end
 
+    def max_samples
+      [max_color_samples, max_depth_samples].min
+    end
+
+    def sample_counts_to_max(counts)
+      return VK_SAMPLE_COUNT_64_BIT if counts & VK_SAMPLE_COUNT_64_BIT != 0
+      return VK_SAMPLE_COUNT_32_BIT if counts & VK_SAMPLE_COUNT_32_BIT != 0
+      return VK_SAMPLE_COUNT_16_BIT if counts & VK_SAMPLE_COUNT_16_BIT != 0
+      return VK_SAMPLE_COUNT_8_BIT  if counts & VK_SAMPLE_COUNT_8_BIT  != 0
+      return VK_SAMPLE_COUNT_4_BIT  if counts & VK_SAMPLE_COUNT_4_BIT  != 0
+      return VK_SAMPLE_COUNT_2_BIT  if counts & VK_SAMPLE_COUNT_2_BIT  != 0
+      return VK_SAMPLE_COUNT_1_BIT
+    end
+
+    def max_color_samples
+      sample_counts_to_max properties[:limits][:framebuffer_color_sample_counts]
+    end
+
+    def max_depth_samples
+      sample_counts_to_max properties[:limits][:framebuffer_depth_sample_counts]
+    end
+
     def detect_supported_format(*candidates, usage:, tiling: :optimal)
       usage  = syms_to_format_feature_flags(usage)
       tiling = sym_to_image_tiling(tiling)
