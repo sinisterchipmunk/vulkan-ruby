@@ -13,6 +13,7 @@ module Vulkan
     attr_reader :format
     attr_reader :tiling
     attr_reader :initial_layout
+    attr_reader :layout
     attr_reader :usage
     attr_reader :sharing
     attr_reader :samples
@@ -42,7 +43,7 @@ module Vulkan
       @array_layers   = array_layers
       @format         = format
       @tiling         = tiling
-      @initial_layout = initial_layout
+      @initial_layout = @layout = initial_layout
       @usage          = usage
       @sharing        = sharing
       @samples        = samples
@@ -133,7 +134,7 @@ module Vulkan
     # idle. Otherwise, it will return as soon as the command buffer is
     # submitted.
     def transition_layout(command_pool, queue,
-                          from: :undefined,
+                          from: self.layout,
                           to:,
                           src_queue_family: nil,
                           dst_queue_family: nil,
@@ -159,6 +160,7 @@ module Vulkan
                                    **access_opts
       end
 
+      @layout = to
       queue.submit([command_buffer])
       queue.wait_until_idle if wait_until_idle
     end
