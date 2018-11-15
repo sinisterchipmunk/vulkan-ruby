@@ -116,6 +116,7 @@ texture = device.create_image dimensions: 2,
 texture.transition_layout command_pool, graphics_queue, to: :transfer_dst_optimal
 texture.copy_from_buffer  command_pool, graphics_queue, buffer: image_data_buffer, width: png.width, height: png.height
 graphics_queue.wait_until_idle
+texture.transition_layout command_pool, graphics_queue, to: :shader_ro_optimal
 texture_view = texture.create_view
 sampler = device.create_sampler
 

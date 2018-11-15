@@ -145,6 +145,7 @@ num_mip_levels.times do |mip_level|
                          png.height == 1 ? png.height : png.height / 2
 end
 graphics_queue.wait_until_idle
+texture.transition_layout command_pool, graphics_queue, to: :shader_ro_optimal
 texture_view = texture.create_view
 sampler = device.create_sampler max_lod: num_mip_levels#, min_lod: num_mip_levels / 2
 
