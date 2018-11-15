@@ -222,7 +222,8 @@ rebuild_swap_chain = proc do
 
   # Create graphic pipeline
   pipeline = device.create_pipeline($swapchain)
-  pipeline.multisampling[:samples] = device.max_samples
+  pipeline.multisampling[:samples]        = device.max_samples
+  pipeline.multisampling[:sample_shading] = true
   pipeline.depth
   pipeline.add_binding_description binding: 0,
                                    stride: Vertex.size,
