@@ -222,7 +222,7 @@ until done
   frame_counter += 1
   break if ENV['MAX_FRAMES'].to_i == frame_counter
   # dump some FPS infos
-  uptime = Time.now - start_time
+  uptime = ENV['TIME_STEP'] ? ENV['TIME_STEP'].to_f * frame_counter : Time.now - start_time
   if frame_counter % 300 == 0
     fps = frame_counter / uptime
     p ['fps: ', fps, 'frame-time (ms): ', 1000.0 / fps]
