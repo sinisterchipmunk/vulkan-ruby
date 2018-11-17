@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/sinisterchipmunk/cglm-ruby
-  revision: e18c2a19f7cde0ad2f450ef7991b824ae13ce78e
+  revision: c418df809a5e36e669e18d98f994bee8e09ef0d8
   specs:
     cglm (0.1.0)
 
@@ -17,12 +17,6 @@ GIT
   specs:
     sdl2_vulkan (0.1.0)
       ruby-sdl2 (~> 0.3)
-
-GIT
-  remote: https://github.com/sinisterchipmunk/tinyobj-ruby
-  revision: 32de9a313de03bf3e35347ea86a1fe8bd2f22cd2
-  specs:
-    tiny_obj (0.1.0)
 
 PATH
   remote: .
@@ -48,6 +42,7 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
+    tiny_obj (0.2.0)
 
 PLATFORMS
   ruby
@@ -63,7 +58,7 @@ DEPENDENCIES
   rake (~> 10.0)
   sdl2_vulkan!
   simplecov (~> 0.16)
-  tiny_obj!
+  tiny_obj (~> 0.2)
   vulkan-ruby!
 
 BUNDLED WITH
