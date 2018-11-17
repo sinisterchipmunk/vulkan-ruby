@@ -9,12 +9,9 @@ include CGLM
 UniformBufferStruct = Vulkan.struct(['float model[16]', 'float view[16]', 'float proj[16]'])
 def UniformBufferStruct.alignment; Mat4.alignment; end
 $ubo = UniformBufferStruct.new(CGLM.alloc(UniformBufferStruct))
-# $model_matrix       = Mat4.new(addr: $ubo.to_ptr + $ubo.offset_of('model'))
-# $view_matrix        = Mat4.new(addr: $ubo.to_ptr + $ubo.offset_of('view'))
-# $projection_matrix  = Mat4.new(addr: $ubo.to_ptr + $ubo.offset_of('proj'))
-$model_matrix       = Mat4.new(addr: $ubo.to_ptr)
-$view_matrix        = Mat4.new(addr: $ubo.to_ptr + Fiddle::SIZEOF_FLOAT * 16)
-$projection_matrix  = Mat4.new(addr: $ubo.to_ptr + Fiddle::SIZEOF_FLOAT * 32)
+$model_matrix       = Mat4.new(addr: $ubo.to_ptr + $ubo.offset_of('model'))
+$view_matrix        = Mat4.new(addr: $ubo.to_ptr + $ubo.offset_of('view'))
+$projection_matrix  = Mat4.new(addr: $ubo.to_ptr + $ubo.offset_of('proj'))
 
 Vertex = Vulkan.struct(['float pos[3]', 'float color[3]', 'float texcoords[2]'])
 VertexData = Vulkan.struct('vertices[8]' => Vertex).malloc
@@ -32,7 +29,8 @@ IndexData.indices = [0, 1, 2, 2, 3, 0, 4, 5, 6, 6, 7, 4]
 # Create a window that we plan to draw to
 SDL2.init(SDL2::INIT_EVERYTHING)
 window = SDL2::Window.create "test-vulkan", 0, 0, 640, 480, SDL2::Window::Flags::VULKAN |
-                                                            SDL2::Window::Flags::RESIZABLE
+                                                            SDL2::Window::Flags::RESIZABLE |
+                                                            0x00002000 # SDL2::Window::Flags::ALLOW_HIGHDPI
 
 # Create a Vulkan instance
 instance = Vulkan::Instance.new extensions: window.vk_instance_extensions
@@ -263,7 +261,7 @@ until done
   break if ENV['MAX_FRAMES'].to_i == frame_counter
   # dump some FPS infos
   uptime = ENV['TIME_STEP'] ? ENV['TIME_STEP'].to_f * frame_counter : Time.now - start_time
-  if frame_counter % 300 == 0
+  if frame_counter % 3000 == 0
     fps = frame_counter / uptime
     p ['fps: ', fps, 'frame-time (ms): ', 1000.0 / fps]
   end

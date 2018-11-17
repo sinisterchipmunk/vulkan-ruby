@@ -11,46 +11,29 @@ include CGLM
 UniformBufferStruct = Vulkan.struct(['float model[16]', 'float view[16]', 'float proj[16]'])
 def UniformBufferStruct.alignment; Mat4.alignment; end
 $ubo = UniformBufferStruct.new(CGLM.alloc(UniformBufferStruct))
-# $model_matrix       = Mat4.new(addr: $ubo.to_ptr + $ubo.offset_of('model'))
-# $view_matrix        = Mat4.new(addr: $ubo.to_ptr + $ubo.offset_of('view'))
-# $projection_matrix  = Mat4.new(addr: $ubo.to_ptr + $ubo.offset_of('proj'))
-$model_matrix       = Mat4.new(addr: $ubo.to_ptr)
-$view_matrix        = Mat4.new(addr: $ubo.to_ptr + Fiddle::SIZEOF_FLOAT * 16)
-$projection_matrix  = Mat4.new(addr: $ubo.to_ptr + Fiddle::SIZEOF_FLOAT * 32)
+$model_matrix       = Mat4.new(addr: $ubo.to_ptr + $ubo.offset_of('model'))
+$view_matrix        = Mat4.new(addr: $ubo.to_ptr + $ubo.offset_of('view'))
+$projection_matrix  = Mat4.new(addr: $ubo.to_ptr + $ubo.offset_of('proj'))
 
 obj = TinyOBJ.load(File.expand_path('models/chalet.obj', __dir__))
-MAX_VERTICES = obj[:shapes].reduce(0) { |a, shape| a + shape[:mesh][:indices].size }
-NUM_INDICES = obj[:shapes].reduce(0) { |a, shape| a + shape[:mesh][:indices].size }
-
+NUM_INDICES = obj.num_indices
 Vertex = Vulkan.struct(['float pos[3]', 'float color[3]', 'float texcoords[2]'])
-MaxVertexData = Fiddle::Pointer.malloc(Vertex.size * MAX_VERTICES)
 IndexData = Fiddle::Pointer.malloc(Fiddle::SIZEOF_INT * NUM_INDICES)
-index_ofs = 0
-cache = {}
-obj[:shapes].each do |shape|
-  shape[:mesh][:indices].each do |index|
-    hash = [3.times.map { |i| obj[:vertices][3 * index[:vertex_index] + i] },
-            2.times.map { |i| obj[:texcoords][2 * index[:texcoord_index] + i] }]
-    hash[1][1] = 1.0 - hash[1][1] # flip V texcoord
-    unless hit = cache[hash]
-      hit = cache[hash] = cache.size
-      vert = Vertex.new(MaxVertexData + hit * Vertex.size)
-      vert.pos = hash[0]
-      vert.texcoords = hash[1]
-      vert.color = [1, 1, 1]
-    end
-
-    (IndexData + index_ofs * Fiddle::SIZEOF_INT)[0, 4] = [hit].pack("I")
-    index_ofs += 1
-  end
-end
-VertexData = Fiddle::Pointer.malloc(Vertex.size * cache.size)
-VertexData.memcpy(MaxVertexData)
+VertexData = Fiddle::Pointer.malloc(Vertex.size * obj.num_distinct_vertices)
+obj.fill_buffers index_type:    :uint32,
+                 index_stride:  Fiddle::SIZEOF_INT,
+                 vertex_stride: Vertex.size,
+                 flip_v:        true,
+                 indices:       IndexData,
+                 positions:     VertexData,
+                 colors:        VertexData + Vertex.offset_of(:color),
+                 texcoords:     VertexData + Vertex.offset_of(:texcoords)
 
 # Create a window that we plan to draw to
 SDL2.init(SDL2::INIT_EVERYTHING)
 window = SDL2::Window.create "test-vulkan", 0, 0, 640, 480, SDL2::Window::Flags::VULKAN |
-                                                            SDL2::Window::Flags::RESIZABLE
+                                                            SDL2::Window::Flags::RESIZABLE |
+                                                            0x00002000 # SDL2::Window::Flags::ALLOW_HIGHDPI
 
 # Create a Vulkan instance
 instance = Vulkan::Instance.new extensions: window.vk_instance_extensions
@@ -318,7 +301,7 @@ until done
   break if ENV['MAX_FRAMES'].to_i == frame_counter
   # dump some FPS infos
   uptime = ENV['TIME_STEP'] ? ENV['TIME_STEP'].to_f * frame_counter : Time.now - start_time
-  if frame_counter % 300 == 0
+  if frame_counter % 3000 == 0
     fps = frame_counter / uptime
     p ['fps: ', fps, 'frame-time (ms): ', 1000.0 / fps]
   end

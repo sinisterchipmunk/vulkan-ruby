@@ -16,7 +16,8 @@ IndexData.indices = [1, 0, 2, 2, 0, 3]
 # Create a window that we plan to draw to
 SDL2.init(SDL2::INIT_EVERYTHING)
 window = SDL2::Window.create "test-vulkan", 0, 0, 640, 480, SDL2::Window::Flags::VULKAN |
-                                                            SDL2::Window::Flags::RESIZABLE
+                                                            SDL2::Window::Flags::RESIZABLE |
+                                                            0x00002000 # SDL2::Window::Flags::ALLOW_HIGHDPI
 
 # Create a Vulkan instance
 instance = Vulkan::Instance.new extensions: window.vk_instance_extensions
@@ -153,7 +154,7 @@ until done
   frame_counter += 1
   break if ENV['MAX_FRAMES'].to_i == frame_counter
   # dump some FPS infos
-  if frame_counter % 300 == 0
+  if frame_counter % 3000 == 0
     next_time = Time.now
     seconds = next_time - last_time
     fps = frame_counter / seconds
