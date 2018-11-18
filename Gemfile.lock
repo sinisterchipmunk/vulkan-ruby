@@ -1,10 +1,4 @@
 GIT
-  remote: https://github.com/sinisterchipmunk/cglm-ruby
-  revision: c418df809a5e36e669e18d98f994bee8e09ef0d8
-  specs:
-    cglm (0.1.0)
-
-GIT
   remote: https://github.com/sinisterchipmunk/fiddle
   revision: 94dbbaf07b1fb400aebbf1deca9cee302fe80e30
   branch: nested-structs
@@ -26,12 +20,13 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    cglm (0.1.0)
     chunky_png (1.3.10)
     docile (1.3.1)
     json (2.1.0)
     mini_portile2 (2.3.0)
     minitest (5.11.3)
-    nokogiri (1.8.4)
+    nokogiri (1.8.5)
       mini_portile2 (~> 2.3.0)
     oily_png (1.2.1)
       chunky_png (~> 1.3.7)
@@ -49,7 +44,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler
-  cglm!
+  cglm (~> 0.1)
   chunky_png (~> 1.3)
   fiddle!
   minitest (~> 5.0)
