@@ -5,13 +5,6 @@ GIT
   specs:
     fiddle (1.0.0)
 
-GIT
-  remote: https://github.com/sinisterchipmunk/sdl2_vulkan
-  revision: 191a632d0e57d130526ce94071c0df0d2925e4e7
-  specs:
-    sdl2_vulkan (0.1.0)
-      ruby-sdl2 (~> 0.3)
-
 PATH
   remote: .
   specs:
@@ -32,12 +25,14 @@ GEM
       chunky_png (~> 1.3.7)
     rake (10.5.0)
     ruby-sdl2 (0.3.4)
+    sdl2_vulkan (0.1.0)
+      ruby-sdl2 (~> 0.3)
     simplecov (0.16.1)
       docile (~> 1.1)
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    tiny_obj (0.2.0)
+    tiny_obj (0.2.1)
 
 PLATFORMS
   ruby
@@ -51,7 +46,7 @@ DEPENDENCIES
   nokogiri (~> 1.8)
   oily_png (~> 1.2)
   rake (~> 10.0)
-  sdl2_vulkan!
+  sdl2_vulkan (~> 0.1)
   simplecov (~> 0.16)
   tiny_obj (~> 0.2)
   vulkan-ruby!
