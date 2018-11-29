@@ -1,6 +1,7 @@
 module Vulkan
   class Buffer
     include Vulkan::Checks
+    include Vulkan::Conversions
     include Vulkan::Finalizer
 
     attr_reader :memory
@@ -18,7 +19,7 @@ module Vulkan
       buffer_info = VkBufferCreateInfo.malloc
       buffer_info.sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO
       buffer_info.size        = size
-      buffer_info.usage       = usage
+      buffer_info.usage       = syms_to_buffer_usage_flags(usage)
       buffer_info.sharingMode = sharing_mode
       buffer_info.flags       = flags
       handle_p = Vulkan.create_value('void *', nil)

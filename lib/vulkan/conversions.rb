@@ -3,6 +3,7 @@ module Vulkan
     IMAGE_FORMATS = {}
     IMAGE_TILING = {}
     DESCRIPTOR_TYPES = {}
+    BUFFER_USAGE_BITS = {}
     IMAGE_USAGE_BITS = {}
     IMAGE_TYPES = {}
     SHADER_STAGE_BITS = {}
@@ -26,6 +27,7 @@ module Vulkan
                when /^VK_FORMAT_(.*?)$/                then IMAGE_FORMATS
                when /^VK_IMAGE_TILING_(.*?)$/          then IMAGE_TILING
                when /^VK_DESCRIPTOR_TYPE_(.*?)$/       then DESCRIPTOR_TYPES
+               when /^VK_BUFFER_USAGE_(.*?)_BIT/       then BUFFER_USAGE_BITS
                when /^VK_IMAGE_USAGE_(.*?)_BIT/        then IMAGE_USAGE_BITS
                when /^VK_IMAGE_TYPE_(.*?)$/            then IMAGE_TYPES
                when /^VK_IMAGE_ASPECT_(.*?)_BIT/       then IMAGE_ASPECT_BITS
@@ -65,6 +67,10 @@ module Vulkan
 
     def sym_to_compare_op(sym)
       sym_to_val(sym, COMPARE_OPS)
+    end
+
+    def syms_to_buffer_usage_flags(syms)
+      syms_to_flags(syms, BUFFER_USAGE_BITS)
     end
 
     def syms_to_format_feature_flags(syms)
