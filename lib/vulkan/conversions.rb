@@ -20,6 +20,7 @@ module Vulkan
     BORDER_COLORS = {}
     MEMORY_PROPERTIES = {}
     FORMAT_FEATURE_BITS = {}
+    VERTEX_INPUT_RATES = {}
 
     Vulkan.constants.each do |name|
       output = case name.to_s
@@ -43,6 +44,7 @@ module Vulkan
                when /^VK_BORDER_COLOR_(.*?)$/          then BORDER_COLORS
                when /^VK_SAMPLER_MIPMAP_MODE_(.*?)$/   then SAMPLER_MIPMAP_MODES
                when /^VK_MEMORY_PROPERTY_(.*?)_BIT/    then MEMORY_PROPERTIES
+               when /^VK_VERTEX_INPUT_RATE_(.*?)$/     then VERTEX_INPUT_RATES
                else next
                end
       key = $1.downcase
@@ -63,6 +65,10 @@ module Vulkan
 
     def syms_to_flags(syms, bits)
       [syms].flatten.reduce(0) { |bit, sym| bit | sym_to_val(sym, bits) }
+    end
+
+    def sym_to_vertex_input_rate(sym)
+      sym_to_val(sym, VERTEX_INPUT_RATES)
     end
 
     def sym_to_compare_op(sym)

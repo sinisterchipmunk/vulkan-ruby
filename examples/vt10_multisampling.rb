@@ -117,7 +117,7 @@ texture.transition_layout command_pool, graphics_queue, to: :transfer_dst_optima
 num_mip_levels.times do |mip_level|
   image_data = png.to_rgba_stream
   image_data_buffer = device.create_buffer size: image_data.size,
-                                           usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+                                           usage: :transfer_src,
                                            properties: [:host_visible, :host_coherent]
   image_data_buffer.map { |data| data[0, image_data.size] = image_data }
   texture.copy_from_buffer  command_pool, graphics_queue, buffer: image_data_buffer,
@@ -210,7 +210,7 @@ rebuild_swap_chain = proc do
   pipeline.depth
   pipeline.add_binding_description binding: 0,
                                    stride: Vertex.size,
-                                   input_rate: Vulkan::VK_VERTEX_INPUT_RATE_VERTEX
+                                   input_rate: :vertex
 
   pipeline.add_attribute_description binding: 0,
                                      location: 0,

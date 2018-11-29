@@ -78,7 +78,7 @@ module Vulkan
       binding_description = VkVertexInputBindingDescription.malloc
       binding_description.binding   = binding
       binding_description.stride    = stride
-      binding_description.inputRate = input_rate
+      binding_description.inputRate = sym_to_vertex_input_rate(input_rate)
       @binding_descriptions << binding_description
     end
 
