@@ -1,3 +1,5 @@
+# https://vulkan-tutorial.com/code/27_model_loading.cpp
+
 require 'bundler/setup'
 require 'simplecov'
 require 'vulkan'

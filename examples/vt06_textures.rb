@@ -1,3 +1,5 @@
+# https://vulkan-tutorial.com/code/25_texture_mapping.cpp
+
 require 'bundler/setup'
 require 'simplecov'
 require 'vulkan'

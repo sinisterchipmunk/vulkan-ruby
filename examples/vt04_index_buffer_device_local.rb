@@ -1,3 +1,5 @@
+# https://vulkan-tutorial.com/code/20_index_buffer.cpp
+
 require 'bundler/setup'
 require 'simplecov'
 require 'vulkan'

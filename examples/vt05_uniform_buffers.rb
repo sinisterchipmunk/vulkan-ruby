@@ -1,3 +1,5 @@
+# https://vulkan-tutorial.com/code/22_descriptor_sets.cpp
+
 require 'bundler/setup'
 require 'simplecov'
 require 'vulkan'

@@ -1,3 +1,5 @@
+# https://vulkan-tutorial.com/code/19_staging_buffer.cpp
+
 require 'bundler/setup'
 require 'simplecov'
 require 'vulkan'

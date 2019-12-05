@@ -1,3 +1,5 @@
+# https://vulkan-tutorial.com/code/16_swap_chain_recreation.cpp
+
 require 'bundler/setup'
 require 'simplecov'
 require 'vulkan'
@@ -5,9 +7,10 @@ require 'sdl2_vulkan'
 
 # Create a window that we plan to draw to
 SDL2.init(SDL2::INIT_EVERYTHING)
-window = SDL2::Window.create "test-vulkan", 0, 0, 640, 480, SDL2::Window::Flags::VULKAN |
-                                                            SDL2::Window::Flags::RESIZABLE |
-                                                            0x00002000 # SDL2::Window::Flags::ALLOW_HIGHDPI
+window = SDL2::Window.create "Hello Triangle", 0, 0, 640, 480,
+                             SDL2::Window::Flags::VULKAN |
+                             SDL2::Window::Flags::RESIZABLE |
+                             0x00002000 # SDL2::Window::Flags::ALLOW_HIGHDPI
 
 # Create a Vulkan instance
 instance = Vulkan::Instance.new extensions: window.vk_instance_extensions

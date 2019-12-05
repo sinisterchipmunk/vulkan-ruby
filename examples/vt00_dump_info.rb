@@ -10,7 +10,7 @@ pp Vulkan::Instance.extensions
 puts
 puts
 
-puts 'SUPPORTED EXTENSIONS'
+puts 'SUPPORTED LAYERS'
 puts '--------------------'
 puts
 pp Vulkan::Instance.layers
