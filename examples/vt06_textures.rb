@@ -42,7 +42,7 @@ dev = instance.physical_devices.detect do |dev|
   next false unless swapchain_surface_info = dev.swapchain_surface_info(surface)
   builder = Vulkan::SwapchainBuilder.new(swapchain_surface_info)
   dev.properties[:device_type] == :discrete_gpu &&
-    builder.optimal_format && builder.optimal_presentation_mode
+    (builder.format rescue false) && (builder.presentation_mode rescue false)
 end
 raise 'could not find a suitable physical device' unless dev
 
@@ -149,7 +149,7 @@ rebuild_swap_chain = proc do
   end
 
   # Create graphic pipeline
-  pipeline = device.create_pipeline($swapchain)
+  pipeline = device.create_pipeline(viewport: { width: $swapchain.width, height: $swapchain.height })
   pipeline.add_binding_description binding: 0,
                                    stride: Vertex.size,
                                    input_rate: Vulkan::VK_VERTEX_INPUT_RATE_VERTEX

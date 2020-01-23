@@ -48,7 +48,7 @@ dev = instance.physical_devices.detect do |dev|
   next false unless swapchain_surface_info = dev.swapchain_surface_info(surface)
   builder = Vulkan::SwapchainBuilder.new(swapchain_surface_info)
   dev.properties[:device_type] == :discrete_gpu &&
-    builder.optimal_format && builder.optimal_presentation_mode
+    (builder.format rescue false) && (builder.presentation_mode rescue false)
 end
 raise 'could not find a suitable physical device' unless dev
 
@@ -206,7 +206,7 @@ rebuild_swap_chain = proc do
   end
 
   # Create graphic pipeline
-  pipeline = device.create_pipeline($swapchain)
+  pipeline = device.create_pipeline(viewport: { width: $swapchain.width, height: $swapchain.height })
   pipeline.multisampling[:samples]        = device.max_samples
   pipeline.multisampling[:sample_shading] = true
   pipeline.depth
@@ -303,7 +303,7 @@ until done
   break if ENV['MAX_FRAMES'].to_i == frame_counter
   # dump some FPS infos
   uptime = ENV['TIME_STEP'] ? ENV['TIME_STEP'].to_f * frame_counter : Time.now - start_time
-  if frame_counter % 3000 == 0
+  if frame_counter % 1000 == 0
     fps = frame_counter / uptime
     p ['fps: ', fps, 'frame-time (ms): ', 1000.0 / fps]
   end
