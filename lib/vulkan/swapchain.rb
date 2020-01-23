@@ -1,6 +1,7 @@
 module Vulkan
   class Swapchain
     include Vulkan::Checks
+    include Vulkan::Conversions
     include Vulkan::Finalizer
 
     attr_reader :extent
@@ -11,6 +12,7 @@ module Vulkan
     def initialize(instance, device, surface:,
                                      surface_width:,
                                      surface_height:,
+                                     app_config: {},
                                      builder_class: Vulkan::SwapchainBuilder,
                                      image_usage: VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
                                      image_array_layers: 1,
@@ -21,19 +23,19 @@ module Vulkan
       @vk = Vulkan[instance, device]
 
       info = device.physical_device.swapchain_surface_info(surface)
-      builder = builder_class.new(info)
-      @extent = builder.choose_extent(surface_width, surface_height)
-      format = builder.optimal_format
-      presentation_mode = builder.optimal_presentation_mode
-      @format = format[:format]
-      @color_space = format[:color_space]
+      builder = builder_class.new(info, app_config)
+      @extent = { width: builder.width(surface_width), height: builder.height(surface_height) }
+
+      image_format = builder.format
+      @format = image_format[:format]
+      @color_space = image_format[:color_space]
 
       create_info = VkSwapchainCreateInfoKHR.malloc
       create_info.sType                 = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR
       create_info.surface               = surface.to_ptr
       create_info.minImageCount         = builder.image_count
-      create_info.imageFormat           = format[:format]
-      create_info.imageColorSpace       = format[:color_space]
+      create_info.imageFormat           = @format
+      create_info.imageColorSpace       = @color_space
       create_info.imageExtent.width     = @extent[:width]
       create_info.imageExtent.height    = @extent[:height]
       create_info.imageArrayLayers      = image_array_layers
@@ -41,9 +43,9 @@ module Vulkan
       create_info.imageSharingMode      = sharing_mode
       create_info.queueFamilyIndexCount = 0
       create_info.pQueueFamilyIndices   = nil
-      create_info.preTransform          = info[:capabilities][:current_transform_flags]
+      create_info.preTransform          = syms_to_surface_transforms(builder.transformation)
       create_info.compositeAlpha        = composite_alpha
-      create_info.presentMode           = presentation_mode
+      create_info.presentMode           = sym_to_present_mode(builder.presentation_mode)
       create_info.clipped               = clipped ? VK_TRUE : VK_FALSE
       create_info.oldSwapchain          = old_swapchain
 
@@ -56,7 +58,7 @@ module Vulkan
       check_result @vk.vkGetSwapchainImagesKHR(device.to_ptr, @handle, image_count_p, nil)
       images_p = Vulkan.struct("images[#{image_count_p.value}]" => 'void *handle').malloc
       check_result @vk.vkGetSwapchainImagesKHR(device.to_ptr, @handle, image_count_p, images_p);
-      @image_views = images_p.images.map { |i| ImageView.new(@vk, i.handle, format[:format]) }
+      @image_views = images_p.images.map { |i| ImageView.new(@vk, i.handle, sym_to_image_format(@format)) }
 
       @image_index_p = Vulkan.create_value('uint32_t', 0)
     end
