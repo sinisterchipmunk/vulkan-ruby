@@ -21,6 +21,9 @@ module Vulkan
     MEMORY_PROPERTIES = {}
     FORMAT_FEATURE_BITS = {}
     VERTEX_INPUT_RATES = {}
+    PRESENT_MODES = {}
+    SURFACE_TRANSFORMS = {}
+    DYNAMIC_STATES = {}
 
     Vulkan.constants.each do |name|
       output = case name.to_s
@@ -45,11 +48,22 @@ module Vulkan
                when /^VK_SAMPLER_MIPMAP_MODE_(.*?)$/   then SAMPLER_MIPMAP_MODES
                when /^VK_MEMORY_PROPERTY_(.*?)_BIT/    then MEMORY_PROPERTIES
                when /^VK_VERTEX_INPUT_RATE_(.*?)$/     then VERTEX_INPUT_RATES
+               when /^VK_PRESENT_MODE_(.*?)(?:_KHR)?$/ then PRESENT_MODES
+               when /^VK_SURFACE_TRANSFORM_(.*?)_BIT/  then SURFACE_TRANSFORMS
+               when /^VK_DYNAMIC_STATE_(.*)/           then DYNAMIC_STATES
                else next
                end
       key = $1.downcase
       raise 'BUG: two identical constant names? %s => %s' % [name, key] if output.include?(key)
-      output[key] = output[key.to_sym] = Vulkan.const_get(name)
+      output[key.to_sym] = output[key] = Vulkan.const_get(name)
+    end
+
+    def sym_to_present_mode(sym)
+      PRESENT_MODES[sym]
+    end
+
+    def present_mode_to_sym(mode)
+      PRESENT_MODES.key(mode)&.to_sym
     end
 
     def sym_to_samples(sym)
@@ -59,12 +73,30 @@ module Vulkan
       sym
     end
 
+    def sym_to_dynamic_state(sym)
+      DYNAMIC_STATES[sym]
+    end
+
+    def syms_to_surface_transforms(sym)
+      syms_to_flags sym, SURFACE_TRANSFORMS
+    end
+
     def sym_to_val(sym, vals)
       vals[sym] || sym
     end
 
     def syms_to_flags(syms, bits)
       [syms].flatten.reduce(0) { |bit, sym| bit | sym_to_val(sym, bits) }
+    end
+
+    def flags_to_syms(flags, bits)
+      return flags   if flags.kind_of?(Array)
+      return [flags] if flags.kind_of?(Symbol)
+      bits.reduce([]) do |syms, (name, bit)|
+        syms << name if flags & bit != 0
+        syms
+      end
+      syms
     end
 
     def sym_to_vertex_input_rate(sym)
@@ -77,6 +109,10 @@ module Vulkan
 
     def syms_to_buffer_usage_flags(syms)
       syms_to_flags(syms, BUFFER_USAGE_BITS)
+    end
+
+    def buffer_usage_flags_to_syms(bits)
+      flags_to_syms(bits, BUFFER_USAGE_BITS)
     end
 
     def syms_to_format_feature_flags(syms)
@@ -167,7 +203,7 @@ module Vulkan
       DESCRIPTOR_TYPES[sym] || sym
     end
 
-    def syms_to_stage_flags(syms)
+    def syms_to_shader_stage_flags(syms)
       syms_to_flags syms, SHADER_STAGE_BITS
     end
 
@@ -206,10 +242,10 @@ module Vulkan
 
     def queue_family_to_index(family)
       case family
-      when nil     then VK_QUEUE_FAMILY_IGNORED
-      when Numeric then family
-      when Hash    then queue_family_to_index(family[:index])
-      else raise ArgumentError, 'queue family must be number or hash containing :index'
+      when nil, :ignored then VK_QUEUE_FAMILY_IGNORED
+      when Numeric       then family
+      when Hash          then queue_family_to_index(family[:index])
+      else raise ArgumentError, 'queue family must be :ignored, a number, or a hash containing :index'
       end
     end
 
@@ -362,6 +398,14 @@ module Vulkan
       when 64 then VK_SAMPLE_COUNT_64_BIT
       else i
       end
+    end
+
+    def array_of_uint32s(ary)
+      return nil if ary.nil? || ary.empty?
+      size = ary.size * 4
+      ints = Fiddle::Pointer.malloc(size)
+      ints[0, size] = ary.pack("L")
+      ints
     end
 
     def array_of_structures(ary)

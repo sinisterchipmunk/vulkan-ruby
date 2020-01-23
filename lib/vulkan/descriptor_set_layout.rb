@@ -31,7 +31,7 @@ module Vulkan
         descr.binding            = binding
         descr.descriptorType     = sym_to_descriptor_type(type)
         descr.descriptorCount    = count
-        descr.stageFlags         = syms_to_stage_flags(stages)
+        descr.stageFlags         = syms_to_shader_stage_flags(stages)
         descr.pImmutableSamplers = array_of_pointers(samplers)
       end
     end

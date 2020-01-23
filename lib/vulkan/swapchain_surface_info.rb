@@ -21,7 +21,7 @@ module Vulkan
         check_result @vk.vkGetPhysicalDeviceSurfacePresentModesKHR(@physical_device.to_ptr, @surface.to_ptr, modes_count_p, nil)
         modes_p = Vulkan.struct(["VkPresentModeKHR modes[#{modes_count_p.value}]"]).malloc
         check_result @vk.vkGetPhysicalDeviceSurfacePresentModesKHR(@physical_device.to_ptr, @surface.to_ptr, modes_count_p, modes_p)
-        modes_p.modes
+        modes_p.modes.map { |mode| present_mode_to_sym(mode) }
       end
     end
 

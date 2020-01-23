@@ -72,25 +72,25 @@ class ConversionsTest < Minitest::Test
                  syms_to_descriptor_set_layout_type_flags([:push, :update_after_bind_pool])
   end
 
-  def test_stage_flags
+  def test_shader_stage_flags
     assert_equal VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-                 syms_to_stage_flags([:vertex, :geometry, :fragment])
-    assert_equal VK_SHADER_STAGE_VERTEX_BIT,                  syms_to_stage_flags([:vertex])
-    assert_equal VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT,    syms_to_stage_flags([:tessellation_control])
-    assert_equal VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT, syms_to_stage_flags([:tessellation_evaluation])
-    assert_equal VK_SHADER_STAGE_GEOMETRY_BIT,                syms_to_stage_flags([:geometry])
-    assert_equal VK_SHADER_STAGE_FRAGMENT_BIT,                syms_to_stage_flags([:fragment])
-    assert_equal VK_SHADER_STAGE_COMPUTE_BIT,                 syms_to_stage_flags([:compute])
-    assert_equal VK_SHADER_STAGE_ALL_GRAPHICS,                syms_to_stage_flags([:all_graphics])
-    assert_equal VK_SHADER_STAGE_ALL,                         syms_to_stage_flags([:all])
-    assert_equal VK_SHADER_STAGE_TASK_BIT_NV,                 syms_to_stage_flags([:task])
-    assert_equal VK_SHADER_STAGE_MESH_BIT_NV,                 syms_to_stage_flags([:mesh])
-    assert_equal VK_SHADER_STAGE_RAYGEN_BIT_NV,               syms_to_stage_flags([:raygen])
-    assert_equal VK_SHADER_STAGE_ANY_HIT_BIT_NV,              syms_to_stage_flags([:any_hit])
-    assert_equal VK_SHADER_STAGE_CLOSEST_HIT_BIT_NV,          syms_to_stage_flags([:closest_hit])
-    assert_equal VK_SHADER_STAGE_MISS_BIT_NV,                 syms_to_stage_flags([:miss])
-    assert_equal VK_SHADER_STAGE_INTERSECTION_BIT_NV,         syms_to_stage_flags([:intersection])
-    assert_equal VK_SHADER_STAGE_CALLABLE_BIT_NV,             syms_to_stage_flags([:callable])
+                 syms_to_shader_stage_flags([:vertex, :geometry, :fragment])
+    assert_equal VK_SHADER_STAGE_VERTEX_BIT,                  syms_to_shader_stage_flags([:vertex])
+    assert_equal VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT,    syms_to_shader_stage_flags([:tessellation_control])
+    assert_equal VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT, syms_to_shader_stage_flags([:tessellation_evaluation])
+    assert_equal VK_SHADER_STAGE_GEOMETRY_BIT,                syms_to_shader_stage_flags([:geometry])
+    assert_equal VK_SHADER_STAGE_FRAGMENT_BIT,                syms_to_shader_stage_flags([:fragment])
+    assert_equal VK_SHADER_STAGE_COMPUTE_BIT,                 syms_to_shader_stage_flags([:compute])
+    assert_equal VK_SHADER_STAGE_ALL_GRAPHICS,                syms_to_shader_stage_flags([:all_graphics])
+    assert_equal VK_SHADER_STAGE_ALL,                         syms_to_shader_stage_flags([:all])
+    assert_equal VK_SHADER_STAGE_TASK_BIT_NV,                 syms_to_shader_stage_flags([:task])
+    assert_equal VK_SHADER_STAGE_MESH_BIT_NV,                 syms_to_shader_stage_flags([:mesh])
+    assert_equal VK_SHADER_STAGE_RAYGEN_BIT_NV,               syms_to_shader_stage_flags([:raygen])
+    assert_equal VK_SHADER_STAGE_ANY_HIT_BIT_NV,              syms_to_shader_stage_flags([:any_hit])
+    assert_equal VK_SHADER_STAGE_CLOSEST_HIT_BIT_NV,          syms_to_shader_stage_flags([:closest_hit])
+    assert_equal VK_SHADER_STAGE_MISS_BIT_NV,                 syms_to_shader_stage_flags([:miss])
+    assert_equal VK_SHADER_STAGE_INTERSECTION_BIT_NV,         syms_to_shader_stage_flags([:intersection])
+    assert_equal VK_SHADER_STAGE_CALLABLE_BIT_NV,             syms_to_shader_stage_flags([:callable])
   end
 
   def test_descriptor_types

@@ -3,6 +3,7 @@ require 'simplecov'
 SimpleCov.start
 
 require "vulkan"
+require 'vulkan/mock'
 
 require "minitest/autorun"
 

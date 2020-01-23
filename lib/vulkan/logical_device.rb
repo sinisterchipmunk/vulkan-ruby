@@ -122,8 +122,8 @@ module Vulkan
       Vulkan::Semaphore.new(@vk)
     end
 
-    def create_pipeline(swapchain)
-      Vulkan::Pipeline.new(@vk, swapchain)
+    def create_pipeline(**args)
+      Vulkan::Pipeline.new(@vk, **args)
     end
 
     def create_swapchain(**args)
