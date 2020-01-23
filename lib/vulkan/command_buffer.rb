@@ -76,10 +76,92 @@ module Vulkan
       @vk.vkCmdCopyBuffer(to_ptr, src, dst, regions.size, copy_regions_p)
     end
 
+    # Blit from the image at `:src` into the image at `:dst`.
+    # `:regions` contains an array of hashes, which must correspond to
+    # this layout (values given are defaults used if the field is omitted):
+    #
+    #     {
+    #       src: { # corresponds to struct VkImageSubresourceLayers
+    #         aspect_mask: VK_IMAGE_ASPECT_FLAG_BITS_MAX_ENUM, # (everything)
+    #         mip_level: (required),
+    #         base_array_layer: 0,
+    #         layer_count: 1,
+    #         tl: { # corresponds to srcOffests[0], a struct VkOffset3D
+    #           x: 0,
+    #           y: 0,
+    #           z: 0
+    #         },
+    #         br: { # corresponds to srcOffests[1], a struct VkOffset3D
+    #           x: (required)
+    #           y: (required)
+    #           z: (required)
+    #         }
+    #       },
+    #       dst: { # corresponds to struct VkImageSubresourceLayers
+    #         aspect_mask: VK_IMAGE_ASPECT_FLAG_BITS_MAX_ENUM, # (everything)
+    #         mip_level: (required),
+    #         base_array_layer: 0,
+    #         layer_count: 1,
+    #         tl: { # corresponds to dstOffests[0], a struct VkOffset3D
+    #           x: 0,
+    #           y: 0,
+    #           z: 0
+    #         },
+    #         br: { # corresponds to dstOffests[1], a struct VkOffset3D
+    #           x: (required)
+    #           y: (required)
+    #           z: (required)
+    #         }
+    #       },
+    #     }
+    def blit_image(src:,
+                   src_layout: :transfer_src_optimal,
+                   dst:,
+                   dst_layout: :transfer_dst_optimal,
+                   regions:,
+                   filter: :nearest)
+      blit_regions_p = Vulkan.struct("regions[#{regions.size}]" => VkImageBlit).malloc
+      @refs << blit_regions_p
+      regions.each_with_index do |region, i|
+        blit_region = blit_regions_p.regions[i]
+        blit_region.srcSubresource.aspectMask     = syms_to_image_aspect_flags(region[:src][:aspect_mask] || VK_IMAGE_ASPECT_FLAG_BITS_MAX_ENUM)
+        blit_region.srcSubresource.mipLevel       = region[:src][:mip_level]
+        blit_region.srcSubresource.baseArrayLayer = region[:src][:base_array_layer] || 0
+        blit_region.srcSubresource.layerCount     = region[:src][:layer_count] || 1
+        blit_region.dstSubresource.aspectMask     = syms_to_image_aspect_flags(region[:dst][:aspect_mask] || VK_IMAGE_ASPECT_FLAG_BITS_MAX_ENUM)
+        blit_region.dstSubresource.mipLevel       = region[:dst][:mip_level]
+        blit_region.dstSubresource.baseArrayLayer = region[:dst][:base_array_layer] || 0
+        blit_region.dstSubresource.layerCount     = region[:dst][:layer_count] || 1
+        tl = region[:src][:tl] || {}
+        blit_region.srcOffsets[0].x = tl[:x] || 0
+        blit_region.srcOffsets[0].y = tl[:y] || 0
+        blit_region.srcOffsets[0].z = tl[:z] || 0
+        blit_region.srcOffsets[1].x = region[:src][:br][:x] || raise(ArgumentError, "Need src :br offsets (x)")
+        blit_region.srcOffsets[1].y = region[:src][:br][:y] || raise(ArgumentError, "Need src :br offsets (y)")
+        blit_region.srcOffsets[1].z = region[:src][:br][:z] || raise(ArgumentError, "Need src :br offsets (z)")
+        tl = region[:dst][:tl] || {}
+        blit_region.dstOffsets[0].x = tl[:x] || 0
+        blit_region.dstOffsets[0].y = tl[:y] || 0
+        blit_region.dstOffsets[0].z = tl[:z] || 0
+        blit_region.dstOffsets[1].x = region[:dst][:br][:x] || raise(ArgumentError, "Need dst :br offsets (x)")
+        blit_region.dstOffsets[1].y = region[:dst][:br][:y] || raise(ArgumentError, "Need dst :br offsets (y)")
+        blit_region.dstOffsets[1].z = region[:dst][:br][:z] || raise(ArgumentError, "Need dst :br offsets (z)")
+      end
+
+      @vk.vkCmdBlitImage(to_ptr,
+                          src,
+                          sym_to_image_layout(src_layout),
+                          dst,
+                          sym_to_image_layout(dst_layout),
+                          regions.size,
+                          blit_regions_p,
+                          sym_to_filter(filter))
+    end
+
     def pipeline_image_barrier(from_layout:,
                                to_layout:,
-                               src_queue_family:,
-                               dst_queue_family:,
+                               src_queue_family: :ignored,
+                               dst_queue_family: :ignored,
                                image:,
                                aspects:,
                                base_mip_level:,
@@ -265,6 +347,17 @@ module Vulkan
 
     def draw_indexed(index_count, instance_count, first_index, vertex_offset, first_instance)
       @vk.vkCmdDrawIndexed(to_ptr, index_count, instance_count, first_index, vertex_offset, first_instance)
+    end
+
+    def viewport(x, y, width, height, min_depth = 0, max_depth = 1)
+      vp = VkViewport.malloc
+      vp.x = x
+      vp.y = y
+      vp.width = width
+      vp.height = height
+      vp.minDepth = min_depth
+      vp.maxDepth = max_depth
+      @vk.vkCmdSetViewport(to_ptr, 0, 1, vp)
     end
 
     def to_ptr

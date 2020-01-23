@@ -19,6 +19,11 @@ module Vulkan
     attr_reader :samples
     attr_reader :memory
 
+    # You should only set this if you have transitioned the image to a
+    # different layout outside of this class, by working directly with
+    # a command buffer.
+    attr_writer :layout
+
     def initialize(vk, physical_device,
                        dimensions: ,
                        width: ,
@@ -196,6 +201,29 @@ module Vulkan
                                  mip_level:           mip_level,
                                  base_array_layer:    base_array_layer,
                                  layer_count:         layer_count
+      end
+
+      queue.submit([command_buffer])
+      queue.wait_until_idle if wait_until_idle
+    end
+
+    # See CommandBuffer#blit_image for details. If `:wait_until_idle` is true,
+    # this method won't return until the blit operation has completed and its
+    # queue is idle.
+    def blit_from(command_pool, queue,
+                  src:,
+                  src_layout: :transfer_src_optimal,
+                  dst_layout: :transfer_dst_optimal,
+                  regions:,
+                  filter: :nearest,
+                  wait_until_idle: false)
+      command_buffer = command_pool.create_command_buffer(usage: :one_time_submit) do |cmd|
+        cmd.blit_image src_image: src,
+                       src_image_layout: src_layout,
+                       dst_image: self,
+                       dst_image_layout: dst_layout,
+                       regions: regions,
+                       filter: filter
       end
 
       queue.submit([command_buffer])
