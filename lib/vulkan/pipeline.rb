@@ -14,10 +14,11 @@ module Vulkan
     attr_reader :layouts
     attr_reader :constant_ranges
     attr_reader :descriptors
+    attr_accessor :specialization_constants
 
-    def initialize(vk, swapchain)
+    # TODO support multiple viewports
+    def initialize(vk, viewport: { }, scissor: { })
       @vk = vk
-      @swapchain = swapchain
       @shader_stages = []
       @layouts = []
       @constant_ranges = []
@@ -29,17 +30,17 @@ module Vulkan
       @viewport = {
         left: 0,
         top: 0,
-        width: swapchain[:extent][:width],
-        height: swapchain[:extent][:height],
+        width: 640,
+        height: 480,
         min_depth: 0,
         max_depth: 1
-      }
+      }.merge(viewport)
       @scissor = {
         left: 0,
         top: 0,
-        width: @viewport[:width],
-        height: @viewport[:height]
-      }
+        width: 0xffffffff,
+        height: 0xffffffff
+      }.merge(scissor)
       @rasterizer = {
         depth_clamp: false,
         discard_all: false,
@@ -72,6 +73,8 @@ module Vulkan
       }
       @binding_descriptions = []
       @attribute_descriptions = []
+      @dynamic_states = []
+      @specialization_constants = {}
     end
 
     def add_binding_description(binding:, stride:, input_rate:)
@@ -92,7 +95,11 @@ module Vulkan
     end
 
     def add_descriptor_set_layout(*a, **b)
-      Vulkan::DescriptorSetLayout.new(@vk, *a, **b).tap { |layout| @layouts << layout }
+      if a.size == 1 && b.empty? && a.first.kind_of?(Vulkan::DescriptorSetLayout)
+        @layouts << a[0]
+      else
+        Vulkan::DescriptorSetLayout.new(@vk, *a, **b).tap { |layout| @layouts << layout }
+      end
     end
 
     def add_shader_stage(shader_stage)
@@ -120,8 +127,44 @@ module Vulkan
       # TODO stencil test options
     end
 
+    def add_dynamic_state(which)
+      @dynamic_states << which
+    end
+
+    def construct_specialization_info(specialization_constants_hash)
+      specialization_info = nil
+      if specialization_constants_hash&.any?
+        specialization_data = ""
+        specialization_entries = specialization_constants_hash.map do |id, data|
+          VkSpecializationMapEntry.malloc.tap do |entry|
+            entry.constantID = id
+            entry.offset = specialization_data.size
+            entry.size = data.size
+            specialization_data << data
+          end
+        end
+        specialization_info = VkSpecializationInfo.malloc
+        specialization_info.mapEntryCount = specialization_entries.count
+        specialization_info.pMapEntries = array_of_structures(specialization_entries)
+        specialization_info.dataSize = specialization_data.size
+        specialization_info.pData = specialization_data
+      end
+      specialization_info
+    end
+
     def commit(render_pass, first_subpass_index: 0)
       @render_pass = render_pass
+
+      shader_stage_create_infos = @shader_stages.map do |stage|
+        stage_info = VkPipelineShaderStageCreateInfo.malloc
+        stage_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO
+        stage_info.stage = syms_to_shader_stage_flags(stage.stage)
+        stage_info.module = stage.module_handle
+        stage_info.pName = Fiddle::Pointer[stage.entry_point]
+        specs = construct_specialization_info(@specialization_constants[stage.stage])
+        stage_info.pSpecializationInfo = specs
+        stage_info
+      end
 
       vertex_input_info = VkPipelineVertexInputStateCreateInfo.malloc
       vertex_input_info.sType                           = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO
@@ -202,8 +245,6 @@ module Vulkan
       color_blending.blendConstants[2] = 0.0 # TODO
       color_blending.blendConstants[3] = 0.0 # TODO
 
-      # TODO dynamic states
-
       pipeline_layout_info = VkPipelineLayoutCreateInfo.malloc
       pipeline_layout_info.sType                  = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO
       pipeline_layout_info.setLayoutCount         = @layouts.size
@@ -217,10 +258,19 @@ module Vulkan
       @layout = pipeline_layout_p.value
       finalize_with @vk, :vkDestroyPipelineLayout, @vk.device, @layout, nil
 
+      if @dynamic_states.any?
+        dynamic_states = VkPipelineDynamicStateCreateInfo.malloc
+        dynamic_states.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO
+        dynamic_states.dynamicStateCount = @dynamic_states.count
+        dynamic_states.pDynamicStates = array_of_uint32s(@dynamic_states.map { |state| sym_to_dynamic_state(state) })
+      else
+        dynamic_states = nil
+      end
+
       pipeline_info = VkGraphicsPipelineCreateInfo.malloc
       pipeline_info.sType               = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
-      pipeline_info.stageCount          = @shader_stages.size
-      pipeline_info.pStages             = array_of_structures(@shader_stages)
+      pipeline_info.stageCount          = shader_stage_create_infos.size
+      pipeline_info.pStages             = array_of_structures(shader_stage_create_infos)
       pipeline_info.pVertexInputState   = vertex_input_info
       pipeline_info.pInputAssemblyState = input_assembly
       pipeline_info.pViewportState      = viewport_state
@@ -228,7 +278,7 @@ module Vulkan
       pipeline_info.pMultisampleState   = multisampling
       pipeline_info.pDepthStencilState  = @depth_stencil
       pipeline_info.pColorBlendState    = color_blending
-      pipeline_info.pDynamicState       = nil
+      pipeline_info.pDynamicState       = dynamic_states
       pipeline_info.layout              = @layout
       pipeline_info.renderPass          = render_pass.to_ptr
       pipeline_info.subpass             = first_subpass_index

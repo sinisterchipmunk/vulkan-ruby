@@ -1,9 +1,10 @@
 module Vulkan
   class ShaderStage
     include Vulkan::Checks
+    include Vulkan::Conversions
     include Vulkan::Finalizer
 
-    attr_reader :entry_point, :stage
+    attr_reader :entry_point, :stage, :module_handle
 
     def initialize(vk, code: nil,
                        file_path: nil,
@@ -26,12 +27,7 @@ module Vulkan
       @module_handle = module_handle_p.value
       finalize_with vk, :vkDestroyShaderModule, vk.device, @module_handle, nil
 
-      stage_info = VkPipelineShaderStageCreateInfo.malloc
-      stage_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO
-      stage_info.stage = stage
-      stage_info.module = @module_handle
-      stage_info.pName = Fiddle::Pointer[entry_point]
-      @handle = stage_info.to_ptr
+      @handle = @module_handle
     end
   end
 end
