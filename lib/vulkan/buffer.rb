@@ -6,6 +6,7 @@ module Vulkan
 
     attr_reader :memory
     attr_reader :size
+    attr_reader :usage
 
     def initialize(vk, physical_device, size:,
                                         usage:,
@@ -32,6 +33,22 @@ module Vulkan
 
     def map(*args, &block)
       memory.map(*args, &block)
+    end
+
+    def flush(...)
+      memory.flush(...)
+    end
+
+    def flush_all(...)
+      memory.flush_all(...)
+    end
+
+    def invalidate(...)
+      memory.invalidate(...)
+    end
+
+    def invalidate_all(...)
+      memory.invalidate_all(...)
     end
 
     def mapped?
