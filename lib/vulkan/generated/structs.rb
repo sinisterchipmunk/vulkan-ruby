@@ -1130,9 +1130,9 @@ module Vulkan
                                       "void * pView"]
 
   VkImageBlit = struct [{ "srcSubresource" => VkImageSubresourceLayers },
-                        { "srcOffsets" => VkOffset3D },
+                        { "srcOffsets[2]" => VkOffset3D },
                         { "dstSubresource" => VkImageSubresourceLayers },
-                        { "dstOffsets" => VkOffset3D }]
+                        { "dstOffsets[2]" => VkOffset3D }]
 
   VkImageCopy = struct [{ "srcSubresource" => VkImageSubresourceLayers },
                         { "srcOffset" => VkOffset3D },

@@ -1,6 +1,11 @@
 require "test_helper"
 
 class GeneratorsTest < Minitest::Test
+  def test_VkImageBlit_offsets_are_arrays
+    assert_equal 2, VkImageBlit.malloc.srcOffsets.size
+    assert_equal 2, VkImageBlit.malloc.dstOffsets.size
+  end
+
   def test_uint32_pointer_in_swapchain_create_info_struct
     content = File.read(Vulkan.root.join('generated/structs.rb'))
     content[/VkSwapchainCreateInfoKHR\s*=\s*struct\s*\[(.*?)\]/m]

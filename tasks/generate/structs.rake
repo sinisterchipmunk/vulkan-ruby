@@ -29,18 +29,18 @@ namespace :generate do
               else
                 # MyStruct = struct ['int i', 'char c', { position: ['float x', 'float y'] }]
                 members = struct.xpath('member').map do |m|
+                  m.xpath('comment').remove
                   type = m.xpath('type').text.to_s.strip
                   is_pointer = m.to_s[/<\/type>\s*\*/]
                   # type = 'void' if is_pointer
-                  array = m.text[/\[[0-9+]\]$/]
+                  array = m.text[/\[[0-9]+\]$/]
                   if processed[type] && !is_pointer
-                    arylen = ''
+                    arylen = array || ''
                     arylen = "[#{m.xpath('enum').text.to_s.strip}]" if m.xpath('enum').any?
                     nested_name = m.xpath('name').text.to_s.strip + arylen
                     { nested_name => type }
                   else
                     # comment = m.xpath('comment').text.to_s.strip
-                    m.xpath('comment').remove
                     m.xpath('enum').each do |enum|
                       enum.content = "\#{" + enum.text + "}" unless enum.text['#{']
                     end
