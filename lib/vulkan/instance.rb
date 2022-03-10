@@ -115,6 +115,10 @@ module Vulkan
       finalize_with @vk, :vkDestroyInstance, @handle, nil
     end
 
+    def on_log(&cb)
+      @log_callback = cb
+    end
+
     def hook_debug_utils_callback
       _, return_type, param_types = Vulkan.parse_signature('VkBool32 debug_callback(int   messageSeverity,' +
                                                                                    'int   messageType,' +
@@ -124,7 +128,11 @@ module Vulkan
         data     = VkDebugUtilsMessengerCallbackDataEXT.new(cb_data_addr)
         type     = const_to_symbol(msg_type,     /^VK_DEBUG_UTILS_MESSAGE_TYPE_(.*?)_BIT_EXT$/)
         severity = const_to_symbol(msg_severity, /^VK_DEBUG_UTILS_MESSAGE_SEVERITY_(.*?)_BIT_EXT$/)
-        puts ['[UTIL]', "[#{severity}]", "[#{type}]", data.pMessage.to_s].join("\t")
+        if @log_callback
+          @log_callback.call severity, type, data.pMessage.to_s
+        else
+          puts ['[UTIL]', "[#{severity}]", "[#{type}]", data.pMessage.to_s].join("\t")
+        end
         VK_FALSE # don't bail
       end
 

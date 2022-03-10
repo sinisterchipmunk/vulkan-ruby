@@ -7,7 +7,7 @@ class PipelinesTest < Minitest::Test
   end
 
   def test_descriptors_and_layouts
-    pipeline = @device.create_pipeline({viewport: { width: 640, height: 480 }})
+    pipeline = @device.create_pipeline(viewport: { width: 640, height: 480 })
     descriptor = {
       binding: 0,
       type: :uniform_buffer,

@@ -4,6 +4,8 @@ module Vulkan
     include Vulkan::Conversions
     include Vulkan::Finalizer
 
+    attr_reader :image
+
     def initialize(vk, image, image_format,
                    view_type: VK_IMAGE_VIEW_TYPE_2D,
                    red_swizzle: VK_COMPONENT_SWIZZLE_IDENTITY,

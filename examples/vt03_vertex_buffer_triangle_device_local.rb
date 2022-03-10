@@ -59,13 +59,13 @@ end
 
 command_pool = device.create_command_pool queue_family: graphics_queue_family
 
-StagingBuffer = device.create_buffer size: VertexData.size,
+StagingBuffer = device.create_buffer size: VertexData.class.size,
                                      usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 StagingBuffer.map do |data|
-  data[0, VertexData.size] = VertexData[0, VertexData.size]
+  data[0, VertexData.class.size] = VertexData[0, VertexData.class.size]
 end
 
-VertexBuffer = device.create_buffer size: VertexData.size,
+VertexBuffer = device.create_buffer size: VertexData.class.size,
                                     usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_DST_BIT | Vulkan::VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
                                     properties: :device_local
 transfer_buffer = command_pool.create_command_buffer(usage: :one_time_submit) do |cmd|
@@ -111,12 +111,12 @@ rebuild_swap_chain = proc do
   pipeline.add_attribute_description binding: 0,
                                      location: 0,
                                      format: Vulkan::VK_FORMAT_R32G32_SFLOAT,
-                                     offset: Vertex.offset_of('pos')
+                                     offset: Vertex.offsetof('pos')
 
   pipeline.add_attribute_description binding: 0,
                                      location: 1,
                                      format: Vulkan::VK_FORMAT_R32G32B32_SFLOAT,
-                                     offset: Vertex.offset_of('color')
+                                     offset: Vertex.offsetof('color')
   shader_stages.each { |stage| pipeline.add_shader_stage(stage) }
   pipeline.commit(render_pass)
 

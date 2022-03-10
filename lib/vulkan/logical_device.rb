@@ -49,7 +49,7 @@ module Vulkan
       end
 
       enabled_features = VkPhysicalDeviceFeatures.malloc
-      enabled_features.to_ptr.memcpy physical_device.features.to_ptr
+      enabled_features.to_ptr.copy_from physical_device.features.to_ptr
       enabled_features.class.members.each do |member|
         member_name = member.gsub(/[0-9A-Z]+/) { |x| "_#{x.downcase}" }.to_sym
         if features.include?(member_name)

@@ -25,6 +25,7 @@ module Vulkan
       @vk = vk
       @handle = handle
       @recording = false
+      @scissors_p = {}
       record(index, &block) if block_given?
     end
 
@@ -207,6 +208,18 @@ module Vulkan
                                buffer_barriers_p,
                                image_barriers&.size || 0,
                                image_barriers_p
+    end
+
+    def set_scissor(scissors, first: 0)
+      scissors_p = @scissors_p[scissors.size] ||=
+                   Vulkan.struct("scissors[#{scissors.size}]" => VkRect2D).malloc
+      scissors.each_with_index do |scissor, i|
+        scissors_p.scissors[i].offset.x      = scissor[:left]
+        scissors_p.scissors[i].offset.y      = scissor[:top]
+        scissors_p.scissors[i].extent.width  = scissor[:width]
+        scissors_p.scissors[i].extent.height = scissor[:height]
+      end
+      @vk.vkCmdSetScissor(to_ptr, first, scissors.size, scissors_p)
     end
 
     def begin_render_pass(render_pass, framebuffer:,

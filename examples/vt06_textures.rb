@@ -11,9 +11,9 @@ include CGLM
 UniformBufferStruct = Vulkan.struct(['float model[16]', 'float view[16]', 'float proj[16]'])
 def UniformBufferStruct.alignment; Mat4.alignment; end
 $ubo = UniformBufferStruct.new(CGLM.alloc(UniformBufferStruct))
-$model_matrix       = Mat4.new(addr: $ubo.to_ptr + $ubo.offset_of('model'))
-$view_matrix        = Mat4.new(addr: $ubo.to_ptr + $ubo.offset_of('view'))
-$projection_matrix  = Mat4.new(addr: $ubo.to_ptr + $ubo.offset_of('proj'))
+$model_matrix       = Mat4.new(addr: $ubo.to_ptr + UniformBufferStruct.offsetof('model'))
+$view_matrix        = Mat4.new(addr: $ubo.to_ptr + UniformBufferStruct.offsetof('view'))
+$projection_matrix  = Mat4.new(addr: $ubo.to_ptr + UniformBufferStruct.offsetof('proj'))
 
 Vertex = Vulkan.struct(['float pos[2]', 'float color[3]', 'float texcoords[2]'])
 VertexData = Vulkan.struct('vertices[4]' => Vertex).malloc
@@ -74,17 +74,17 @@ end
 command_pool = device.create_command_pool queue_family: graphics_queue_family
 
 # Populate the vertex buffer
-staging_buffer = device.create_buffer size: VertexData.size, usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-staging_buffer.map { |data| data[0, VertexData.size] = VertexData[0, VertexData.size] }
-VertexBuffer = device.create_buffer size: VertexData.size,
+staging_buffer = device.create_buffer size: VertexData.class.size, usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_SRC_BIT
+staging_buffer.map { |data| data[0, VertexData.class.size] = VertexData[0, VertexData.class.size] }
+VertexBuffer = device.create_buffer size: VertexData.class.size,
                                     usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_DST_BIT | Vulkan::VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
                                     properties: :device_local
 vertex_transfer_buffer = command_pool.create_command_buffer(usage: :one_time_submit) { |cmd| cmd.copy_buffer staging_buffer, VertexBuffer }
 
 # Populate the index buffer
-staging_buffer = device.create_buffer size: IndexData.size, usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-staging_buffer.map { |data| data[0, IndexData.size] = IndexData[0, IndexData.size] }
-IndexBuffer = device.create_buffer size: IndexData.size,
+staging_buffer = device.create_buffer size: IndexData.class.size, usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_SRC_BIT
+staging_buffer.map { |data| data[0, IndexData.class.size] = IndexData[0, IndexData.class.size] }
+IndexBuffer = device.create_buffer size: IndexData.class.size,
                                    usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_DST_BIT | Vulkan::VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
                                    properties: :device_local
 index_transfer_buffer = command_pool.create_command_buffer(usage: :one_time_submit) { |cmd| cmd.copy_buffer staging_buffer, IndexBuffer }
@@ -157,17 +157,17 @@ rebuild_swap_chain = proc do
   pipeline.add_attribute_description binding: 0,
                                      location: 0,
                                      format: :r32g32_sfloat,
-                                     offset: Vertex.offset_of('pos')
+                                     offset: Vertex.offsetof('pos')
 
   pipeline.add_attribute_description binding: 0,
                                      location: 1,
                                      format: :r32g32b32_sfloat,
-                                     offset: Vertex.offset_of('color')
+                                     offset: Vertex.offsetof('color')
 
   pipeline.add_attribute_description binding: 0,
                                      location: 2,
                                      format: :r32g32_sfloat,
-                                     offset: Vertex.offset_of('texcoords')
+                                     offset: Vertex.offsetof('texcoords')
 
   # Create a uniform buffer for each image in the swapchain, so that we don't
   # modify a buffer for a frame still in-flight
@@ -252,7 +252,7 @@ until done
                                            near: 0.1,
                                            far: 10
       $projection_matrix[1][1] *= -1
-      data[0, $ubo.size] = $ubo[0, $ubo.size]
+      data[0, UniformBufferStruct.size] = $ubo[0, UniformBufferStruct.size]
     end
     graphics_queue.submit([$command_buffers[image_index]],
                           wait_semaphores:   [image_available_semaphores[current_frame]],

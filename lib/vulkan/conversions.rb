@@ -415,7 +415,7 @@ module Vulkan
       raise ArgumentError, "size is 0?, #{ary}" if size == 0
       offset = 0
       ary.each_with_index do |addr, i|
-        (pointers + offset).memcpy(addr.to_ptr)
+        (pointers + offset).copy_from(addr.to_ptr)
         offset += addr.to_ptr.size
       end
       pointers

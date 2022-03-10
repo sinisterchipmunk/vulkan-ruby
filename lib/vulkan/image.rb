@@ -101,6 +101,15 @@ module Vulkan
           dst_stages: :transfer,
           dependencies: 0
         }
+      elsif from == VK_IMAGE_LAYOUT_UNDEFINED &&
+            to   == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+        return {
+          src_access:   0,
+          dst_access:   :shader_read,
+          src_stages:   :color_attachment_output,
+          dst_stages:   :fragment_shader,
+          dependencies: 0
+        }
       elsif from == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL &&
             to   == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
         return {
@@ -133,39 +142,43 @@ module Vulkan
       end
     end
 
+    # Transitions the layout for this image using the given command buffer.
+    # Does not submit the command buffer. Use #transition_layout if you want
+    # to be sure the image has fully transitioned before continuing.
+    def transition_layout_using(cmd,
+                                from: self.layout,
+                                to:,
+                                src_queue_family: nil,
+                                dst_queue_family: nil,
+                                base_mip_level: 0,
+                                level_count: mip_levels - base_mip_level,
+                                base_array_layer: 0,
+                                layer_count: array_layers - base_array_layer,
+                                aspects: :color)
+      access_opts = detect_transition_access_and_stage_flags(from, to)
+      cmd.pipeline_image_barrier from_layout:      from,
+                                 to_layout:        to,
+                                 src_queue_family: src_queue_family,
+                                 dst_queue_family: dst_queue_family,
+                                 image:            self,
+                                 aspects:          aspects,
+                                 base_mip_level:   base_mip_level,
+                                 level_count:      level_count,
+                                 base_array_layer: base_array_layer,
+                                 layer_count:      layer_count,
+                                 **access_opts
+      @layout = to
+    end
+
     # Transitions the layout for this image, using the given command pool to
     # allocate a command buffer and using the given queue to submit it. If
     # `wait_until_idle` is true, this method will block until the queue is
     # idle. Otherwise, it will return as soon as the command buffer is
-    # submitted.
-    def transition_layout(command_pool, queue,
-                          from: self.layout,
-                          to:,
-                          src_queue_family: nil,
-                          dst_queue_family: nil,
-                          base_mip_level: 0,
-                          level_count: mip_levels - base_mip_level,
-                          base_array_layer: 0,
-                          layer_count: array_layers - base_array_layer,
-                          aspects: :color,
-                          wait_until_idle: true
-                         )
-      access_opts = detect_transition_access_and_stage_flags(from, to)
+    # submitted. See #transition_layout_with for other arguments.
+    def transition_layout(command_pool, queue, wait_until_idle: true, **other_args)
       command_buffer = command_pool.create_command_buffer(usage: :one_time_submit) do |cmd|
-        cmd.pipeline_image_barrier from_layout:      from,
-                                   to_layout:        to,
-                                   src_queue_family: src_queue_family,
-                                   dst_queue_family: dst_queue_family,
-                                   image:            self,
-                                   aspects:          aspects,
-                                   base_mip_level:   base_mip_level,
-                                   level_count:      level_count,
-                                   base_array_layer: base_array_layer,
-                                   layer_count:      layer_count,
-                                   **access_opts
+        transition_layout_using(cmd, **other_args)
       end
-
-      @layout = to
       queue.submit([command_buffer])
       queue.wait_until_idle if wait_until_idle
     end
@@ -187,20 +200,21 @@ module Vulkan
                          layer_count: array_layers - base_array_layer,
                          wait_until_idle: true)
       command_buffer = command_pool.create_command_buffer(usage: :one_time_submit) do |cmd|
-        cmd.copy_buffer_to_image buffer, self,
-                                 buffer_offset:       buffer_offset,
-                                 buffer_row_length:   buffer_row_length,
-                                 buffer_image_height: buffer_image_height,
-                                 x:                   x,
-                                 y:                   y,
-                                 z:                   z,
-                                 width:               width,
-                                 height:              height,
-                                 depth:               depth,
-                                 aspects:             aspects,
-                                 mip_level:           mip_level,
-                                 base_array_layer:    base_array_layer,
-                                 layer_count:         layer_count
+        cmd.copy_buffer_to_image buffer, self, [
+                                   buffer_offset:       buffer_offset,
+                                   buffer_row_length:   buffer_row_length,
+                                   buffer_image_height: buffer_image_height,
+                                   x:                   x,
+                                   y:                   y,
+                                   z:                   z,
+                                   width:               width,
+                                   height:              height,
+                                   depth:               depth,
+                                   aspects:             aspects,
+                                   mip_level:           mip_level,
+                                   base_array_layer:    base_array_layer,
+                                   layer_count:         layer_count
+                                 ]
       end
 
       queue.submit([command_buffer])

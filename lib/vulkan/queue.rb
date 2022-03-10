@@ -30,7 +30,7 @@ module Vulkan
       submit_infos_p = @submit_infos[submit_infos.size] ||= Vulkan.struct("infos[#{submit_infos.size}]" => VkSubmitInfo).malloc
       submit_infos.each_with_index do |info, i|
         next if submit_infos_p.infos[i] == info
-        submit_infos_p.infos[i].memcpy(info)
+        submit_infos_p.infos[i].copy_from(info)
       end
 
       check_result @vk.vkQueueSubmit(to_ptr, submit_infos.size, submit_infos_p, fence)

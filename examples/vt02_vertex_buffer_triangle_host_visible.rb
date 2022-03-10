@@ -57,9 +57,9 @@ else
   presentation_queue = device.queue_families[1][:queues][0]
 end
 
-VertexBuffer = device.create_buffer size: VertexData.size, usage: Vulkan::VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
+VertexBuffer = device.create_buffer size: VertexData.class.size, usage: Vulkan::VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
 VertexBuffer.map do |data|
-  data[0, VertexData.size] = VertexData[0, VertexData.size]
+  data[0, VertexData.class.size] = VertexData[0, VertexData.class.size]
 end
 
 command_pool = device.create_command_pool queue_family: graphics_queue_family
@@ -101,12 +101,12 @@ rebuild_swap_chain = proc do
   pipeline.add_attribute_description binding: 0,
                                      location: 0,
                                      format: Vulkan::VK_FORMAT_R32G32_SFLOAT,
-                                     offset: Vertex.offset_of('pos')
+                                     offset: Vertex.offsetof('pos')
 
   pipeline.add_attribute_description binding: 0,
                                      location: 1,
                                      format: Vulkan::VK_FORMAT_R32G32B32_SFLOAT,
-                                     offset: Vertex.offset_of('color')
+                                     offset: Vertex.offsetof('color')
   shader_stages.each { |stage| pipeline.add_shader_stage(stage) }
   pipeline.commit(render_pass)
 

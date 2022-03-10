@@ -1,22 +1,13 @@
-require 'fiddle'
-require 'fiddle/import'
 require 'pathname'
 require 'rubygems/version'
 require 'vulkan/platform'
-require 'vulkan/struct'
+require 'fiddle_ext'
 
 module Vulkan
   extend Fiddle::Importer
   extend Vulkan::Platform
 
   class << self
-    def struct(*args)
-      klass = super
-      klass.send(:include, Vulkan::Struct::InstanceMethods)
-      klass.send(:extend,  Vulkan::Struct::ClassMethods)
-      klass
-    end
-
     def root
       Pathname.new(__dir__).join('vulkan')
     end

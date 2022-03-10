@@ -13,9 +13,9 @@ include CGLM
 UniformBufferStruct = Vulkan.struct(['float model[16]', 'float view[16]', 'float proj[16]'])
 def UniformBufferStruct.alignment; Mat4.alignment; end
 $ubo = UniformBufferStruct.new(CGLM.alloc(UniformBufferStruct))
-$model_matrix       = Mat4.new(addr: $ubo.to_ptr + $ubo.offset_of('model'))
-$view_matrix        = Mat4.new(addr: $ubo.to_ptr + $ubo.offset_of('view'))
-$projection_matrix  = Mat4.new(addr: $ubo.to_ptr + $ubo.offset_of('proj'))
+$model_matrix       = Mat4.new(addr: $ubo.to_ptr + UniformBufferStruct.offsetof('model'))
+$view_matrix        = Mat4.new(addr: $ubo.to_ptr + UniformBufferStruct.offsetof('view'))
+$projection_matrix  = Mat4.new(addr: $ubo.to_ptr + UniformBufferStruct.offsetof('proj'))
 
 obj = TinyOBJ.load(File.expand_path('models/chalet.obj', __dir__))
 NUM_INDICES = obj.num_indices
@@ -28,8 +28,8 @@ obj.fill_buffers index_type:    :uint32,
                  flip_v:        true,
                  indices:       IndexData,
                  positions:     VertexData,
-                 colors:        VertexData + Vertex.offset_of(:color),
-                 texcoords:     VertexData + Vertex.offset_of(:texcoords)
+                 colors:        VertexData + Vertex.offsetof('color'),
+                 texcoords:     VertexData + Vertex.offsetof('texcoords')
 
 # Create a window that we plan to draw to
 SDL2.init(SDL2::INIT_EVERYTHING)
@@ -295,7 +295,7 @@ $projection_matrix.mul_mat4 Mat4.new([Vec4.new([1.0,  0.0, 0.0,  0.0]),
                                       Vec4.new([0.0,  0.0, 0.5, -0.5]),
                                       Vec4.new([0.0,  0.0, 0.0,  1.0])]),
                             $projection_matrix
-UniformBuffers.each { |b| b.map { |data| data[0, $ubo.size] = $ubo[0, $ubo.size] } }
+UniformBuffers.each { |b| b.map { |data| data[0, UniformBufferStruct.size] = $ubo[0, UniformBufferStruct.size] } }
 
 # Begin main event loop & drawing
 until done

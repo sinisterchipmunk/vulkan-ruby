@@ -64,17 +64,17 @@ end
 command_pool = device.create_command_pool queue_family: graphics_queue_family
 
 # Populate the vertex buffer
-staging_buffer = device.create_buffer size: VertexData.size, usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-staging_buffer.map { |data| data[0, VertexData.size] = VertexData[0, VertexData.size] }
-VertexBuffer = device.create_buffer size: VertexData.size,
+staging_buffer = device.create_buffer size: VertexData.class.size, usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_SRC_BIT
+staging_buffer.map { |data| data[0, VertexData.class.size] = VertexData[0, VertexData.class.size] }
+VertexBuffer = device.create_buffer size: VertexData.class.size,
                                     usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_DST_BIT | Vulkan::VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
                                     properties: :device_local
 vertex_transfer_buffer = command_pool.create_command_buffer(usage: :one_time_submit) { |cmd| cmd.copy_buffer staging_buffer, VertexBuffer }
 
 # Populate the index buffer
-staging_buffer = device.create_buffer size: IndexData.size, usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-staging_buffer.map { |data| data[0, IndexData.size] = IndexData[0, IndexData.size] }
-IndexBuffer = device.create_buffer size: IndexData.size,
+staging_buffer = device.create_buffer size: IndexData.class.size, usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_SRC_BIT
+staging_buffer.map { |data| data[0, IndexData.class.size] = IndexData[0, IndexData.class.size] }
+IndexBuffer = device.create_buffer size: IndexData.class.size,
                                    usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_DST_BIT | Vulkan::VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
                                    properties: :device_local
 index_transfer_buffer = command_pool.create_command_buffer(usage: :one_time_submit) { |cmd| cmd.copy_buffer staging_buffer, IndexBuffer }
@@ -121,12 +121,12 @@ rebuild_swap_chain = proc do
   pipeline.add_attribute_description binding: 0,
                                      location: 0,
                                      format: Vulkan::VK_FORMAT_R32G32_SFLOAT,
-                                     offset: Vertex.offset_of('pos')
+                                     offset: Vertex.offsetof('pos')
 
   pipeline.add_attribute_description binding: 0,
                                      location: 1,
                                      format: Vulkan::VK_FORMAT_R32G32B32_SFLOAT,
-                                     offset: Vertex.offset_of('color')
+                                     offset: Vertex.offsetof('color')
   shader_stages.each { |stage| pipeline.add_shader_stage(stage) }
   pipeline.commit(render_pass)
 
