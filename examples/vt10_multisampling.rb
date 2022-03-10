@@ -309,7 +309,7 @@ until done
   end
   while event = SDL2::Event.poll
     case event
-    when SDL2::Event::Quit, SDL2::Event::KeyDown then done = true
+    when SDL2::Event::Quit then done = true
     when SDL2::Event::Window::RESIZED then rebuild_swap_chain.call
     end
   end
