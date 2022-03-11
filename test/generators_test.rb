@@ -6,6 +6,16 @@ class GeneratorsTest < Minitest::Test
     assert_equal 2, VkImageBlit.malloc.dstOffsets.size
   end
 
+  def test_version
+    assert_kind_of Array, VK_HEADER_VERSION_COMPLETE
+    assert_equal 4, VK_HEADER_VERSION_COMPLETE.size
+    # current version at time of writing
+    assert VK_HEADER_VERSION_COMPLETE[0] >= 0
+    assert VK_HEADER_VERSION_COMPLETE[1] >= 1
+    assert VK_HEADER_VERSION_COMPLETE[2] >= 3
+    assert VK_HEADER_VERSION_COMPLETE[3] >= 207
+  end
+
   def test_uint32_pointer_in_swapchain_create_info_struct
     content = File.read(Vulkan.root.join('generated/structs.rb'))
     content[/VkSwapchainCreateInfoKHR\s*=\s*struct\s*\[(.*?)\]/m]
@@ -23,18 +33,12 @@ class GeneratorsTest < Minitest::Test
   end
 
   def test_extensions_discovered
-    assert File.exist?(Vulkan.root.join('generated/extensions/vk_nv_ray_tracing.rb'))
-
-    content = File.read(Vulkan.root.join('generated/extensions.rb'))
-    assert content[/require ['"]vulkan\/generated\/extensions\/vk_nv_ray_tracing/]
+    assert_equal "VK_NV_ray_tracing", VK_NV_RAY_TRACING_EXTENSION_NAME
   end
 
   def test_extension_enums_have_correct_values
-    content = File.read(Vulkan.root.join('generated/extensions/vk_khr_swapchain.rb'))
-    assert content[/VK_KHR_SWAPCHAIN_SPEC_VERSION\s*=\s*70/]
-    assert content[/VK_KHR_SWAPCHAIN_EXTENSION_NAME\s*=\s*['"]VK_KHR_swapchain['"]/]
-    assert content[/VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR\s*=\s*1000001000/]
-    assert content[/VK_ERROR_OUT_OF_DATE_KHR\s*=\s*-1000001004/]
+    assert_equal 1000001000, VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR
+    assert_equal -1000001004, VK_ERROR_OUT_OF_DATE_KHR
   end
 
   def test_commands_and_params
@@ -43,8 +47,9 @@ class GeneratorsTest < Minitest::Test
   end
 
   def test_enums
-    content = File.read(Vulkan.root.join('generated/enums.rb'))
-    assert content[/typealias\s*['"]VkAttachmentLoadOp['"]\s*,\s*['"]int['"]/]
+    assert Vulkan.struct(['VkAttachmentLoadOp i']).malloc
+    assert Vulkan.struct(['GgpFrameToken i']).malloc
+    assert_equal 1000.0, VK_LOD_CLAMP_NONE
   end
 
   def test_structs_containing_arrays

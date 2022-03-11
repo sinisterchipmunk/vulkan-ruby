@@ -27,6 +27,15 @@ Or install it yourself as:
 
     $ gem install vulkan-ruby
 
+
+## A Note About Versioning
+
+The first 3 components of the version number of this gem represent the version
+of the Vulkan spec that the gem was built with. For example, 1.3.207.2 would
+represent the second (presumably bug-fix) release of this gem built against
+version 1.3.207 of the Vulkan spec.
+
+
 ## Usage
 
 This library is intended to be a rather shallow wrapper around the Vulkan APIs. It does some things that are nifty (like tying garbage collection of Vulkan resources to the Ruby garbage collector), but mostly the design goal is to give you an interface into Vulkan without getting in the way. As with Vulkan itself, some things are possible to do in a number of different ways, depending on your specific use case. Nothing that is possible in Vulkan should prove _impossible_ to do with `vulkan-ruby`.

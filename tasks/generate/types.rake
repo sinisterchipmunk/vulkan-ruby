@@ -1,80 +1,29 @@
-NAME_PADDING = 56
+# Include the manually specified types here, and then we will skip them while
+# processing vk.xml if they are encountered. This way, all special cases need
+# only be added to that file to be properly dealt with everywhere.
+require 'vulkan/manual_types'
+::ManualTypes = Class.new do
+  extend Fiddle::Importer
+  # HACK, fiddle only initializes this if we call dlload which we don't need here
+  @type_alias = {}
+  include Vulkan::ManualTypes
+end.new
 
-def pad_name(name)
-  name.ljust(NAME_PADDING)
-end
+TYPE_ALIASES = {}
 
-def base_types
-  @base_types ||= {}.tap do |base_types|
-    vk_xml.xpath('//types/type').each do |type|
-      if type.attribute('category')&.value == 'basetype'
-        name = type.xpath('name').first&.text
-        ctype = type.xpath('type').first&.text
-        raise "type has no name: #{type.to_s.inspect}" unless name
-        raise "type has no ctype: #{type.to_s.inspect}" unless ctype
-        raise "unknown platform type: #{type.to_s.inspect} (#{ctype.to_s.inspect})" unless platform_type_map[ctype]
-        base_types[name] = ctype # platform_type_map[ctype]
-      end
-    end
+# Returns an array whose entries are 2-element arrays containing first the
+# name of the type to be created, and second the name of the type that it is
+# an alias of. The return value is sorted such that types that depend on
+# other types appear later.
+def resolve_type_aliases(aliases = TYPE_ALIASES.dup)
+  result = []
+  aliases.dup.each do |name, alias_of|
+    next if aliases[alias_of] # we want only leaf nodes
+    aliases.delete name
+    result << [name, alias_of]
   end
-end
-
-def platform_types
-  @platform_types ||= {}.tap do |platform_types|
-    vk_xml.xpath('//types/type').each do |type|
-      if type.attribute('requires')&.value == 'vk_platform'
-        name = type.attribute('name').value
-        raise "type has no name: #{type.to_s.inspect}" unless name
-        raise "unknown platform type: #{type.to_s.inspect} (#{name.inspect})" unless platform_type_map[name]
-        platform_types[name] = platform_type_map[name]
-      end
-    end
-  end
-end
-
-def generate_type_map(out)
-  base_types.each do |name, type|
-    out.puts "  typealias #{pad_name name.inspect}, '#{type}'"
-  end
-  @types = {}.tap do |processed_types|
-    vk_xml.xpath('//types/type').each do |type|
-      if type.attributes['category']&.value == 'bitmask'
-        alias_name = type.attributes['alias']&.value
-        name = (type.xpath('name').first&.text) ||
-               (type.attributes['name']&.value)
-        raise "type has no name: #{type.to_s.inspect}" unless name
-        if alias_name
-          raise "type alias not yet processed: #{type.to_s.inspect}" unless processed_types[alias_name]
-          btype = processed_types[alias_name]
-        else
-          btype = type.xpath('type').first&.text
-          raise "type has no base type: #{type.to_s.inspect}" unless btype
-          raise "unknown base type: #{type.to_s.inspect} (#{btype.to_s.inspect})" unless base_types[btype]
-          # btype = base_types[btype]
-        end
-        out.puts "  typealias #{pad_name name.inspect}, #{base_types[btype].inspect}"
-        processed_types[name] = btype
-      elsif type.attributes['category']&.value == 'handle'
-        name = (type.xpath('name').first&.text) || (type.attributes['name']&.value)
-        raise "type has no name: #{type.to_s.inspect}" unless name
-        out.puts "  typealias #{pad_name name.inspect}, 'void *'"
-        processed_types[name] = 'void *'
-      elsif type.attributes['category']&.value == 'funcpointer'
-        # we'll just treat function pointers as void pointers, shouldn't matter
-        # as long as the signatures are correct, which we'll call a programmer
-        # responsibility.
-        name = (type.xpath('name').first&.text) || (type.attributes['name']&.value)
-        raise "type has no name: #{type.to_s.inspect}" unless name
-        out.puts "  typealias #{pad_name name.inspect}, 'void *'"
-        processed_types[name] = 'void *'
-      end
-    end
-  end
-  @types.each do |name, alias_name_or_type|
-    out.puts "  typealias #{pad_name name.inspect}, #{alias_name_or_type.inspect}"
-  end
-
-  # out.puts '    }'
+  result.concat resolve_type_aliases(aliases) unless aliases.empty?
+  result
 end
 
 namespace :generate do
@@ -84,7 +33,80 @@ namespace :generate do
       f.puts header_comment
       f.puts
       f.puts 'module Vulkan'
-      generate_type_map(f)
+
+      vk_xml.xpath('/registry/types/type').each do |type|
+        raise "duplicate type? #{type}" if TYPE_ALIASES[type['name']]
+        value = nil
+        # skip types we can't make use of
+        next if type['category'] == 'include'
+
+        name = type['name'] || type.xpath('name')&.text.to_s
+        name = nil if name.size == 0
+        if name
+          # skip C types defined by Fiddle (see lib/fiddle/cparser.rb #parse_ctype)
+          next if %w( char void int double float size_t ssize_t short ).include?(name)
+          # skip types we manually defined
+          next if ::ManualTypes.class.send(:type_alias).key?(name)
+        end
+
+        # types that depend on an external dependency, which we don't have access
+        # to. Try to define a default for them, which may or may not be correct.
+        # Note they won't be defined if they are already typealias'ed everywhere.
+        # We do this for a few known types in lib/vulkan/generated.rb.
+        # FIXME is there a better solution? Do nothing? Always manually define them?
+        if type['requires'] && type['requires'][/\.h/]
+          raise "No type name for #{type}" unless name
+          f.puts "  typealias '#{name}', 'void *' unless send(:type_alias).key?('#{name}') # defined in #{type['requires']}"
+        elsif type['category'] == 'define'
+          raise "No type name for #{type}" unless name
+          next if name['VERSION']
+          f.puts "  #{name} = 0 # dummy value, its real value could not be converted"
+        elsif type['category'] == 'basetype'
+          _type = type.xpath('type')&.text
+          raise "No type name for #{type}" unless name
+          if _type.size == 0
+            # we are about to choose type 'void' in hopes that it will only ever
+            # be used as a pointer (void *). In case we are wrong, check whether
+            # it was manually specified in lib/vulkan/generated.rb first. Then
+            # we can address these on a case by case basis.
+            f.puts "  typealias '#{name}', 'void' unless send(:type_alias).key?('#{name}')"
+          else
+            f.puts "  typealias '#{name}', '#{_type}'"
+          end
+        elsif type['category'] == 'bitmask'
+          _type = type.xpath('type')&.text
+          _type = nil if _type&.size == 0
+          raise "No type name for #{type}" unless name.size > 0
+          if _type
+            f.puts "  typealias '#{name}', '#{_type}'"
+          elsif type['alias']
+            TYPE_ALIASES[name] = type['alias']
+          end
+        elsif type['category'] == 'handle'
+          # all handles are pointers
+          raise "No type name for #{type}" unless name.size > 0
+          f.puts "  typealias '#{name}', 'void *' # handle"
+        elsif type['category'] == 'enum'
+          # FIXME we shouldn't assume an enum is an int, it could be smaller
+          # depending on the compiler.
+          raise "No type name for #{type}" unless name.size > 0
+          f.puts "  typealias '#{name}', 'int' # enum"
+        elsif type['category'] == 'funcpointer'
+          # function pointers are pointers.
+          # TODO do something with the arguments? Not sure fiddle knows/cares.
+          raise "No type name for #{type}" unless name.size > 0
+          f.puts "  typealias '#{name}', 'void *' # function pointer"
+        elsif type['category'] == 'struct' || type['category'] == 'union'
+          # structs and unions are handled by the generate:structs task.
+        else
+          raise "Unhandled type: #{type.to_s}"
+        end
+      end
+
+      resolve_type_aliases.each do |type_alias|
+        f.puts "  typealias '#{type_alias[0]}', '#{type_alias[1]}'"
+      end
+
       f.puts 'end'
     end
   end

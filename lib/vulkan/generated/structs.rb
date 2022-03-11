@@ -1,10 +1,80 @@
-# vulkan-ruby 0.1.0
+# vulkan-ruby 1.3.207.1
 #
 #   => https://github.com/sinisterchipmunk/vulkan-ruby
 #
 # [NOTICE] This is an automatically generated file.
 
 module Vulkan
+  VkAabbPositionsKHR = struct ["float  minX",
+                               "float  minY",
+                               "float  minZ",
+                               "float  maxX",
+                               "float  maxY",
+                               "float  maxZ"]
+
+  VkAabbPositionsNV = VkAabbPositionsKHR
+
+  VkDeviceOrHostAddressConstKHR = union ["VkDeviceAddress  deviceAddress",
+                                         "void * hostAddress"]
+  VkAccelerationStructureGeometryTrianglesDataKHR = struct ["VkStructureType  sType",
+                                                            "void * pNext",
+                                                            "VkFormat  vertexFormat",
+                                                            { "vertexData" => VkDeviceOrHostAddressConstKHR },
+                                                            "VkDeviceSize  vertexStride",
+                                                            "uint32_t  maxVertex",
+                                                            "VkIndexType  indexType",
+                                                            { "indexData" => VkDeviceOrHostAddressConstKHR },
+                                                            { "transformData" => VkDeviceOrHostAddressConstKHR }]
+  VkAccelerationStructureGeometryAabbsDataKHR = struct ["VkStructureType  sType",
+                                                        "void * pNext",
+                                                        { "data" => VkDeviceOrHostAddressConstKHR },
+                                                        "VkDeviceSize  stride"]
+  VkAccelerationStructureGeometryInstancesDataKHR = struct ["VkStructureType  sType",
+                                                            "void * pNext",
+                                                            "VkBool32  arrayOfPointers",
+                                                            { "data" => VkDeviceOrHostAddressConstKHR }]
+  VkAccelerationStructureGeometryDataKHR = union [{ "triangles" => VkAccelerationStructureGeometryTrianglesDataKHR },
+                                                  { "aabbs" => VkAccelerationStructureGeometryAabbsDataKHR },
+                                                  { "instances" => VkAccelerationStructureGeometryInstancesDataKHR }]
+  VkAccelerationStructureGeometryKHR = struct ["VkStructureType  sType",
+                                               "void * pNext",
+                                               "VkGeometryTypeKHR  geometryType",
+                                               { "geometry" => VkAccelerationStructureGeometryDataKHR },
+                                               "VkGeometryFlagsKHR  flags"]
+  VkDeviceOrHostAddressKHR = union ["VkDeviceAddress  deviceAddress",
+                                    "void * hostAddress"]
+  VkAccelerationStructureBuildGeometryInfoKHR = struct ["VkStructureType  sType",
+                                                        "void * pNext",
+                                                        "VkAccelerationStructureTypeKHR  type",
+                                                        "VkBuildAccelerationStructureFlagsKHR  flags",
+                                                        "VkBuildAccelerationStructureModeKHR  mode",
+                                                        "VkAccelerationStructureKHR  srcAccelerationStructure",
+                                                        "VkAccelerationStructureKHR  dstAccelerationStructure",
+                                                        "uint32_t  geometryCount",
+                                                        "VkAccelerationStructureGeometryKHR * pGeometries",
+                                                        "VkAccelerationStructureGeometryKHR * ppGeometries",
+                                                        { "scratchData" => VkDeviceOrHostAddressKHR }]
+
+  VkAccelerationStructureBuildRangeInfoKHR = struct ["uint32_t  primitiveCount",
+                                                     "uint32_t  primitiveOffset",
+                                                     "uint32_t  firstVertex",
+                                                     "uint32_t  transformOffset"]
+
+  VkAccelerationStructureBuildSizesInfoKHR = struct ["VkStructureType  sType",
+                                                     "void * pNext",
+                                                     "VkDeviceSize  accelerationStructureSize",
+                                                     "VkDeviceSize  updateScratchSize",
+                                                     "VkDeviceSize  buildScratchSize"]
+
+  VkAccelerationStructureCreateInfoKHR = struct ["VkStructureType  sType",
+                                                 "void * pNext",
+                                                 "VkAccelerationStructureCreateFlagsKHR  createFlags",
+                                                 "VkBuffer  buffer",
+                                                 "VkDeviceSize  offset",
+                                                 "VkDeviceSize  size",
+                                                 "VkAccelerationStructureTypeKHR  type",
+                                                 "VkDeviceAddress  deviceAddress"]
+
   VkGeometryTrianglesNV = struct ["VkStructureType  sType",
                                   "void * pNext",
                                   "VkBuffer  vertexData",
@@ -28,9 +98,9 @@ module Vulkan
                              { "aabbs" => VkGeometryAABBNV }]
   VkGeometryNV = struct ["VkStructureType  sType",
                          "void * pNext",
-                         "VkGeometryTypeNV  geometryType",
+                         "VkGeometryTypeKHR  geometryType",
                          { "geometry" => VkGeometryDataNV },
-                         "VkGeometryFlagsNV  flags"]
+                         "VkGeometryFlagsKHR  flags"]
   VkAccelerationStructureInfoNV = struct ["VkStructureType  sType",
                                           "void * pNext",
                                           "VkAccelerationStructureTypeNV  type",
@@ -43,10 +113,76 @@ module Vulkan
                                                 "VkDeviceSize  compactedSize",
                                                 { "info" => VkAccelerationStructureInfoNV }]
 
+  VkAccelerationStructureDeviceAddressInfoKHR = struct ["VkStructureType  sType",
+                                                        "void * pNext",
+                                                        "VkAccelerationStructureKHR  accelerationStructure"]
+
+  VkAccelerationStructureGeometryMotionTrianglesDataNV = struct ["VkStructureType  sType",
+                                                                 "void * pNext",
+                                                                 { "vertexData" => VkDeviceOrHostAddressConstKHR }]
+
+  VkTransformMatrixKHR = struct ["float  matrix [4]"]
+  VkAccelerationStructureInstanceKHR = struct [{ "transform" => VkTransformMatrixKHR },
+                                               "uint32_t  instanceCustomIndex",
+                                               "uint32_t  mask",
+                                               "uint32_t  instanceShaderBindingTableRecordOffset",
+                                               "VkGeometryInstanceFlagsKHR  flags",
+                                               "uint64_t  accelerationStructureReference"]
+
+  VkAccelerationStructureInstanceNV = VkAccelerationStructureInstanceKHR
+
+  VkAccelerationStructureMatrixMotionInstanceNV = struct [{ "transformT0" => VkTransformMatrixKHR },
+                                                          { "transformT1" => VkTransformMatrixKHR },
+                                                          "uint32_t  instanceCustomIndex",
+                                                          "uint32_t  mask",
+                                                          "uint32_t  instanceShaderBindingTableRecordOffset",
+                                                          "VkGeometryInstanceFlagsKHR  flags",
+                                                          "uint64_t  accelerationStructureReference"]
+
   VkAccelerationStructureMemoryRequirementsInfoNV = struct ["VkStructureType  sType",
                                                             "void * pNext",
                                                             "VkAccelerationStructureMemoryRequirementsTypeNV  type",
                                                             "VkAccelerationStructureNV  accelerationStructure"]
+
+  VkAccelerationStructureMotionInfoNV = struct ["VkStructureType  sType",
+                                                "void * pNext",
+                                                "uint32_t  maxInstances",
+                                                "VkAccelerationStructureMotionInfoFlagsNV  flags"]
+
+  VkSRTDataNV = struct ["float  sx",
+                        "float  a",
+                        "float  b",
+                        "float  pvx",
+                        "float  sy",
+                        "float  c",
+                        "float  pvy",
+                        "float  sz",
+                        "float  pvz",
+                        "float  qx",
+                        "float  qy",
+                        "float  qz",
+                        "float  qw",
+                        "float  tx",
+                        "float  ty",
+                        "float  tz"]
+  VkAccelerationStructureSRTMotionInstanceNV = struct [{ "transformT0" => VkSRTDataNV },
+                                                       { "transformT1" => VkSRTDataNV },
+                                                       "uint32_t  instanceCustomIndex",
+                                                       "uint32_t  mask",
+                                                       "uint32_t  instanceShaderBindingTableRecordOffset",
+                                                       "VkGeometryInstanceFlagsKHR  flags",
+                                                       "uint64_t  accelerationStructureReference"]
+  VkAccelerationStructureMotionInstanceDataNV = union [{ "staticInstance" => VkAccelerationStructureInstanceKHR },
+                                                       { "matrixMotionInstance" => VkAccelerationStructureMatrixMotionInstanceNV },
+                                                       { "srtMotionInstance" => VkAccelerationStructureSRTMotionInstanceNV }]
+
+  VkAccelerationStructureMotionInstanceNV = struct ["VkAccelerationStructureMotionInstanceTypeNV  type",
+                                                    "VkAccelerationStructureMotionInstanceFlagsNV  flags",
+                                                    { "data" => VkAccelerationStructureMotionInstanceDataNV }]
+
+  VkAccelerationStructureVersionInfoKHR = struct ["VkStructureType  sType",
+                                                  "void * pNext",
+                                                  "uint8_t * pVersionData"]
 
   VkAcquireNextImageInfoKHR = struct ["VkStructureType  sType",
                                       "void * pNext",
@@ -55,6 +191,11 @@ module Vulkan
                                       "VkSemaphore  semaphore",
                                       "VkFence  fence",
                                       "uint32_t  deviceMask"]
+
+  VkAcquireProfilingLockInfoKHR = struct ["VkStructureType  sType",
+                                          "void * pNext",
+                                          "VkAcquireProfilingLockFlagsKHR  flags",
+                                          "uint64_t  timeout"]
 
   VkAllocationCallbacks = struct ["void * pUserData",
                                   "PFN_vkAllocationFunction  pfnAllocation",
@@ -67,6 +208,17 @@ module Vulkan
                                "VkComponentSwizzle  g",
                                "VkComponentSwizzle  b",
                                "VkComponentSwizzle  a"]
+  VkAndroidHardwareBufferFormatProperties2ANDROID = struct ["VkStructureType  sType",
+                                                            "void * pNext",
+                                                            "VkFormat  format",
+                                                            "uint64_t  externalFormat",
+                                                            "VkFormatFeatureFlags2  formatFeatures",
+                                                            { "samplerYcbcrConversionComponents" => VkComponentMapping },
+                                                            "VkSamplerYcbcrModelConversion  suggestedYcbcrModel",
+                                                            "VkSamplerYcbcrRange  suggestedYcbcrRange",
+                                                            "VkChromaLocation  suggestedXChromaOffset",
+                                                            "VkChromaLocation  suggestedYChromaOffset"]
+
   VkAndroidHardwareBufferFormatPropertiesANDROID = struct ["VkStructureType  sType",
                                                            "void * pNext",
                                                            "VkFormat  format",
@@ -110,26 +262,51 @@ module Vulkan
                                     "VkImageLayout  initialLayout",
                                     "VkImageLayout  finalLayout"]
 
-  VkAttachmentDescription2KHR = struct ["VkStructureType  sType",
-                                        "void * pNext",
-                                        "VkAttachmentDescriptionFlags  flags",
-                                        "VkFormat  format",
-                                        "VkSampleCountFlagBits  samples",
-                                        "VkAttachmentLoadOp  loadOp",
-                                        "VkAttachmentStoreOp  storeOp",
-                                        "VkAttachmentLoadOp  stencilLoadOp",
-                                        "VkAttachmentStoreOp  stencilStoreOp",
-                                        "VkImageLayout  initialLayout",
-                                        "VkImageLayout  finalLayout"]
+  VkAttachmentDescription2 = struct ["VkStructureType  sType",
+                                     "void * pNext",
+                                     "VkAttachmentDescriptionFlags  flags",
+                                     "VkFormat  format",
+                                     "VkSampleCountFlagBits  samples",
+                                     "VkAttachmentLoadOp  loadOp",
+                                     "VkAttachmentStoreOp  storeOp",
+                                     "VkAttachmentLoadOp  stencilLoadOp",
+                                     "VkAttachmentStoreOp  stencilStoreOp",
+                                     "VkImageLayout  initialLayout",
+                                     "VkImageLayout  finalLayout"]
+
+  VkAttachmentDescription2KHR = VkAttachmentDescription2
+
+  VkAttachmentDescriptionStencilLayout = struct ["VkStructureType  sType",
+                                                 "void * pNext",
+                                                 "VkImageLayout  stencilInitialLayout",
+                                                 "VkImageLayout  stencilFinalLayout"]
+
+  VkAttachmentDescriptionStencilLayoutKHR = VkAttachmentDescriptionStencilLayout
 
   VkAttachmentReference = struct ["uint32_t  attachment",
                                   "VkImageLayout  layout"]
 
-  VkAttachmentReference2KHR = struct ["VkStructureType  sType",
-                                      "void * pNext",
-                                      "uint32_t  attachment",
-                                      "VkImageLayout  layout",
-                                      "VkImageAspectFlags  aspectMask"]
+  VkAttachmentReference2 = struct ["VkStructureType  sType",
+                                   "void * pNext",
+                                   "uint32_t  attachment",
+                                   "VkImageLayout  layout",
+                                   "VkImageAspectFlags  aspectMask"]
+
+  VkAttachmentReference2KHR = VkAttachmentReference2
+
+  VkAttachmentReferenceStencilLayout = struct ["VkStructureType  sType",
+                                               "void * pNext",
+                                               "VkImageLayout  stencilLayout"]
+
+  VkAttachmentReferenceStencilLayoutKHR = VkAttachmentReferenceStencilLayout
+
+  VkAttachmentSampleCountInfoAMD = struct ["VkStructureType  sType",
+                                           "void * pNext",
+                                           "uint32_t  colorAttachmentCount",
+                                           "VkSampleCountFlagBits * pColorAttachmentSamples",
+                                           "VkSampleCountFlagBits  depthStencilAttachmentSamples"]
+
+  VkAttachmentSampleCountInfoNV = VkAttachmentSampleCountInfoAMD
 
   VkExtent2D = struct ["uint32_t  width",
                        "uint32_t  height"]
@@ -205,6 +382,12 @@ module Vulkan
 
   VkBindImagePlaneMemoryInfoKHR = VkBindImagePlaneMemoryInfo
 
+  VkBindIndexBufferIndirectCommandNV = struct ["VkDeviceAddress  bufferAddress",
+                                               "uint32_t  size",
+                                               "VkIndexType  indexType"]
+
+  VkBindShaderGroupIndirectCommandNV = struct ["uint32_t  groupIndex"]
+
   VkSparseMemoryBind = struct ["VkDeviceSize  resourceOffset",
                                "VkDeviceSize  size",
                                "VkDeviceMemory  memory",
@@ -247,9 +430,70 @@ module Vulkan
                              "uint32_t  signalSemaphoreCount",
                              "VkSemaphore * pSignalSemaphores"]
 
-  VkBufferCopy = struct ["VkDeviceSize  srcOffset",
-                         "VkDeviceSize  dstOffset",
-                         "VkDeviceSize  size"]
+  VkBindVertexBufferIndirectCommandNV = struct ["VkDeviceAddress  bufferAddress",
+                                                "uint32_t  size",
+                                                "uint32_t  stride"]
+
+  VkImageSubresourceLayers = struct ["VkImageAspectFlags  aspectMask",
+                                     "uint32_t  mipLevel",
+                                     "uint32_t  baseArrayLayer",
+                                     "uint32_t  layerCount"]
+  VkImageBlit2 = struct ["VkStructureType  sType",
+                         "void * pNext",
+                         { "srcSubresource" => VkImageSubresourceLayers },
+                         { "srcOffsets[2]" => VkOffset3D },
+                         { "dstSubresource" => VkImageSubresourceLayers },
+                         { "dstOffsets[2]" => VkOffset3D }]
+  VkBlitImageInfo2 = struct ["VkStructureType  sType",
+                             "void * pNext",
+                             "VkImage  srcImage",
+                             "VkImageLayout  srcImageLayout",
+                             "VkImage  dstImage",
+                             "VkImageLayout  dstImageLayout",
+                             "uint32_t  regionCount",
+                             "VkImageBlit2 * pRegions",
+                             "VkFilter  filter"]
+
+  VkBlitImageInfo2KHR = VkBlitImageInfo2
+
+  VkBufferCollectionBufferCreateInfoFUCHSIA = struct ["VkStructureType  sType",
+                                                      "void * pNext",
+                                                      "VkBufferCollectionFUCHSIA  collection",
+                                                      "uint32_t  index"]
+
+  VkBufferCollectionConstraintsInfoFUCHSIA = struct ["VkStructureType  sType",
+                                                     "void * pNext",
+                                                     "uint32_t  minBufferCount",
+                                                     "uint32_t  maxBufferCount",
+                                                     "uint32_t  minBufferCountForCamping",
+                                                     "uint32_t  minBufferCountForDedicatedSlack",
+                                                     "uint32_t  minBufferCountForSharedSlack"]
+
+  VkBufferCollectionCreateInfoFUCHSIA = struct ["VkStructureType  sType",
+                                                "void * pNext",
+                                                "zx_handle_t  collectionToken"]
+
+  VkBufferCollectionImageCreateInfoFUCHSIA = struct ["VkStructureType  sType",
+                                                     "void * pNext",
+                                                     "VkBufferCollectionFUCHSIA  collection",
+                                                     "uint32_t  index"]
+
+  VkSysmemColorSpaceFUCHSIA = struct ["VkStructureType  sType",
+                                      "void * pNext",
+                                      "uint32_t  colorSpace"]
+  VkBufferCollectionPropertiesFUCHSIA = struct ["VkStructureType  sType",
+                                                "void * pNext",
+                                                "uint32_t  memoryTypeBits",
+                                                "uint32_t  bufferCount",
+                                                "uint32_t  createInfoIndex",
+                                                "uint64_t  sysmemPixelFormat",
+                                                "VkFormatFeatureFlags  formatFeatures",
+                                                { "sysmemColorSpaceIndex" => VkSysmemColorSpaceFUCHSIA },
+                                                { "samplerYcbcrConversionComponents" => VkComponentMapping },
+                                                "VkSamplerYcbcrModelConversion  suggestedYcbcrModel",
+                                                "VkSamplerYcbcrRange  suggestedYcbcrRange",
+                                                "VkChromaLocation  suggestedXChromaOffset",
+                                                "VkChromaLocation  suggestedYChromaOffset"]
 
   VkBufferCreateInfo = struct ["VkStructureType  sType",
                                "void * pNext",
@@ -259,17 +503,53 @@ module Vulkan
                                "VkSharingMode  sharingMode",
                                "uint32_t  queueFamilyIndexCount",
                                "uint32_t * pQueueFamilyIndices"]
+  VkBufferConstraintsInfoFUCHSIA = struct ["VkStructureType  sType",
+                                           "void * pNext",
+                                           { "createInfo" => VkBufferCreateInfo },
+                                           "VkFormatFeatureFlags  requiredFormatFeatures",
+                                           { "bufferCollectionConstraints" => VkBufferCollectionConstraintsInfoFUCHSIA }]
 
-  VkImageSubresourceLayers = struct ["VkImageAspectFlags  aspectMask",
-                                     "uint32_t  mipLevel",
-                                     "uint32_t  baseArrayLayer",
-                                     "uint32_t  layerCount"]
+  VkBufferCopy = struct ["VkDeviceSize  srcOffset",
+                         "VkDeviceSize  dstOffset",
+                         "VkDeviceSize  size"]
+
+  VkBufferCopy2 = struct ["VkStructureType  sType",
+                          "void * pNext",
+                          "VkDeviceSize  srcOffset",
+                          "VkDeviceSize  dstOffset",
+                          "VkDeviceSize  size"]
+
+  VkBufferCopy2KHR = VkBufferCopy2
+
+  VkBufferDeviceAddressCreateInfoEXT = struct ["VkStructureType  sType",
+                                               "void * pNext",
+                                               "VkDeviceAddress  deviceAddress"]
+
+  VkBufferDeviceAddressInfo = struct ["VkStructureType  sType",
+                                      "void * pNext",
+                                      "VkBuffer  buffer"]
+
+  VkBufferDeviceAddressInfoEXT = VkBufferDeviceAddressInfo
+
+  VkBufferDeviceAddressInfoKHR = VkBufferDeviceAddressInfo
+
   VkBufferImageCopy = struct ["VkDeviceSize  bufferOffset",
                               "uint32_t  bufferRowLength",
                               "uint32_t  bufferImageHeight",
                               { "imageSubresource" => VkImageSubresourceLayers },
                               { "imageOffset" => VkOffset3D },
                               { "imageExtent" => VkExtent3D }]
+
+  VkBufferImageCopy2 = struct ["VkStructureType  sType",
+                               "void * pNext",
+                               "VkDeviceSize  bufferOffset",
+                               "uint32_t  bufferRowLength",
+                               "uint32_t  bufferImageHeight",
+                               { "imageSubresource" => VkImageSubresourceLayers },
+                               { "imageOffset" => VkOffset3D },
+                               { "imageExtent" => VkExtent3D }]
+
+  VkBufferImageCopy2KHR = VkBufferImageCopy2
 
   VkBufferMemoryBarrier = struct ["VkStructureType  sType",
                                   "void * pNext",
@@ -281,11 +561,31 @@ module Vulkan
                                   "VkDeviceSize  offset",
                                   "VkDeviceSize  size"]
 
+  VkBufferMemoryBarrier2 = struct ["VkStructureType  sType",
+                                   "void * pNext",
+                                   "VkPipelineStageFlags2  srcStageMask",
+                                   "VkAccessFlags2  srcAccessMask",
+                                   "VkPipelineStageFlags2  dstStageMask",
+                                   "VkAccessFlags2  dstAccessMask",
+                                   "uint32_t  srcQueueFamilyIndex",
+                                   "uint32_t  dstQueueFamilyIndex",
+                                   "VkBuffer  buffer",
+                                   "VkDeviceSize  offset",
+                                   "VkDeviceSize  size"]
+
+  VkBufferMemoryBarrier2KHR = VkBufferMemoryBarrier2
+
   VkBufferMemoryRequirementsInfo2 = struct ["VkStructureType  sType",
                                             "void * pNext",
                                             "VkBuffer  buffer"]
 
   VkBufferMemoryRequirementsInfo2KHR = VkBufferMemoryRequirementsInfo2
+
+  VkBufferOpaqueCaptureAddressCreateInfo = struct ["VkStructureType  sType",
+                                                   "void * pNext",
+                                                   "uint64_t  opaqueCaptureAddress"]
+
+  VkBufferOpaqueCaptureAddressCreateInfoKHR = VkBufferOpaqueCaptureAddressCreateInfo
 
   VkBufferViewCreateInfo = struct ["VkStructureType  sType",
                                    "void * pNext",
@@ -298,6 +598,11 @@ module Vulkan
   VkCalibratedTimestampInfoEXT = struct ["VkStructureType  sType",
                                          "void * pNext",
                                          "VkTimeDomainEXT  timeDomain"]
+
+  VkCheckpointData2NV = struct ["VkStructureType  sType",
+                                "void * pNext",
+                                "VkPipelineStageFlags2  stage",
+                                "void * pCheckpointMarker"]
 
   VkCheckpointDataNV = struct ["VkStructureType  sType",
                                "void * pNext",
@@ -320,28 +625,6 @@ module Vulkan
   VkClearRect = struct [{ "rect" => VkRect2D },
                         "uint32_t  baseArrayLayer",
                         "uint32_t  layerCount"]
-
-  VkIndirectCommandsTokenNVX = struct ["VkIndirectCommandsTokenTypeNVX  tokenType",
-                                       "VkBuffer  buffer",
-                                       "VkDeviceSize  offset"]
-  VkCmdProcessCommandsInfoNVX = struct ["VkStructureType  sType",
-                                        "void * pNext",
-                                        "VkObjectTableNVX  objectTable",
-                                        "VkIndirectCommandsLayoutNVX  indirectCommandsLayout",
-                                        "uint32_t  indirectCommandsTokenCount",
-                                        "VkIndirectCommandsTokenNVX * pIndirectCommandsTokens",
-                                        "uint32_t  maxSequencesCount",
-                                        "VkCommandBuffer  targetCommandBuffer",
-                                        "VkBuffer  sequencesCountBuffer",
-                                        "VkDeviceSize  sequencesCountOffset",
-                                        "VkBuffer  sequencesIndexBuffer",
-                                        "VkDeviceSize  sequencesIndexOffset"]
-
-  VkCmdReserveSpaceForCommandsInfoNVX = struct ["VkStructureType  sType",
-                                                "void * pNext",
-                                                "VkObjectTableNVX  objectTable",
-                                                "VkIndirectCommandsLayoutNVX  indirectCommandsLayout",
-                                                "uint32_t  maxSequencesCount"]
 
   VkCoarseSampleLocationNV = struct ["uint32_t  pixelX",
                                      "uint32_t  pixelY",
@@ -374,6 +657,42 @@ module Vulkan
   VkCommandBufferInheritanceConditionalRenderingInfoEXT = struct ["VkStructureType  sType",
                                                                   "void * pNext",
                                                                   "VkBool32  conditionalRenderingEnable"]
+
+  VkCommandBufferInheritanceRenderPassTransformInfoQCOM = struct ["VkStructureType  sType",
+                                                                  "void * pNext",
+                                                                  "VkSurfaceTransformFlagBitsKHR  transform",
+                                                                  { "renderArea" => VkRect2D }]
+
+  VkCommandBufferInheritanceRenderingInfo = struct ["VkStructureType  sType",
+                                                    "void * pNext",
+                                                    "VkRenderingFlags  flags",
+                                                    "uint32_t  viewMask",
+                                                    "uint32_t  colorAttachmentCount",
+                                                    "VkFormat * pColorAttachmentFormats",
+                                                    "VkFormat  depthAttachmentFormat",
+                                                    "VkFormat  stencilAttachmentFormat",
+                                                    "VkSampleCountFlagBits  rasterizationSamples"]
+
+  VkCommandBufferInheritanceRenderingInfoKHR = VkCommandBufferInheritanceRenderingInfo
+
+  VkViewport = struct ["float  x",
+                       "float  y",
+                       "float  width",
+                       "float  height",
+                       "float  minDepth",
+                       "float  maxDepth"]
+  VkCommandBufferInheritanceViewportScissorInfoNV = struct ["VkStructureType  sType",
+                                                            "void * pNext",
+                                                            "VkBool32  viewportScissor2D",
+                                                            "uint32_t  viewportDepthCount",
+                                                            "VkViewport * pViewportDepths"]
+
+  VkCommandBufferSubmitInfo = struct ["VkStructureType  sType",
+                                      "void * pNext",
+                                      "VkCommandBuffer  commandBuffer",
+                                      "uint32_t  deviceMask"]
+
+  VkCommandBufferSubmitInfoKHR = VkCommandBufferSubmitInfo
 
   VkCommandPoolCreateInfo = struct ["VkStructureType  sType",
                                     "void * pNext",
@@ -408,10 +727,58 @@ module Vulkan
                                                "VkDeviceSize  offset",
                                                "VkConditionalRenderingFlagsEXT  flags"]
 
-  VkConformanceVersionKHR = struct ["uint8_t  major",
-                                    "uint8_t  minor",
-                                    "uint8_t  subminor",
-                                    "uint8_t  patch"]
+  VkConformanceVersion = struct ["uint8_t  major",
+                                 "uint8_t  minor",
+                                 "uint8_t  subminor",
+                                 "uint8_t  patch"]
+
+  VkConformanceVersionKHR = VkConformanceVersion
+
+  VkCooperativeMatrixPropertiesNV = struct ["VkStructureType  sType",
+                                            "void * pNext",
+                                            "uint32_t  MSize",
+                                            "uint32_t  NSize",
+                                            "uint32_t  KSize",
+                                            "VkComponentTypeNV  AType",
+                                            "VkComponentTypeNV  BType",
+                                            "VkComponentTypeNV  CType",
+                                            "VkComponentTypeNV  DType",
+                                            "VkScopeNV  scope"]
+
+  VkCopyAccelerationStructureInfoKHR = struct ["VkStructureType  sType",
+                                               "void * pNext",
+                                               "VkAccelerationStructureKHR  src",
+                                               "VkAccelerationStructureKHR  dst",
+                                               "VkCopyAccelerationStructureModeKHR  mode"]
+
+  VkCopyAccelerationStructureToMemoryInfoKHR = struct ["VkStructureType  sType",
+                                                       "void * pNext",
+                                                       "VkAccelerationStructureKHR  src",
+                                                       { "dst" => VkDeviceOrHostAddressKHR },
+                                                       "VkCopyAccelerationStructureModeKHR  mode"]
+
+  VkCopyBufferInfo2 = struct ["VkStructureType  sType",
+                              "void * pNext",
+                              "VkBuffer  srcBuffer",
+                              "VkBuffer  dstBuffer",
+                              "uint32_t  regionCount",
+                              "VkBufferCopy2 * pRegions"]
+
+  VkCopyBufferInfo2KHR = VkCopyBufferInfo2
+
+  VkCopyBufferToImageInfo2 = struct ["VkStructureType  sType",
+                                     "void * pNext",
+                                     "VkBuffer  srcBuffer",
+                                     "VkImage  dstImage",
+                                     "VkImageLayout  dstImageLayout",
+                                     "uint32_t  regionCount",
+                                     "VkBufferImageCopy2 * pRegions"]
+
+  VkCopyBufferToImageInfo2KHR = VkCopyBufferToImageInfo2
+
+  VkCopyCommandTransformInfoQCOM = struct ["VkStructureType  sType",
+                                           "void * pNext",
+                                           "VkSurfaceTransformFlagBitsKHR  transform"]
 
   VkCopyDescriptorSet = struct ["VkStructureType  sType",
                                 "void * pNext",
@@ -422,6 +789,65 @@ module Vulkan
                                 "uint32_t  dstBinding",
                                 "uint32_t  dstArrayElement",
                                 "uint32_t  descriptorCount"]
+
+  VkImageCopy2 = struct ["VkStructureType  sType",
+                         "void * pNext",
+                         { "srcSubresource" => VkImageSubresourceLayers },
+                         { "srcOffset" => VkOffset3D },
+                         { "dstSubresource" => VkImageSubresourceLayers },
+                         { "dstOffset" => VkOffset3D },
+                         { "extent" => VkExtent3D }]
+  VkCopyImageInfo2 = struct ["VkStructureType  sType",
+                             "void * pNext",
+                             "VkImage  srcImage",
+                             "VkImageLayout  srcImageLayout",
+                             "VkImage  dstImage",
+                             "VkImageLayout  dstImageLayout",
+                             "uint32_t  regionCount",
+                             "VkImageCopy2 * pRegions"]
+
+  VkCopyImageInfo2KHR = VkCopyImageInfo2
+
+  VkCopyImageToBufferInfo2 = struct ["VkStructureType  sType",
+                                     "void * pNext",
+                                     "VkImage  srcImage",
+                                     "VkImageLayout  srcImageLayout",
+                                     "VkBuffer  dstBuffer",
+                                     "uint32_t  regionCount",
+                                     "VkBufferImageCopy2 * pRegions"]
+
+  VkCopyImageToBufferInfo2KHR = VkCopyImageToBufferInfo2
+
+  VkCopyMemoryToAccelerationStructureInfoKHR = struct ["VkStructureType  sType",
+                                                       "void * pNext",
+                                                       { "src" => VkDeviceOrHostAddressConstKHR },
+                                                       "VkAccelerationStructureKHR  dst",
+                                                       "VkCopyAccelerationStructureModeKHR  mode"]
+
+  VkCuFunctionCreateInfoNVX = struct ["VkStructureType  sType",
+                                      "void * pNext",
+                                      "VkCuModuleNVX  module",
+                                      "char * pName"]
+
+  VkCuLaunchInfoNVX = struct ["VkStructureType  sType",
+                              "void * pNext",
+                              "VkCuFunctionNVX  function",
+                              "uint32_t  gridDimX",
+                              "uint32_t  gridDimY",
+                              "uint32_t  gridDimZ",
+                              "uint32_t  blockDimX",
+                              "uint32_t  blockDimY",
+                              "uint32_t  blockDimZ",
+                              "uint32_t  sharedMemBytes",
+                              "size_t  paramCount",
+                              "void * pParams",
+                              "size_t  extraCount",
+                              "void * pExtras"]
+
+  VkCuModuleCreateInfoNVX = struct ["VkStructureType  sType",
+                                    "void * pNext",
+                                    "size_t  dataSize",
+                                    "void * pData"]
 
   VkD3D12FenceSubmitInfoKHR = struct ["VkStructureType  sType",
                                       "void * pNext",
@@ -507,6 +933,41 @@ module Vulkan
                                                       "VkImage  image",
                                                       "VkBuffer  buffer"]
 
+  VkMemoryBarrier2 = struct ["VkStructureType  sType",
+                             "void * pNext",
+                             "VkPipelineStageFlags2  srcStageMask",
+                             "VkAccessFlags2  srcAccessMask",
+                             "VkPipelineStageFlags2  dstStageMask",
+                             "VkAccessFlags2  dstAccessMask"]
+  VkImageSubresourceRange = struct ["VkImageAspectFlags  aspectMask",
+                                    "uint32_t  baseMipLevel",
+                                    "uint32_t  levelCount",
+                                    "uint32_t  baseArrayLayer",
+                                    "uint32_t  layerCount"]
+  VkImageMemoryBarrier2 = struct ["VkStructureType  sType",
+                                  "void * pNext",
+                                  "VkPipelineStageFlags2  srcStageMask",
+                                  "VkAccessFlags2  srcAccessMask",
+                                  "VkPipelineStageFlags2  dstStageMask",
+                                  "VkAccessFlags2  dstAccessMask",
+                                  "VkImageLayout  oldLayout",
+                                  "VkImageLayout  newLayout",
+                                  "uint32_t  srcQueueFamilyIndex",
+                                  "uint32_t  dstQueueFamilyIndex",
+                                  "VkImage  image",
+                                  { "subresourceRange" => VkImageSubresourceRange }]
+  VkDependencyInfo = struct ["VkStructureType  sType",
+                             "void * pNext",
+                             "VkDependencyFlags  dependencyFlags",
+                             "uint32_t  memoryBarrierCount",
+                             "VkMemoryBarrier2 * pMemoryBarriers",
+                             "uint32_t  bufferMemoryBarrierCount",
+                             "VkBufferMemoryBarrier2 * pBufferMemoryBarriers",
+                             "uint32_t  imageMemoryBarrierCount",
+                             "VkImageMemoryBarrier2 * pImageMemoryBarriers"]
+
+  VkDependencyInfoKHR = VkDependencyInfo
+
   VkDescriptorBufferInfo = struct ["VkBuffer  buffer",
                                    "VkDeviceSize  offset",
                                    "VkDeviceSize  range"]
@@ -524,9 +985,11 @@ module Vulkan
                                        "uint32_t  poolSizeCount",
                                        "VkDescriptorPoolSize * pPoolSizes"]
 
-  VkDescriptorPoolInlineUniformBlockCreateInfoEXT = struct ["VkStructureType  sType",
-                                                            "void * pNext",
-                                                            "uint32_t  maxInlineUniformBlockBindings"]
+  VkDescriptorPoolInlineUniformBlockCreateInfo = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "uint32_t  maxInlineUniformBlockBindings"]
+
+  VkDescriptorPoolInlineUniformBlockCreateInfoEXT = VkDescriptorPoolInlineUniformBlockCreateInfo
 
   VkDescriptorSetAllocateInfo = struct ["VkStructureType  sType",
                                         "void * pNext",
@@ -534,16 +997,23 @@ module Vulkan
                                         "uint32_t  descriptorSetCount",
                                         "VkDescriptorSetLayout * pSetLayouts"]
 
+  VkDescriptorSetBindingReferenceVALVE = struct ["VkStructureType  sType",
+                                                 "void * pNext",
+                                                 "VkDescriptorSetLayout  descriptorSetLayout",
+                                                 "uint32_t  binding"]
+
   VkDescriptorSetLayoutBinding = struct ["uint32_t  binding",
                                          "VkDescriptorType  descriptorType",
                                          "uint32_t  descriptorCount",
                                          "VkShaderStageFlags  stageFlags",
                                          "VkSampler * pImmutableSamplers"]
 
-  VkDescriptorSetLayoutBindingFlagsCreateInfoEXT = struct ["VkStructureType  sType",
-                                                           "void * pNext",
-                                                           "uint32_t  bindingCount",
-                                                           "VkDescriptorBindingFlagsEXT * pBindingFlags"]
+  VkDescriptorSetLayoutBindingFlagsCreateInfo = struct ["VkStructureType  sType",
+                                                        "void * pNext",
+                                                        "uint32_t  bindingCount",
+                                                        "VkDescriptorBindingFlags * pBindingFlags"]
+
+  VkDescriptorSetLayoutBindingFlagsCreateInfoEXT = VkDescriptorSetLayoutBindingFlagsCreateInfo
 
   VkDescriptorSetLayoutCreateInfo = struct ["VkStructureType  sType",
                                             "void * pNext",
@@ -551,20 +1021,29 @@ module Vulkan
                                             "uint32_t  bindingCount",
                                             "VkDescriptorSetLayoutBinding * pBindings"]
 
+  VkDescriptorSetLayoutHostMappingInfoVALVE = struct ["VkStructureType  sType",
+                                                      "void * pNext",
+                                                      "size_t  descriptorOffset",
+                                                      "uint32_t  descriptorSize"]
+
   VkDescriptorSetLayoutSupport = struct ["VkStructureType  sType",
                                          "void * pNext",
                                          "VkBool32  supported"]
 
   VkDescriptorSetLayoutSupportKHR = VkDescriptorSetLayoutSupport
 
-  VkDescriptorSetVariableDescriptorCountAllocateInfoEXT = struct ["VkStructureType  sType",
-                                                                  "void * pNext",
-                                                                  "uint32_t  descriptorSetCount",
-                                                                  "uint32_t * pDescriptorCounts"]
+  VkDescriptorSetVariableDescriptorCountAllocateInfo = struct ["VkStructureType  sType",
+                                                               "void * pNext",
+                                                               "uint32_t  descriptorSetCount",
+                                                               "uint32_t * pDescriptorCounts"]
 
-  VkDescriptorSetVariableDescriptorCountLayoutSupportEXT = struct ["VkStructureType  sType",
-                                                                   "void * pNext",
-                                                                   "uint32_t  maxVariableDescriptorCount"]
+  VkDescriptorSetVariableDescriptorCountAllocateInfoEXT = VkDescriptorSetVariableDescriptorCountAllocateInfo
+
+  VkDescriptorSetVariableDescriptorCountLayoutSupport = struct ["VkStructureType  sType",
+                                                                "void * pNext",
+                                                                "uint32_t  maxVariableDescriptorCount"]
+
+  VkDescriptorSetVariableDescriptorCountLayoutSupportEXT = VkDescriptorSetVariableDescriptorCountLayoutSupport
 
   VkDescriptorUpdateTemplateEntry = struct ["uint32_t  dstBinding",
                                             "uint32_t  dstArrayElement",
@@ -586,6 +1065,12 @@ module Vulkan
   VkDescriptorUpdateTemplateCreateInfoKHR = VkDescriptorUpdateTemplateCreateInfo
 
   VkDescriptorUpdateTemplateEntryKHR = VkDescriptorUpdateTemplateEntry
+
+  VkDeviceBufferMemoryRequirements = struct ["VkStructureType  sType",
+                                             "void * pNext",
+                                             "VkBufferCreateInfo * pCreateInfo"]
+
+  VkDeviceBufferMemoryRequirementsKHR = VkDeviceBufferMemoryRequirements
 
   VkDeviceQueueCreateInfo = struct ["VkStructureType  sType",
                                     "void * pNext",
@@ -659,21 +1144,19 @@ module Vulkan
                                "char * ppEnabledExtensionNames",
                                "VkPhysicalDeviceFeatures * pEnabledFeatures"]
 
+  VkDeviceDeviceMemoryReportCreateInfoEXT = struct ["VkStructureType  sType",
+                                                    "void * pNext",
+                                                    "VkDeviceMemoryReportFlagsEXT  flags",
+                                                    "PFN_vkDeviceMemoryReportCallbackEXT  pfnUserCallback",
+                                                    "void * pUserData"]
+
+  VkDeviceDiagnosticsConfigCreateInfoNV = struct ["VkStructureType  sType",
+                                                  "void * pNext",
+                                                  "VkDeviceDiagnosticsConfigFlagsNV  flags"]
+
   VkDeviceEventInfoEXT = struct ["VkStructureType  sType",
                                  "void * pNext",
                                  "VkDeviceEventTypeEXT  deviceEvent"]
-
-  VkDeviceGeneratedCommandsFeaturesNVX = struct ["VkStructureType  sType",
-                                                 "void * pNext",
-                                                 "VkBool32  computeBindingPointSupport"]
-
-  VkDeviceGeneratedCommandsLimitsNVX = struct ["VkStructureType  sType",
-                                               "void * pNext",
-                                               "uint32_t  maxIndirectCommandsLayoutTokenCount",
-                                               "uint32_t  maxObjectEntryCounts",
-                                               "uint32_t  minSequenceCountBufferOffsetAlignment",
-                                               "uint32_t  minSequenceIndexBufferOffsetAlignment",
-                                               "uint32_t  minCommandsTokenBufferOffsetAlignment"]
 
   VkDeviceGroupBindSparseInfo = struct ["VkStructureType  sType",
                                         "void * pNext",
@@ -729,19 +1212,70 @@ module Vulkan
                                                 "void * pNext",
                                                 "VkDeviceGroupPresentModeFlagsKHR  modes"]
 
+  VkImageCreateInfo = struct ["VkStructureType  sType",
+                              "void * pNext",
+                              "VkImageCreateFlags  flags",
+                              "VkImageType  imageType",
+                              "VkFormat  format",
+                              { "extent" => VkExtent3D },
+                              "uint32_t  mipLevels",
+                              "uint32_t  arrayLayers",
+                              "VkSampleCountFlagBits  samples",
+                              "VkImageTiling  tiling",
+                              "VkImageUsageFlags  usage",
+                              "VkSharingMode  sharingMode",
+                              "uint32_t  queueFamilyIndexCount",
+                              "uint32_t * pQueueFamilyIndices",
+                              "VkImageLayout  initialLayout"]
+  VkDeviceImageMemoryRequirements = struct ["VkStructureType  sType",
+                                            "void * pNext",
+                                            "VkImageCreateInfo * pCreateInfo",
+                                            "VkImageAspectFlagBits  planeAspect"]
+
+  VkDeviceImageMemoryRequirementsKHR = VkDeviceImageMemoryRequirements
+
+  VkDeviceMemoryOpaqueCaptureAddressInfo = struct ["VkStructureType  sType",
+                                                   "void * pNext",
+                                                   "VkDeviceMemory  memory"]
+
+  VkDeviceMemoryOpaqueCaptureAddressInfoKHR = VkDeviceMemoryOpaqueCaptureAddressInfo
+
   VkDeviceMemoryOverallocationCreateInfoAMD = struct ["VkStructureType  sType",
                                                       "void * pNext",
                                                       "VkMemoryOverallocationBehaviorAMD  overallocationBehavior"]
 
-  VkDeviceQueueGlobalPriorityCreateInfoEXT = struct ["VkStructureType  sType",
+  VkDeviceMemoryReportCallbackDataEXT = struct ["VkStructureType  sType",
+                                                "void * pNext",
+                                                "VkDeviceMemoryReportFlagsEXT  flags",
+                                                "VkDeviceMemoryReportEventTypeEXT  type",
+                                                "uint64_t  memoryObjectId",
+                                                "VkDeviceSize  size",
+                                                "VkObjectType  objectType",
+                                                "uint64_t  objectHandle",
+                                                "uint32_t  heapIndex"]
+
+  VkDevicePrivateDataCreateInfo = struct ["VkStructureType  sType",
+                                          "void * pNext",
+                                          "uint32_t  privateDataSlotRequestCount"]
+
+  VkDevicePrivateDataCreateInfoEXT = VkDevicePrivateDataCreateInfo
+
+  VkDeviceQueueGlobalPriorityCreateInfoKHR = struct ["VkStructureType  sType",
                                                      "void * pNext",
-                                                     "VkQueueGlobalPriorityEXT  globalPriority"]
+                                                     "VkQueueGlobalPriorityKHR  globalPriority"]
+  VkDeviceQueueGlobalPriorityCreateInfoEXT = VkDeviceQueueGlobalPriorityCreateInfoKHR
 
   VkDeviceQueueInfo2 = struct ["VkStructureType  sType",
                                "void * pNext",
                                "VkDeviceQueueCreateFlags  flags",
                                "uint32_t  queueFamilyIndex",
                                "uint32_t  queueIndex"]
+
+  VkDirectFBSurfaceCreateInfoEXT = struct ["VkStructureType  sType",
+                                           "void * pNext",
+                                           "VkDirectFBSurfaceCreateFlagsEXT  flags",
+                                           "IDirectFB * dfb",
+                                           "IDirectFBSurface * surface"]
 
   VkDispatchIndirectCommand = struct ["uint32_t  x",
                                       "uint32_t  y",
@@ -763,6 +1297,10 @@ module Vulkan
   VkDisplayModeProperties2KHR = struct ["VkStructureType  sType",
                                         "void * pNext",
                                         { "displayModeProperties" => VkDisplayModePropertiesKHR }]
+
+  VkDisplayNativeHdrSurfaceCapabilitiesAMD = struct ["VkStructureType  sType",
+                                                     "void * pNext",
+                                                     "VkBool32  localDimmingSupport"]
 
   VkDisplayPlaneCapabilitiesKHR = struct ["VkDisplayPlaneAlphaFlagsKHR  supportedAlpha",
                                           { "minSrcPosition" => VkOffset2D },
@@ -834,9 +1372,18 @@ module Vulkan
   VkDrawMeshTasksIndirectCommandNV = struct ["uint32_t  taskCount",
                                              "uint32_t  firstTask"]
 
+  VkDrmFormatModifierProperties2EXT = struct ["uint64_t  drmFormatModifier",
+                                              "uint32_t  drmFormatModifierPlaneCount",
+                                              "VkFormatFeatureFlags2  drmFormatModifierTilingFeatures"]
+
   VkDrmFormatModifierPropertiesEXT = struct ["uint64_t  drmFormatModifier",
                                              "uint32_t  drmFormatModifierPlaneCount",
                                              "VkFormatFeatureFlags  drmFormatModifierTilingFeatures"]
+
+  VkDrmFormatModifierPropertiesList2EXT = struct ["VkStructureType  sType",
+                                                  "void * pNext",
+                                                  "uint32_t  drmFormatModifierCount",
+                                                  "VkDrmFormatModifierProperties2EXT * pDrmFormatModifierProperties"]
 
   VkDrmFormatModifierPropertiesListEXT = struct ["VkStructureType  sType",
                                                  "void * pNext",
@@ -972,6 +1519,11 @@ module Vulkan
                                          "VkFence  fence",
                                          "VkExternalFenceHandleTypeFlagBits  handleType"]
 
+  VkFilterCubicImageViewImageFormatPropertiesEXT = struct ["VkStructureType  sType",
+                                                           "void * pNext",
+                                                           "VkBool32  filterCubic",
+                                                           "VkBool32  filterCubicMinmax"]
+
   VkFormatProperties = struct ["VkFormatFeatureFlags  linearTilingFeatures",
                                "VkFormatFeatureFlags  optimalTilingFeatures",
                                "VkFormatFeatureFlags  bufferFeatures"]
@@ -982,6 +1534,38 @@ module Vulkan
 
   VkFormatProperties2KHR = VkFormatProperties2
 
+  VkFormatProperties3 = struct ["VkStructureType  sType",
+                                "void * pNext",
+                                "VkFormatFeatureFlags2  linearTilingFeatures",
+                                "VkFormatFeatureFlags2  optimalTilingFeatures",
+                                "VkFormatFeatureFlags2  bufferFeatures"]
+
+  VkFormatProperties3KHR = VkFormatProperties3
+
+  VkFragmentShadingRateAttachmentInfoKHR = struct ["VkStructureType  sType",
+                                                   "void * pNext",
+                                                   "VkAttachmentReference2 * pFragmentShadingRateAttachment",
+                                                   { "shadingRateAttachmentTexelSize" => VkExtent2D }]
+
+  VkFramebufferAttachmentImageInfo = struct ["VkStructureType  sType",
+                                             "void * pNext",
+                                             "VkImageCreateFlags  flags",
+                                             "VkImageUsageFlags  usage",
+                                             "uint32_t  width",
+                                             "uint32_t  height",
+                                             "uint32_t  layerCount",
+                                             "uint32_t  viewFormatCount",
+                                             "VkFormat * pViewFormats"]
+
+  VkFramebufferAttachmentImageInfoKHR = VkFramebufferAttachmentImageInfo
+
+  VkFramebufferAttachmentsCreateInfo = struct ["VkStructureType  sType",
+                                               "void * pNext",
+                                               "uint32_t  attachmentImageInfoCount",
+                                               "VkFramebufferAttachmentImageInfo * pAttachmentImageInfos"]
+
+  VkFramebufferAttachmentsCreateInfoKHR = VkFramebufferAttachmentsCreateInfo
+
   VkFramebufferCreateInfo = struct ["VkStructureType  sType",
                                     "void * pNext",
                                     "VkFramebufferCreateFlags  flags",
@@ -991,6 +1575,38 @@ module Vulkan
                                     "uint32_t  width",
                                     "uint32_t  height",
                                     "uint32_t  layers"]
+
+  VkFramebufferMixedSamplesCombinationNV = struct ["VkStructureType  sType",
+                                                   "void * pNext",
+                                                   "VkCoverageReductionModeNV  coverageReductionMode",
+                                                   "VkSampleCountFlagBits  rasterizationSamples",
+                                                   "VkSampleCountFlags  depthStencilSamples",
+                                                   "VkSampleCountFlags  colorSamples"]
+
+  VkIndirectCommandsStreamNV = struct ["VkBuffer  buffer",
+                                       "VkDeviceSize  offset"]
+  VkGeneratedCommandsInfoNV = struct ["VkStructureType  sType",
+                                      "void * pNext",
+                                      "VkPipelineBindPoint  pipelineBindPoint",
+                                      "VkPipeline  pipeline",
+                                      "VkIndirectCommandsLayoutNV  indirectCommandsLayout",
+                                      "uint32_t  streamCount",
+                                      "VkIndirectCommandsStreamNV * pStreams",
+                                      "uint32_t  sequencesCount",
+                                      "VkBuffer  preprocessBuffer",
+                                      "VkDeviceSize  preprocessOffset",
+                                      "VkDeviceSize  preprocessSize",
+                                      "VkBuffer  sequencesCountBuffer",
+                                      "VkDeviceSize  sequencesCountOffset",
+                                      "VkBuffer  sequencesIndexBuffer",
+                                      "VkDeviceSize  sequencesIndexOffset"]
+
+  VkGeneratedCommandsMemoryRequirementsInfoNV = struct ["VkStructureType  sType",
+                                                        "void * pNext",
+                                                        "VkPipelineBindPoint  pipelineBindPoint",
+                                                        "VkPipeline  pipeline",
+                                                        "VkIndirectCommandsLayoutNV  indirectCommandsLayout",
+                                                        "uint32_t  maxSequencesCount"]
 
   VkVertexInputBindingDescription = struct ["uint32_t  binding",
                                             "uint32_t  stride",
@@ -1015,12 +1631,6 @@ module Vulkan
                                                   "void * pNext",
                                                   "VkPipelineTessellationStateCreateFlags  flags",
                                                   "uint32_t  patchControlPoints"]
-  VkViewport = struct ["float  x",
-                       "float  y",
-                       "float  width",
-                       "float  height",
-                       "float  minDepth",
-                       "float  maxDepth"]
   VkPipelineViewportStateCreateInfo = struct ["VkStructureType  sType",
                                               "void * pNext",
                                               "VkPipelineViewportStateCreateFlags  flags",
@@ -1110,6 +1720,19 @@ module Vulkan
                                          "VkPipeline  basePipelineHandle",
                                          "int32_t  basePipelineIndex"]
 
+  VkGraphicsShaderGroupCreateInfoNV = struct ["VkStructureType  sType",
+                                              "void * pNext",
+                                              "uint32_t  stageCount",
+                                              "VkPipelineShaderStageCreateInfo * pStages",
+                                              "VkPipelineVertexInputStateCreateInfo * pVertexInputState",
+                                              "VkPipelineTessellationStateCreateInfo * pTessellationState"]
+  VkGraphicsPipelineShaderGroupsCreateInfoNV = struct ["VkStructureType  sType",
+                                                       "void * pNext",
+                                                       "uint32_t  groupCount",
+                                                       "VkGraphicsShaderGroupCreateInfoNV * pGroups",
+                                                       "uint32_t  pipelineCount",
+                                                       "VkPipeline * pPipelines"]
+
   # Chromaticity coordinate
   VkXYColorEXT = struct ["float  x",
                          "float  y"]
@@ -1124,6 +1747,10 @@ module Vulkan
                              "float  maxContentLightLevel",
                              "float  maxFrameAverageLightLevel"]
 
+  VkHeadlessSurfaceCreateInfoEXT = struct ["VkStructureType  sType",
+                                           "void * pNext",
+                                           "VkHeadlessSurfaceCreateFlagsEXT  flags"]
+
   VkIOSSurfaceCreateInfoMVK = struct ["VkStructureType  sType",
                                       "void * pNext",
                                       "VkIOSSurfaceCreateFlagsMVK  flags",
@@ -1134,27 +1761,30 @@ module Vulkan
                         { "dstSubresource" => VkImageSubresourceLayers },
                         { "dstOffsets[2]" => VkOffset3D }]
 
+  VkImageBlit2KHR = VkImageBlit2
+
+  VkImageFormatConstraintsInfoFUCHSIA = struct ["VkStructureType  sType",
+                                                "void * pNext",
+                                                { "imageCreateInfo" => VkImageCreateInfo },
+                                                "VkFormatFeatureFlags  requiredFormatFeatures",
+                                                "VkImageFormatConstraintsFlagsFUCHSIA  flags",
+                                                "uint64_t  sysmemPixelFormat",
+                                                "uint32_t  colorSpaceCount",
+                                                "VkSysmemColorSpaceFUCHSIA * pColorSpaces"]
+  VkImageConstraintsInfoFUCHSIA = struct ["VkStructureType  sType",
+                                          "void * pNext",
+                                          "uint32_t  formatConstraintsCount",
+                                          "VkImageFormatConstraintsInfoFUCHSIA * pFormatConstraints",
+                                          { "bufferCollectionConstraints" => VkBufferCollectionConstraintsInfoFUCHSIA },
+                                          "VkImageConstraintsInfoFlagsFUCHSIA  flags"]
+
   VkImageCopy = struct [{ "srcSubresource" => VkImageSubresourceLayers },
                         { "srcOffset" => VkOffset3D },
                         { "dstSubresource" => VkImageSubresourceLayers },
                         { "dstOffset" => VkOffset3D },
                         { "extent" => VkExtent3D }]
 
-  VkImageCreateInfo = struct ["VkStructureType  sType",
-                              "void * pNext",
-                              "VkImageCreateFlags  flags",
-                              "VkImageType  imageType",
-                              "VkFormat  format",
-                              { "extent" => VkExtent3D },
-                              "uint32_t  mipLevels",
-                              "uint32_t  arrayLayers",
-                              "VkSampleCountFlagBits  samples",
-                              "VkImageTiling  tiling",
-                              "VkImageUsageFlags  usage",
-                              "VkSharingMode  sharingMode",
-                              "uint32_t  queueFamilyIndexCount",
-                              "uint32_t * pQueueFamilyIndices",
-                              "VkImageLayout  initialLayout"]
+  VkImageCopy2KHR = VkImageCopy2
 
   VkSubresourceLayout = struct ["VkDeviceSize  offset",
                                 "VkDeviceSize  size",
@@ -1176,10 +1806,12 @@ module Vulkan
                                                   "void * pNext",
                                                   "uint64_t  drmFormatModifier"]
 
-  VkImageFormatListCreateInfoKHR = struct ["VkStructureType  sType",
-                                           "void * pNext",
-                                           "uint32_t  viewFormatCount",
-                                           "VkFormat * pViewFormats"]
+  VkImageFormatListCreateInfo = struct ["VkStructureType  sType",
+                                        "void * pNext",
+                                        "uint32_t  viewFormatCount",
+                                        "VkFormat * pViewFormats"]
+
+  VkImageFormatListCreateInfoKHR = VkImageFormatListCreateInfo
 
   VkImageFormatProperties2 = struct ["VkStructureType  sType",
                                      "void * pNext",
@@ -1187,11 +1819,6 @@ module Vulkan
 
   VkImageFormatProperties2KHR = VkImageFormatProperties2
 
-  VkImageSubresourceRange = struct ["VkImageAspectFlags  aspectMask",
-                                    "uint32_t  baseMipLevel",
-                                    "uint32_t  levelCount",
-                                    "uint32_t  baseArrayLayer",
-                                    "uint32_t  layerCount"]
   VkImageMemoryBarrier = struct ["VkStructureType  sType",
                                  "void * pNext",
                                  "VkAccessFlags  srcAccessMask",
@@ -1202,6 +1829,8 @@ module Vulkan
                                  "uint32_t  dstQueueFamilyIndex",
                                  "VkImage  image",
                                  { "subresourceRange" => VkImageSubresourceRange }]
+
+  VkImageMemoryBarrier2KHR = VkImageMemoryBarrier2
 
   VkImageMemoryRequirementsInfo2 = struct ["VkStructureType  sType",
                                            "void * pNext",
@@ -1226,11 +1855,27 @@ module Vulkan
                            { "dstOffset" => VkOffset3D },
                            { "extent" => VkExtent3D }]
 
+  VkImageResolve2 = struct ["VkStructureType  sType",
+                            "void * pNext",
+                            { "srcSubresource" => VkImageSubresourceLayers },
+                            { "srcOffset" => VkOffset3D },
+                            { "dstSubresource" => VkImageSubresourceLayers },
+                            { "dstOffset" => VkOffset3D },
+                            { "extent" => VkExtent3D }]
+
+  VkImageResolve2KHR = VkImageResolve2
+
   VkImageSparseMemoryRequirementsInfo2 = struct ["VkStructureType  sType",
                                                  "void * pNext",
                                                  "VkImage  image"]
 
   VkImageSparseMemoryRequirementsInfo2KHR = VkImageSparseMemoryRequirementsInfo2
+
+  VkImageStencilUsageCreateInfo = struct ["VkStructureType  sType",
+                                          "void * pNext",
+                                          "VkImageUsageFlags  stencilUsage"]
+
+  VkImageStencilUsageCreateInfoEXT = VkImageStencilUsageCreateInfo
 
   VkImageSwapchainCreateInfoKHR = struct ["VkStructureType  sType",
                                           "void * pNext",
@@ -1240,6 +1885,11 @@ module Vulkan
                                          "void * pNext",
                                          "VkFormat  decodeMode"]
 
+  VkImageViewAddressPropertiesNVX = struct ["VkStructureType  sType",
+                                            "void * pNext",
+                                            "VkDeviceAddress  deviceAddress",
+                                            "VkDeviceSize  size"]
+
   VkImageViewCreateInfo = struct ["VkStructureType  sType",
                                   "void * pNext",
                                   "VkImageViewCreateFlags  flags",
@@ -1248,6 +1898,16 @@ module Vulkan
                                   "VkFormat  format",
                                   { "components" => VkComponentMapping },
                                   { "subresourceRange" => VkImageSubresourceRange }]
+
+  VkImageViewHandleInfoNVX = struct ["VkStructureType  sType",
+                                     "void * pNext",
+                                     "VkImageView  imageView",
+                                     "VkDescriptorType  descriptorType",
+                                     "VkSampler  sampler"]
+
+  VkImageViewMinLodCreateInfoEXT = struct ["VkStructureType  sType",
+                                           "void * pNext",
+                                           "float  minLod"]
 
   VkImageViewUsageCreateInfo = struct ["VkStructureType  sType",
                                        "void * pNext",
@@ -1274,6 +1934,11 @@ module Vulkan
                                             "HANDLE  handle",
                                             "LPCWSTR  name"]
 
+  VkImportMemoryBufferCollectionFUCHSIA = struct ["VkStructureType  sType",
+                                                  "void * pNext",
+                                                  "VkBufferCollectionFUCHSIA  collection",
+                                                  "uint32_t  index"]
+
   VkImportMemoryFdInfoKHR = struct ["VkStructureType  sType",
                                     "void * pNext",
                                     "VkExternalMemoryHandleTypeFlagBits  handleType",
@@ -1295,6 +1960,11 @@ module Vulkan
                                             "VkExternalMemoryHandleTypeFlagsNV  handleType",
                                             "HANDLE  handle"]
 
+  VkImportMemoryZirconHandleInfoFUCHSIA = struct ["VkStructureType  sType",
+                                                  "void * pNext",
+                                                  "VkExternalMemoryHandleTypeFlagBits  handleType",
+                                                  "zx_handle_t  handle"]
+
   VkImportSemaphoreFdInfoKHR = struct ["VkStructureType  sType",
                                        "void * pNext",
                                        "VkSemaphore  semaphore",
@@ -1310,16 +1980,40 @@ module Vulkan
                                                 "HANDLE  handle",
                                                 "LPCWSTR  name"]
 
-  VkIndirectCommandsLayoutTokenNVX = struct ["VkIndirectCommandsTokenTypeNVX  tokenType",
-                                             "uint32_t  bindingUnit",
-                                             "uint32_t  dynamicCount",
-                                             "uint32_t  divisor"]
-  VkIndirectCommandsLayoutCreateInfoNVX = struct ["VkStructureType  sType",
-                                                  "void * pNext",
-                                                  "VkPipelineBindPoint  pipelineBindPoint",
-                                                  "VkIndirectCommandsLayoutUsageFlagsNVX  flags",
-                                                  "uint32_t  tokenCount",
-                                                  "VkIndirectCommandsLayoutTokenNVX * pTokens"]
+  VkImportSemaphoreZirconHandleInfoFUCHSIA = struct ["VkStructureType  sType",
+                                                     "void * pNext",
+                                                     "VkSemaphore  semaphore",
+                                                     "VkSemaphoreImportFlags  flags",
+                                                     "VkExternalSemaphoreHandleTypeFlagBits  handleType",
+                                                     "zx_handle_t  zirconHandle"]
+
+  VkIndirectCommandsLayoutTokenNV = struct ["VkStructureType  sType",
+                                            "void * pNext",
+                                            "VkIndirectCommandsTokenTypeNV  tokenType",
+                                            "uint32_t  stream",
+                                            "uint32_t  offset",
+                                            "uint32_t  vertexBindingUnit",
+                                            "VkBool32  vertexDynamicStride",
+                                            "VkPipelineLayout  pushconstantPipelineLayout",
+                                            "VkShaderStageFlags  pushconstantShaderStageFlags",
+                                            "uint32_t  pushconstantOffset",
+                                            "uint32_t  pushconstantSize",
+                                            "VkIndirectStateFlagsNV  indirectStateFlags",
+                                            "uint32_t  indexTypeCount",
+                                            "VkIndexType * pIndexTypes",
+                                            "uint32_t * pIndexTypeValues"]
+  VkIndirectCommandsLayoutCreateInfoNV = struct ["VkStructureType  sType",
+                                                 "void * pNext",
+                                                 "VkIndirectCommandsLayoutUsageFlagsNV  flags",
+                                                 "VkPipelineBindPoint  pipelineBindPoint",
+                                                 "uint32_t  tokenCount",
+                                                 "VkIndirectCommandsLayoutTokenNV * pTokens",
+                                                 "uint32_t  streamCount",
+                                                 "uint32_t * pStreamStrides"]
+
+  VkInitializePerformanceApiInfoINTEL = struct ["VkStructureType  sType",
+                                                "void * pNext",
+                                                "void * pUserData"]
 
   VkInputAttachmentAspectReference = struct ["uint32_t  subpass",
                                              "uint32_t  inputAttachmentIndex",
@@ -1369,6 +2063,8 @@ module Vulkan
                             "VkAccessFlags  srcAccessMask",
                             "VkAccessFlags  dstAccessMask"]
 
+  VkMemoryBarrier2KHR = VkMemoryBarrier2
+
   VkMemoryDedicatedAllocateInfo = struct ["VkStructureType  sType",
                                           "void * pNext",
                                           "VkImage  image",
@@ -1396,10 +2092,20 @@ module Vulkan
                                  "VkDeviceMemory  memory",
                                  "VkExternalMemoryHandleTypeFlagBits  handleType"]
 
+  VkMemoryGetRemoteAddressInfoNV = struct ["VkStructureType  sType",
+                                           "void * pNext",
+                                           "VkDeviceMemory  memory",
+                                           "VkExternalMemoryHandleTypeFlagBits  handleType"]
+
   VkMemoryGetWin32HandleInfoKHR = struct ["VkStructureType  sType",
                                           "void * pNext",
                                           "VkDeviceMemory  memory",
                                           "VkExternalMemoryHandleTypeFlagBits  handleType"]
+
+  VkMemoryGetZirconHandleInfoFUCHSIA = struct ["VkStructureType  sType",
+                                               "void * pNext",
+                                               "VkDeviceMemory  memory",
+                                               "VkExternalMemoryHandleTypeFlagBits  handleType"]
 
   VkMemoryHeap = struct ["VkDeviceSize  size",
                          "VkMemoryHeapFlags  flags"]
@@ -1407,6 +2113,16 @@ module Vulkan
   VkMemoryHostPointerPropertiesEXT = struct ["VkStructureType  sType",
                                              "void * pNext",
                                              "uint32_t  memoryTypeBits"]
+
+  VkMemoryOpaqueCaptureAddressAllocateInfo = struct ["VkStructureType  sType",
+                                                     "void * pNext",
+                                                     "uint64_t  opaqueCaptureAddress"]
+
+  VkMemoryOpaqueCaptureAddressAllocateInfoKHR = VkMemoryOpaqueCaptureAddressAllocateInfo
+
+  VkMemoryPriorityAllocateInfoEXT = struct ["VkStructureType  sType",
+                                            "void * pNext",
+                                            "float  priority"]
 
   VkMemoryRequirements = struct ["VkDeviceSize  size",
                                  "VkDeviceSize  alignment",
@@ -1425,60 +2141,106 @@ module Vulkan
                                              "void * pNext",
                                              "uint32_t  memoryTypeBits"]
 
+  VkMemoryZirconHandlePropertiesFUCHSIA = struct ["VkStructureType  sType",
+                                                  "void * pNext",
+                                                  "uint32_t  memoryTypeBits"]
+
+  VkMetalSurfaceCreateInfoEXT = struct ["VkStructureType  sType",
+                                        "void * pNext",
+                                        "VkMetalSurfaceCreateFlagsEXT  flags",
+                                        "CAMetalLayer * pLayer"]
+
+  VkMultiDrawIndexedInfoEXT = struct ["uint32_t  firstIndex",
+                                      "uint32_t  indexCount",
+                                      "int32_t  vertexOffset"]
+
+  VkMultiDrawInfoEXT = struct ["uint32_t  firstVertex",
+                               "uint32_t  vertexCount"]
+
   VkMultisamplePropertiesEXT = struct ["VkStructureType  sType",
                                        "void * pNext",
                                        { "maxSampleLocationGridSize" => VkExtent2D }]
 
+  VkMultiviewPerViewAttributesInfoNVX = struct ["VkStructureType  sType",
+                                                "void * pNext",
+                                                "VkBool32  perViewAttributes",
+                                                "VkBool32  perViewAttributesPositionXOnly"]
+
+  VkMutableDescriptorTypeListVALVE = struct ["uint32_t  descriptorTypeCount",
+                                             "VkDescriptorType * pDescriptorTypes"]
+  VkMutableDescriptorTypeCreateInfoVALVE = struct ["VkStructureType  sType",
+                                                   "void * pNext",
+                                                   "uint32_t  mutableDescriptorTypeListCount",
+                                                   "VkMutableDescriptorTypeListVALVE * pMutableDescriptorTypeLists"]
+
+  VkNativeBufferUsage2ANDROID = struct ["uint64_t  consumer",
+                                        "uint64_t  producer"]
   VkNativeBufferANDROID = struct ["VkStructureType  sType",
                                   "void * pNext",
                                   "void * handle",
                                   "int  stride",
                                   "int  format",
-                                  "int  usage"]
-
-  VkObjectTableCreateInfoNVX = struct ["VkStructureType  sType",
-                                       "void * pNext",
-                                       "uint32_t  objectCount",
-                                       "VkObjectEntryTypeNVX * pObjectEntryTypes",
-                                       "uint32_t * pObjectEntryCounts",
-                                       "VkObjectEntryUsageFlagsNVX * pObjectEntryUsageFlags",
-                                       "uint32_t  maxUniformBuffersPerDescriptor",
-                                       "uint32_t  maxStorageBuffersPerDescriptor",
-                                       "uint32_t  maxStorageImagesPerDescriptor",
-                                       "uint32_t  maxSampledImagesPerDescriptor",
-                                       "uint32_t  maxPipelineLayouts"]
-
-  VkObjectTableDescriptorSetEntryNVX = struct ["VkObjectEntryTypeNVX  type",
-                                               "VkObjectEntryUsageFlagsNVX  flags",
-                                               "VkPipelineLayout  pipelineLayout",
-                                               "VkDescriptorSet  descriptorSet"]
-
-  VkObjectTableEntryNVX = struct ["VkObjectEntryTypeNVX  type",
-                                  "VkObjectEntryUsageFlagsNVX  flags"]
-
-  VkObjectTableIndexBufferEntryNVX = struct ["VkObjectEntryTypeNVX  type",
-                                             "VkObjectEntryUsageFlagsNVX  flags",
-                                             "VkBuffer  buffer",
-                                             "VkIndexType  indexType"]
-
-  VkObjectTablePipelineEntryNVX = struct ["VkObjectEntryTypeNVX  type",
-                                          "VkObjectEntryUsageFlagsNVX  flags",
-                                          "VkPipeline  pipeline"]
-
-  VkObjectTablePushConstantEntryNVX = struct ["VkObjectEntryTypeNVX  type",
-                                              "VkObjectEntryUsageFlagsNVX  flags",
-                                              "VkPipelineLayout  pipelineLayout",
-                                              "VkShaderStageFlags  stageFlags"]
-
-  VkObjectTableVertexBufferEntryNVX = struct ["VkObjectEntryTypeNVX  type",
-                                              "VkObjectEntryUsageFlagsNVX  flags",
-                                              "VkBuffer  buffer"]
+                                  "int  usage",
+                                  { "usage2" => VkNativeBufferUsage2ANDROID }]
 
   VkPastPresentationTimingGOOGLE = struct ["uint32_t  presentID",
                                            "uint64_t  desiredPresentTime",
                                            "uint64_t  actualPresentTime",
                                            "uint64_t  earliestPresentTime",
                                            "uint64_t  presentMargin"]
+
+  VkPerformanceConfigurationAcquireInfoINTEL = struct ["VkStructureType  sType",
+                                                       "void * pNext",
+                                                       "VkPerformanceConfigurationTypeINTEL  type"]
+
+  VkPerformanceCounterDescriptionKHR = struct ["VkStructureType  sType",
+                                               "void * pNext",
+                                               "VkPerformanceCounterDescriptionFlagsKHR  flags",
+                                               "char  name[#{VK_MAX_DESCRIPTION_SIZE}]",
+                                               "char  category[#{VK_MAX_DESCRIPTION_SIZE}]",
+                                               "char  description[#{VK_MAX_DESCRIPTION_SIZE}]"]
+
+  VkPerformanceCounterKHR = struct ["VkStructureType  sType",
+                                    "void * pNext",
+                                    "VkPerformanceCounterUnitKHR  unit",
+                                    "VkPerformanceCounterScopeKHR  scope",
+                                    "VkPerformanceCounterStorageKHR  storage",
+                                    "uint8_t  uuid[#{VK_UUID_SIZE}]"]
+
+  # Union of all the possible return types a counter result could return
+  VkPerformanceCounterResultKHR = union ["int32_t  int32",
+                                         "int64_t  int64",
+                                         "uint32_t  uint32",
+                                         "uint64_t  uint64",
+                                         "float  float32",
+                                         "double  float64"]
+
+  VkPerformanceMarkerInfoINTEL = struct ["VkStructureType  sType",
+                                         "void * pNext",
+                                         "uint64_t  marker"]
+
+  VkPerformanceOverrideInfoINTEL = struct ["VkStructureType  sType",
+                                           "void * pNext",
+                                           "VkPerformanceOverrideTypeINTEL  type",
+                                           "VkBool32  enable",
+                                           "uint64_t  parameter"]
+
+  VkPerformanceQuerySubmitInfoKHR = struct ["VkStructureType  sType",
+                                            "void * pNext",
+                                            "uint32_t  counterPassIndex"]
+
+  VkPerformanceStreamMarkerInfoINTEL = struct ["VkStructureType  sType",
+                                               "void * pNext",
+                                               "uint32_t  marker"]
+
+  VkPerformanceValueDataINTEL = union ["uint32_t  value32",
+                                       "uint64_t  value64",
+                                       "float  valueFloat",
+                                       "VkBool32  valueBool",
+                                       "char * valueString"]
+
+  VkPerformanceValueINTEL = struct ["VkPerformanceValueTypeINTEL  type",
+                                    { "data" => VkPerformanceValueDataINTEL }]
 
   VkPhysicalDevice16BitStorageFeatures = struct ["VkStructureType  sType",
                                                  "void * pNext",
@@ -1489,15 +2251,41 @@ module Vulkan
 
   VkPhysicalDevice16BitStorageFeaturesKHR = VkPhysicalDevice16BitStorageFeatures
 
-  VkPhysicalDevice8BitStorageFeaturesKHR = struct ["VkStructureType  sType",
+  VkPhysicalDevice4444FormatsFeaturesEXT = struct ["VkStructureType  sType",
                                                    "void * pNext",
-                                                   "VkBool32  storageBuffer8BitAccess",
-                                                   "VkBool32  uniformAndStorageBuffer8BitAccess",
-                                                   "VkBool32  storagePushConstant8"]
+                                                   "VkBool32  formatA4R4G4B4",
+                                                   "VkBool32  formatA4B4G4R4"]
+
+  VkPhysicalDevice8BitStorageFeatures = struct ["VkStructureType  sType",
+                                                "void * pNext",
+                                                "VkBool32  storageBuffer8BitAccess",
+                                                "VkBool32  uniformAndStorageBuffer8BitAccess",
+                                                "VkBool32  storagePushConstant8"]
+
+  VkPhysicalDevice8BitStorageFeaturesKHR = VkPhysicalDevice8BitStorageFeatures
 
   VkPhysicalDeviceASTCDecodeFeaturesEXT = struct ["VkStructureType  sType",
                                                   "void * pNext",
                                                   "VkBool32  decodeModeSharedExponent"]
+
+  VkPhysicalDeviceAccelerationStructureFeaturesKHR = struct ["VkStructureType  sType",
+                                                             "void * pNext",
+                                                             "VkBool32  accelerationStructure",
+                                                             "VkBool32  accelerationStructureCaptureReplay",
+                                                             "VkBool32  accelerationStructureIndirectBuild",
+                                                             "VkBool32  accelerationStructureHostCommands",
+                                                             "VkBool32  descriptorBindingAccelerationStructureUpdateAfterBind"]
+
+  VkPhysicalDeviceAccelerationStructurePropertiesKHR = struct ["VkStructureType  sType",
+                                                               "void * pNext",
+                                                               "uint64_t  maxGeometryCount",
+                                                               "uint64_t  maxInstanceCount",
+                                                               "uint64_t  maxPrimitiveCount",
+                                                               "uint32_t  maxPerStageDescriptorAccelerationStructures",
+                                                               "uint32_t  maxPerStageDescriptorUpdateAfterBindAccelerationStructures",
+                                                               "uint32_t  maxDescriptorSetAccelerationStructures",
+                                                               "uint32_t  maxDescriptorSetUpdateAfterBindAccelerationStructures",
+                                                               "uint32_t  minAccelerationStructureScratchOffsetAlignment"]
 
   VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT = struct ["VkStructureType  sType",
                                                               "void * pNext",
@@ -1511,6 +2299,34 @@ module Vulkan
                                                                 "VkBool32  advancedBlendNonPremultipliedDstColor",
                                                                 "VkBool32  advancedBlendCorrelatedOverlap",
                                                                 "VkBool32  advancedBlendAllOperations"]
+
+  VkPhysicalDeviceBorderColorSwizzleFeaturesEXT = struct ["VkStructureType  sType",
+                                                          "void * pNext",
+                                                          "VkBool32  borderColorSwizzle",
+                                                          "VkBool32  borderColorSwizzleFromImage"]
+
+  VkPhysicalDeviceBufferDeviceAddressFeaturesEXT = struct ["VkStructureType  sType",
+                                                           "void * pNext",
+                                                           "VkBool32  bufferDeviceAddress",
+                                                           "VkBool32  bufferDeviceAddressCaptureReplay",
+                                                           "VkBool32  bufferDeviceAddressMultiDevice"]
+  VkPhysicalDeviceBufferAddressFeaturesEXT = VkPhysicalDeviceBufferDeviceAddressFeaturesEXT
+
+  VkPhysicalDeviceBufferDeviceAddressFeatures = struct ["VkStructureType  sType",
+                                                        "void * pNext",
+                                                        "VkBool32  bufferDeviceAddress",
+                                                        "VkBool32  bufferDeviceAddressCaptureReplay",
+                                                        "VkBool32  bufferDeviceAddressMultiDevice"]
+
+  VkPhysicalDeviceBufferDeviceAddressFeaturesKHR = VkPhysicalDeviceBufferDeviceAddressFeatures
+
+  VkPhysicalDeviceCoherentMemoryFeaturesAMD = struct ["VkStructureType  sType",
+                                                      "void * pNext",
+                                                      "VkBool32  deviceCoherentMemory"]
+
+  VkPhysicalDeviceColorWriteEnableFeaturesEXT = struct ["VkStructureType  sType",
+                                                        "void * pNext",
+                                                        "VkBool32  colorWriteEnable"]
 
   VkPhysicalDeviceComputeShaderDerivativesFeaturesNV = struct ["VkStructureType  sType",
                                                                "void * pNext",
@@ -1534,73 +2350,175 @@ module Vulkan
                                                                    "VkBool32  fullyCoveredFragmentShaderInputVariable",
                                                                    "VkBool32  conservativeRasterizationPostDepthCoverage"]
 
+  VkPhysicalDeviceCooperativeMatrixFeaturesNV = struct ["VkStructureType  sType",
+                                                        "void * pNext",
+                                                        "VkBool32  cooperativeMatrix",
+                                                        "VkBool32  cooperativeMatrixRobustBufferAccess"]
+
+  VkPhysicalDeviceCooperativeMatrixPropertiesNV = struct ["VkStructureType  sType",
+                                                          "void * pNext",
+                                                          "VkShaderStageFlags  cooperativeMatrixSupportedStages"]
+
   VkPhysicalDeviceCornerSampledImageFeaturesNV = struct ["VkStructureType  sType",
                                                          "void * pNext",
                                                          "VkBool32  cornerSampledImage"]
 
-  VkPhysicalDeviceDescriptorIndexingFeaturesEXT = struct ["VkStructureType  sType",
-                                                          "void * pNext",
-                                                          "VkBool32  shaderInputAttachmentArrayDynamicIndexing",
-                                                          "VkBool32  shaderUniformTexelBufferArrayDynamicIndexing",
-                                                          "VkBool32  shaderStorageTexelBufferArrayDynamicIndexing",
-                                                          "VkBool32  shaderUniformBufferArrayNonUniformIndexing",
-                                                          "VkBool32  shaderSampledImageArrayNonUniformIndexing",
-                                                          "VkBool32  shaderStorageBufferArrayNonUniformIndexing",
-                                                          "VkBool32  shaderStorageImageArrayNonUniformIndexing",
-                                                          "VkBool32  shaderInputAttachmentArrayNonUniformIndexing",
-                                                          "VkBool32  shaderUniformTexelBufferArrayNonUniformIndexing",
-                                                          "VkBool32  shaderStorageTexelBufferArrayNonUniformIndexing",
-                                                          "VkBool32  descriptorBindingUniformBufferUpdateAfterBind",
-                                                          "VkBool32  descriptorBindingSampledImageUpdateAfterBind",
-                                                          "VkBool32  descriptorBindingStorageImageUpdateAfterBind",
-                                                          "VkBool32  descriptorBindingStorageBufferUpdateAfterBind",
-                                                          "VkBool32  descriptorBindingUniformTexelBufferUpdateAfterBind",
-                                                          "VkBool32  descriptorBindingStorageTexelBufferUpdateAfterBind",
-                                                          "VkBool32  descriptorBindingUpdateUnusedWhilePending",
-                                                          "VkBool32  descriptorBindingPartiallyBound",
-                                                          "VkBool32  descriptorBindingVariableDescriptorCount",
-                                                          "VkBool32  runtimeDescriptorArray"]
-
-  VkPhysicalDeviceDescriptorIndexingPropertiesEXT = struct ["VkStructureType  sType",
+  VkPhysicalDeviceCoverageReductionModeFeaturesNV = struct ["VkStructureType  sType",
                                                             "void * pNext",
-                                                            "uint32_t  maxUpdateAfterBindDescriptorsInAllPools",
-                                                            "VkBool32  shaderUniformBufferArrayNonUniformIndexingNative",
-                                                            "VkBool32  shaderSampledImageArrayNonUniformIndexingNative",
-                                                            "VkBool32  shaderStorageBufferArrayNonUniformIndexingNative",
-                                                            "VkBool32  shaderStorageImageArrayNonUniformIndexingNative",
-                                                            "VkBool32  shaderInputAttachmentArrayNonUniformIndexingNative",
-                                                            "VkBool32  robustBufferAccessUpdateAfterBind",
-                                                            "VkBool32  quadDivergentImplicitLod",
-                                                            "uint32_t  maxPerStageDescriptorUpdateAfterBindSamplers",
-                                                            "uint32_t  maxPerStageDescriptorUpdateAfterBindUniformBuffers",
-                                                            "uint32_t  maxPerStageDescriptorUpdateAfterBindStorageBuffers",
-                                                            "uint32_t  maxPerStageDescriptorUpdateAfterBindSampledImages",
-                                                            "uint32_t  maxPerStageDescriptorUpdateAfterBindStorageImages",
-                                                            "uint32_t  maxPerStageDescriptorUpdateAfterBindInputAttachments",
-                                                            "uint32_t  maxPerStageUpdateAfterBindResources",
-                                                            "uint32_t  maxDescriptorSetUpdateAfterBindSamplers",
-                                                            "uint32_t  maxDescriptorSetUpdateAfterBindUniformBuffers",
-                                                            "uint32_t  maxDescriptorSetUpdateAfterBindUniformBuffersDynamic",
-                                                            "uint32_t  maxDescriptorSetUpdateAfterBindStorageBuffers",
-                                                            "uint32_t  maxDescriptorSetUpdateAfterBindStorageBuffersDynamic",
-                                                            "uint32_t  maxDescriptorSetUpdateAfterBindSampledImages",
-                                                            "uint32_t  maxDescriptorSetUpdateAfterBindStorageImages",
-                                                            "uint32_t  maxDescriptorSetUpdateAfterBindInputAttachments"]
+                                                            "VkBool32  coverageReductionMode"]
+
+  VkPhysicalDeviceCustomBorderColorFeaturesEXT = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "VkBool32  customBorderColors",
+                                                         "VkBool32  customBorderColorWithoutFormat"]
+
+  VkPhysicalDeviceCustomBorderColorPropertiesEXT = struct ["VkStructureType  sType",
+                                                           "void * pNext",
+                                                           "uint32_t  maxCustomBorderColorSamplers"]
+
+  VkPhysicalDeviceDedicatedAllocationImageAliasingFeaturesNV = struct ["VkStructureType  sType",
+                                                                       "void * pNext",
+                                                                       "VkBool32  dedicatedAllocationImageAliasing"]
+
+  VkPhysicalDeviceDepthClipControlFeaturesEXT = struct ["VkStructureType  sType",
+                                                        "void * pNext",
+                                                        "VkBool32  depthClipControl"]
+
+  VkPhysicalDeviceDepthClipEnableFeaturesEXT = struct ["VkStructureType  sType",
+                                                       "void * pNext",
+                                                       "VkBool32  depthClipEnable"]
+
+  VkPhysicalDeviceDepthStencilResolveProperties = struct ["VkStructureType  sType",
+                                                          "void * pNext",
+                                                          "VkResolveModeFlags  supportedDepthResolveModes",
+                                                          "VkResolveModeFlags  supportedStencilResolveModes",
+                                                          "VkBool32  independentResolveNone",
+                                                          "VkBool32  independentResolve"]
+
+  VkPhysicalDeviceDepthStencilResolvePropertiesKHR = VkPhysicalDeviceDepthStencilResolveProperties
+
+  VkPhysicalDeviceDescriptorIndexingFeatures = struct ["VkStructureType  sType",
+                                                       "void * pNext",
+                                                       "VkBool32  shaderInputAttachmentArrayDynamicIndexing",
+                                                       "VkBool32  shaderUniformTexelBufferArrayDynamicIndexing",
+                                                       "VkBool32  shaderStorageTexelBufferArrayDynamicIndexing",
+                                                       "VkBool32  shaderUniformBufferArrayNonUniformIndexing",
+                                                       "VkBool32  shaderSampledImageArrayNonUniformIndexing",
+                                                       "VkBool32  shaderStorageBufferArrayNonUniformIndexing",
+                                                       "VkBool32  shaderStorageImageArrayNonUniformIndexing",
+                                                       "VkBool32  shaderInputAttachmentArrayNonUniformIndexing",
+                                                       "VkBool32  shaderUniformTexelBufferArrayNonUniformIndexing",
+                                                       "VkBool32  shaderStorageTexelBufferArrayNonUniformIndexing",
+                                                       "VkBool32  descriptorBindingUniformBufferUpdateAfterBind",
+                                                       "VkBool32  descriptorBindingSampledImageUpdateAfterBind",
+                                                       "VkBool32  descriptorBindingStorageImageUpdateAfterBind",
+                                                       "VkBool32  descriptorBindingStorageBufferUpdateAfterBind",
+                                                       "VkBool32  descriptorBindingUniformTexelBufferUpdateAfterBind",
+                                                       "VkBool32  descriptorBindingStorageTexelBufferUpdateAfterBind",
+                                                       "VkBool32  descriptorBindingUpdateUnusedWhilePending",
+                                                       "VkBool32  descriptorBindingPartiallyBound",
+                                                       "VkBool32  descriptorBindingVariableDescriptorCount",
+                                                       "VkBool32  runtimeDescriptorArray"]
+
+  VkPhysicalDeviceDescriptorIndexingFeaturesEXT = VkPhysicalDeviceDescriptorIndexingFeatures
+
+  VkPhysicalDeviceDescriptorIndexingProperties = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "uint32_t  maxUpdateAfterBindDescriptorsInAllPools",
+                                                         "VkBool32  shaderUniformBufferArrayNonUniformIndexingNative",
+                                                         "VkBool32  shaderSampledImageArrayNonUniformIndexingNative",
+                                                         "VkBool32  shaderStorageBufferArrayNonUniformIndexingNative",
+                                                         "VkBool32  shaderStorageImageArrayNonUniformIndexingNative",
+                                                         "VkBool32  shaderInputAttachmentArrayNonUniformIndexingNative",
+                                                         "VkBool32  robustBufferAccessUpdateAfterBind",
+                                                         "VkBool32  quadDivergentImplicitLod",
+                                                         "uint32_t  maxPerStageDescriptorUpdateAfterBindSamplers",
+                                                         "uint32_t  maxPerStageDescriptorUpdateAfterBindUniformBuffers",
+                                                         "uint32_t  maxPerStageDescriptorUpdateAfterBindStorageBuffers",
+                                                         "uint32_t  maxPerStageDescriptorUpdateAfterBindSampledImages",
+                                                         "uint32_t  maxPerStageDescriptorUpdateAfterBindStorageImages",
+                                                         "uint32_t  maxPerStageDescriptorUpdateAfterBindInputAttachments",
+                                                         "uint32_t  maxPerStageUpdateAfterBindResources",
+                                                         "uint32_t  maxDescriptorSetUpdateAfterBindSamplers",
+                                                         "uint32_t  maxDescriptorSetUpdateAfterBindUniformBuffers",
+                                                         "uint32_t  maxDescriptorSetUpdateAfterBindUniformBuffersDynamic",
+                                                         "uint32_t  maxDescriptorSetUpdateAfterBindStorageBuffers",
+                                                         "uint32_t  maxDescriptorSetUpdateAfterBindStorageBuffersDynamic",
+                                                         "uint32_t  maxDescriptorSetUpdateAfterBindSampledImages",
+                                                         "uint32_t  maxDescriptorSetUpdateAfterBindStorageImages",
+                                                         "uint32_t  maxDescriptorSetUpdateAfterBindInputAttachments"]
+
+  VkPhysicalDeviceDescriptorIndexingPropertiesEXT = VkPhysicalDeviceDescriptorIndexingProperties
+
+  VkPhysicalDeviceDescriptorSetHostMappingFeaturesVALVE = struct ["VkStructureType  sType",
+                                                                  "void * pNext",
+                                                                  "VkBool32  descriptorSetHostMapping"]
+
+  VkPhysicalDeviceDeviceGeneratedCommandsFeaturesNV = struct ["VkStructureType  sType",
+                                                              "void * pNext",
+                                                              "VkBool32  deviceGeneratedCommands"]
+
+  VkPhysicalDeviceDeviceGeneratedCommandsPropertiesNV = struct ["VkStructureType  sType",
+                                                                "void * pNext",
+                                                                "uint32_t  maxGraphicsShaderGroupCount",
+                                                                "uint32_t  maxIndirectSequenceCount",
+                                                                "uint32_t  maxIndirectCommandsTokenCount",
+                                                                "uint32_t  maxIndirectCommandsStreamCount",
+                                                                "uint32_t  maxIndirectCommandsTokenOffset",
+                                                                "uint32_t  maxIndirectCommandsStreamStride",
+                                                                "uint32_t  minSequencesCountBufferOffsetAlignment",
+                                                                "uint32_t  minSequencesIndexBufferOffsetAlignment",
+                                                                "uint32_t  minIndirectCommandsBufferOffsetAlignment"]
+
+  VkPhysicalDeviceDeviceMemoryReportFeaturesEXT = struct ["VkStructureType  sType",
+                                                          "void * pNext",
+                                                          "VkBool32  deviceMemoryReport"]
+
+  VkPhysicalDeviceDiagnosticsConfigFeaturesNV = struct ["VkStructureType  sType",
+                                                        "void * pNext",
+                                                        "VkBool32  diagnosticsConfig"]
 
   VkPhysicalDeviceDiscardRectanglePropertiesEXT = struct ["VkStructureType  sType",
                                                           "void * pNext",
                                                           "uint32_t  maxDiscardRectangles"]
 
-  VkPhysicalDeviceDriverPropertiesKHR = struct ["VkStructureType  sType",
-                                                "void * pNext",
-                                                "VkDriverIdKHR  driverID",
-                                                "char  driverName[#{VK_MAX_DRIVER_NAME_SIZE_KHR}]",
-                                                "char  driverInfo[#{VK_MAX_DRIVER_INFO_SIZE_KHR}]",
-                                                { "conformanceVersion" => VkConformanceVersionKHR }]
+  VkPhysicalDeviceDriverProperties = struct ["VkStructureType  sType",
+                                             "void * pNext",
+                                             "VkDriverId  driverID",
+                                             "char  driverName[#{VK_MAX_DRIVER_NAME_SIZE}]",
+                                             "char  driverInfo[#{VK_MAX_DRIVER_INFO_SIZE}]",
+                                             { "conformanceVersion" => VkConformanceVersion }]
+
+  VkPhysicalDeviceDriverPropertiesKHR = VkPhysicalDeviceDriverProperties
+
+  VkPhysicalDeviceDrmPropertiesEXT = struct ["VkStructureType  sType",
+                                             "void * pNext",
+                                             "VkBool32  hasPrimary",
+                                             "VkBool32  hasRender",
+                                             "int64_t  primaryMajor",
+                                             "int64_t  primaryMinor",
+                                             "int64_t  renderMajor",
+                                             "int64_t  renderMinor"]
+
+  VkPhysicalDeviceDynamicRenderingFeatures = struct ["VkStructureType  sType",
+                                                     "void * pNext",
+                                                     "VkBool32  dynamicRendering"]
+
+  VkPhysicalDeviceDynamicRenderingFeaturesKHR = VkPhysicalDeviceDynamicRenderingFeatures
 
   VkPhysicalDeviceExclusiveScissorFeaturesNV = struct ["VkStructureType  sType",
                                                        "void * pNext",
                                                        "VkBool32  exclusiveScissor"]
+
+  VkPhysicalDeviceExtendedDynamicState2FeaturesEXT = struct ["VkStructureType  sType",
+                                                             "void * pNext",
+                                                             "VkBool32  extendedDynamicState2",
+                                                             "VkBool32  extendedDynamicState2LogicOp",
+                                                             "VkBool32  extendedDynamicState2PatchControlPoints"]
+
+  VkPhysicalDeviceExtendedDynamicStateFeaturesEXT = struct ["VkStructureType  sType",
+                                                            "void * pNext",
+                                                            "VkBool32  extendedDynamicState"]
 
   VkPhysicalDeviceExternalBufferInfo = struct ["VkStructureType  sType",
                                                "void * pNext",
@@ -1626,6 +2544,10 @@ module Vulkan
                                                             "void * pNext",
                                                             "VkDeviceSize  minImportedHostPointerAlignment"]
 
+  VkPhysicalDeviceExternalMemoryRDMAFeaturesNV = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "VkBool32  externalMemoryRDMA"]
+
   VkPhysicalDeviceExternalSemaphoreInfo = struct ["VkStructureType  sType",
                                                   "void * pNext",
                                                   "VkExternalSemaphoreHandleTypeFlagBits  handleType"]
@@ -1638,9 +2560,120 @@ module Vulkan
 
   VkPhysicalDeviceFeatures2KHR = VkPhysicalDeviceFeatures2
 
+  VkPhysicalDeviceShaderFloat16Int8Features = struct ["VkStructureType  sType",
+                                                      "void * pNext",
+                                                      "VkBool32  shaderFloat16",
+                                                      "VkBool32  shaderInt8"]
+  VkPhysicalDeviceFloat16Int8FeaturesKHR = VkPhysicalDeviceShaderFloat16Int8Features
+
+  VkPhysicalDeviceFloatControlsProperties = struct ["VkStructureType  sType",
+                                                    "void * pNext",
+                                                    "VkShaderFloatControlsIndependence  denormBehaviorIndependence",
+                                                    "VkShaderFloatControlsIndependence  roundingModeIndependence",
+                                                    "VkBool32  shaderSignedZeroInfNanPreserveFloat16",
+                                                    "VkBool32  shaderSignedZeroInfNanPreserveFloat32",
+                                                    "VkBool32  shaderSignedZeroInfNanPreserveFloat64",
+                                                    "VkBool32  shaderDenormPreserveFloat16",
+                                                    "VkBool32  shaderDenormPreserveFloat32",
+                                                    "VkBool32  shaderDenormPreserveFloat64",
+                                                    "VkBool32  shaderDenormFlushToZeroFloat16",
+                                                    "VkBool32  shaderDenormFlushToZeroFloat32",
+                                                    "VkBool32  shaderDenormFlushToZeroFloat64",
+                                                    "VkBool32  shaderRoundingModeRTEFloat16",
+                                                    "VkBool32  shaderRoundingModeRTEFloat32",
+                                                    "VkBool32  shaderRoundingModeRTEFloat64",
+                                                    "VkBool32  shaderRoundingModeRTZFloat16",
+                                                    "VkBool32  shaderRoundingModeRTZFloat32",
+                                                    "VkBool32  shaderRoundingModeRTZFloat64"]
+
+  VkPhysicalDeviceFloatControlsPropertiesKHR = VkPhysicalDeviceFloatControlsProperties
+
+  VkPhysicalDeviceFragmentDensityMap2FeaturesEXT = struct ["VkStructureType  sType",
+                                                           "void * pNext",
+                                                           "VkBool32  fragmentDensityMapDeferred"]
+
+  VkPhysicalDeviceFragmentDensityMap2PropertiesEXT = struct ["VkStructureType  sType",
+                                                             "void * pNext",
+                                                             "VkBool32  subsampledLoads",
+                                                             "VkBool32  subsampledCoarseReconstructionEarlyAccess",
+                                                             "uint32_t  maxSubsampledArrayLayers",
+                                                             "uint32_t  maxDescriptorSetSubsampledSamplers"]
+
+  VkPhysicalDeviceFragmentDensityMapFeaturesEXT = struct ["VkStructureType  sType",
+                                                          "void * pNext",
+                                                          "VkBool32  fragmentDensityMap",
+                                                          "VkBool32  fragmentDensityMapDynamic",
+                                                          "VkBool32  fragmentDensityMapNonSubsampledImages"]
+
+  VkPhysicalDeviceFragmentDensityMapOffsetFeaturesQCOM = struct ["VkStructureType  sType",
+                                                                 "void * pNext",
+                                                                 "VkBool32  fragmentDensityMapOffset"]
+
+  VkPhysicalDeviceFragmentDensityMapOffsetPropertiesQCOM = struct ["VkStructureType  sType",
+                                                                   "void * pNext",
+                                                                   { "fragmentDensityOffsetGranularity" => VkExtent2D }]
+
+  VkPhysicalDeviceFragmentDensityMapPropertiesEXT = struct ["VkStructureType  sType",
+                                                            "void * pNext",
+                                                            { "minFragmentDensityTexelSize" => VkExtent2D },
+                                                            { "maxFragmentDensityTexelSize" => VkExtent2D },
+                                                            "VkBool32  fragmentDensityInvocations"]
+
   VkPhysicalDeviceFragmentShaderBarycentricFeaturesNV = struct ["VkStructureType  sType",
                                                                 "void * pNext",
                                                                 "VkBool32  fragmentShaderBarycentric"]
+
+  VkPhysicalDeviceFragmentShaderInterlockFeaturesEXT = struct ["VkStructureType  sType",
+                                                               "void * pNext",
+                                                               "VkBool32  fragmentShaderSampleInterlock",
+                                                               "VkBool32  fragmentShaderPixelInterlock",
+                                                               "VkBool32  fragmentShaderShadingRateInterlock"]
+
+  VkPhysicalDeviceFragmentShadingRateEnumsFeaturesNV = struct ["VkStructureType  sType",
+                                                               "void * pNext",
+                                                               "VkBool32  fragmentShadingRateEnums",
+                                                               "VkBool32  supersampleFragmentShadingRates",
+                                                               "VkBool32  noInvocationFragmentShadingRates"]
+
+  VkPhysicalDeviceFragmentShadingRateEnumsPropertiesNV = struct ["VkStructureType  sType",
+                                                                 "void * pNext",
+                                                                 "VkSampleCountFlagBits  maxFragmentShadingRateInvocationCount"]
+
+  VkPhysicalDeviceFragmentShadingRateFeaturesKHR = struct ["VkStructureType  sType",
+                                                           "void * pNext",
+                                                           "VkBool32  pipelineFragmentShadingRate",
+                                                           "VkBool32  primitiveFragmentShadingRate",
+                                                           "VkBool32  attachmentFragmentShadingRate"]
+
+  VkPhysicalDeviceFragmentShadingRateKHR = struct ["VkStructureType  sType",
+                                                   "void * pNext",
+                                                   "VkSampleCountFlags  sampleCounts",
+                                                   { "fragmentSize" => VkExtent2D }]
+
+  VkPhysicalDeviceFragmentShadingRatePropertiesKHR = struct ["VkStructureType  sType",
+                                                             "void * pNext",
+                                                             { "minFragmentShadingRateAttachmentTexelSize" => VkExtent2D },
+                                                             { "maxFragmentShadingRateAttachmentTexelSize" => VkExtent2D },
+                                                             "uint32_t  maxFragmentShadingRateAttachmentTexelSizeAspectRatio",
+                                                             "VkBool32  primitiveFragmentShadingRateWithMultipleViewports",
+                                                             "VkBool32  layeredShadingRateAttachments",
+                                                             "VkBool32  fragmentShadingRateNonTrivialCombinerOps",
+                                                             { "maxFragmentSize" => VkExtent2D },
+                                                             "uint32_t  maxFragmentSizeAspectRatio",
+                                                             "uint32_t  maxFragmentShadingRateCoverageSamples",
+                                                             "VkSampleCountFlagBits  maxFragmentShadingRateRasterizationSamples",
+                                                             "VkBool32  fragmentShadingRateWithShaderDepthStencilWrites",
+                                                             "VkBool32  fragmentShadingRateWithSampleMask",
+                                                             "VkBool32  fragmentShadingRateWithShaderSampleMask",
+                                                             "VkBool32  fragmentShadingRateWithConservativeRasterization",
+                                                             "VkBool32  fragmentShadingRateWithFragmentShaderInterlock",
+                                                             "VkBool32  fragmentShadingRateWithCustomSampleLocations",
+                                                             "VkBool32  fragmentShadingRateStrictMultiplyCombiner"]
+
+  VkPhysicalDeviceGlobalPriorityQueryFeaturesKHR = struct ["VkStructureType  sType",
+                                                           "void * pNext",
+                                                           "VkBool32  globalPriorityQuery"]
+  VkPhysicalDeviceGlobalPriorityQueryFeaturesEXT = VkPhysicalDeviceGlobalPriorityQueryFeaturesKHR
 
   VkPhysicalDeviceGroupProperties = struct ["VkStructureType  sType",
                                             "void * pNext",
@@ -1649,6 +2682,12 @@ module Vulkan
                                             "VkBool32  subsetAllocation"]
 
   VkPhysicalDeviceGroupPropertiesKHR = VkPhysicalDeviceGroupProperties
+
+  VkPhysicalDeviceHostQueryResetFeatures = struct ["VkStructureType  sType",
+                                                   "void * pNext",
+                                                   "VkBool32  hostQueryReset"]
+
+  VkPhysicalDeviceHostQueryResetFeaturesEXT = VkPhysicalDeviceHostQueryResetFeatures
 
   VkPhysicalDeviceIDProperties = struct ["VkStructureType  sType",
                                          "void * pNext",
@@ -1677,18 +2716,54 @@ module Vulkan
 
   VkPhysicalDeviceImageFormatInfo2KHR = VkPhysicalDeviceImageFormatInfo2
 
-  VkPhysicalDeviceInlineUniformBlockFeaturesEXT = struct ["VkStructureType  sType",
-                                                          "void * pNext",
-                                                          "VkBool32  inlineUniformBlock",
-                                                          "VkBool32  descriptorBindingInlineUniformBlockUpdateAfterBind"]
+  VkPhysicalDeviceImageRobustnessFeatures = struct ["VkStructureType  sType",
+                                                    "void * pNext",
+                                                    "VkBool32  robustImageAccess"]
 
-  VkPhysicalDeviceInlineUniformBlockPropertiesEXT = struct ["VkStructureType  sType",
-                                                            "void * pNext",
-                                                            "uint32_t  maxInlineUniformBlockSize",
-                                                            "uint32_t  maxPerStageDescriptorInlineUniformBlocks",
-                                                            "uint32_t  maxPerStageDescriptorUpdateAfterBindInlineUniformBlocks",
-                                                            "uint32_t  maxDescriptorSetInlineUniformBlocks",
-                                                            "uint32_t  maxDescriptorSetUpdateAfterBindInlineUniformBlocks"]
+  VkPhysicalDeviceImageRobustnessFeaturesEXT = VkPhysicalDeviceImageRobustnessFeatures
+
+  VkPhysicalDeviceImageViewImageFormatInfoEXT = struct ["VkStructureType  sType",
+                                                        "void * pNext",
+                                                        "VkImageViewType  imageViewType"]
+
+  VkPhysicalDeviceImageViewMinLodFeaturesEXT = struct ["VkStructureType  sType",
+                                                       "void * pNext",
+                                                       "VkBool32  minLod"]
+
+  VkPhysicalDeviceImagelessFramebufferFeatures = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "VkBool32  imagelessFramebuffer"]
+
+  VkPhysicalDeviceImagelessFramebufferFeaturesKHR = VkPhysicalDeviceImagelessFramebufferFeatures
+
+  VkPhysicalDeviceIndexTypeUint8FeaturesEXT = struct ["VkStructureType  sType",
+                                                      "void * pNext",
+                                                      "VkBool32  indexTypeUint8"]
+
+  VkPhysicalDeviceInheritedViewportScissorFeaturesNV = struct ["VkStructureType  sType",
+                                                               "void * pNext",
+                                                               "VkBool32  inheritedViewportScissor2D"]
+
+  VkPhysicalDeviceInlineUniformBlockFeatures = struct ["VkStructureType  sType",
+                                                       "void * pNext",
+                                                       "VkBool32  inlineUniformBlock",
+                                                       "VkBool32  descriptorBindingInlineUniformBlockUpdateAfterBind"]
+
+  VkPhysicalDeviceInlineUniformBlockFeaturesEXT = VkPhysicalDeviceInlineUniformBlockFeatures
+
+  VkPhysicalDeviceInlineUniformBlockProperties = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "uint32_t  maxInlineUniformBlockSize",
+                                                         "uint32_t  maxPerStageDescriptorInlineUniformBlocks",
+                                                         "uint32_t  maxPerStageDescriptorUpdateAfterBindInlineUniformBlocks",
+                                                         "uint32_t  maxDescriptorSetInlineUniformBlocks",
+                                                         "uint32_t  maxDescriptorSetUpdateAfterBindInlineUniformBlocks"]
+
+  VkPhysicalDeviceInlineUniformBlockPropertiesEXT = VkPhysicalDeviceInlineUniformBlockProperties
+
+  VkPhysicalDeviceInvocationMaskFeaturesHUAWEI = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "VkBool32  invocationMask"]
 
   VkPhysicalDeviceLimits = struct ["uint32_t  maxImageDimension1D",
                                    "uint32_t  maxImageDimension2D",
@@ -1797,12 +2872,50 @@ module Vulkan
                                    "VkDeviceSize  optimalBufferCopyRowPitchAlignment",
                                    "VkDeviceSize  nonCoherentAtomSize"]
 
+  VkPhysicalDeviceLineRasterizationFeaturesEXT = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "VkBool32  rectangularLines",
+                                                         "VkBool32  bresenhamLines",
+                                                         "VkBool32  smoothLines",
+                                                         "VkBool32  stippledRectangularLines",
+                                                         "VkBool32  stippledBresenhamLines",
+                                                         "VkBool32  stippledSmoothLines"]
+
+  VkPhysicalDeviceLineRasterizationPropertiesEXT = struct ["VkStructureType  sType",
+                                                           "void * pNext",
+                                                           "uint32_t  lineSubPixelPrecisionBits"]
+
+  VkPhysicalDeviceLinearColorAttachmentFeaturesNV = struct ["VkStructureType  sType",
+                                                            "void * pNext",
+                                                            "VkBool32  linearColorAttachment"]
+
   VkPhysicalDeviceMaintenance3Properties = struct ["VkStructureType  sType",
                                                    "void * pNext",
                                                    "uint32_t  maxPerSetDescriptors",
                                                    "VkDeviceSize  maxMemoryAllocationSize"]
 
   VkPhysicalDeviceMaintenance3PropertiesKHR = VkPhysicalDeviceMaintenance3Properties
+
+  VkPhysicalDeviceMaintenance4Features = struct ["VkStructureType  sType",
+                                                 "void * pNext",
+                                                 "VkBool32  maintenance4"]
+
+  VkPhysicalDeviceMaintenance4FeaturesKHR = VkPhysicalDeviceMaintenance4Features
+
+  VkPhysicalDeviceMaintenance4Properties = struct ["VkStructureType  sType",
+                                                   "void * pNext",
+                                                   "VkDeviceSize  maxBufferSize"]
+
+  VkPhysicalDeviceMaintenance4PropertiesKHR = VkPhysicalDeviceMaintenance4Properties
+
+  VkPhysicalDeviceMemoryBudgetPropertiesEXT = struct ["VkStructureType  sType",
+                                                      "void * pNext",
+                                                      "VkDeviceSize  heapBudget[#{VK_MAX_MEMORY_HEAPS}]",
+                                                      "VkDeviceSize  heapUsage[#{VK_MAX_MEMORY_HEAPS}]"]
+
+  VkPhysicalDeviceMemoryPriorityFeaturesEXT = struct ["VkStructureType  sType",
+                                                      "void * pNext",
+                                                      "VkBool32  memoryPriority"]
 
   VkPhysicalDeviceMemoryProperties = struct ["uint32_t  memoryTypeCount",
                                              { "memoryTypes[#{VK_MAX_MEMORY_TYPES}]" => VkMemoryType },
@@ -1836,6 +2949,14 @@ module Vulkan
                                                    "uint32_t  meshOutputPerVertexGranularity",
                                                    "uint32_t  meshOutputPerPrimitiveGranularity"]
 
+  VkPhysicalDeviceMultiDrawFeaturesEXT = struct ["VkStructureType  sType",
+                                                 "void * pNext",
+                                                 "VkBool32  multiDraw"]
+
+  VkPhysicalDeviceMultiDrawPropertiesEXT = struct ["VkStructureType  sType",
+                                                   "void * pNext",
+                                                   "uint32_t  maxMultiDrawCount"]
+
   VkPhysicalDeviceMultiviewFeatures = struct ["VkStructureType  sType",
                                               "void * pNext",
                                               "VkBool32  multiview",
@@ -1855,18 +2976,90 @@ module Vulkan
 
   VkPhysicalDeviceMultiviewPropertiesKHR = VkPhysicalDeviceMultiviewProperties
 
+  VkPhysicalDeviceMutableDescriptorTypeFeaturesVALVE = struct ["VkStructureType  sType",
+                                                               "void * pNext",
+                                                               "VkBool32  mutableDescriptorType"]
+
   VkPhysicalDevicePCIBusInfoPropertiesEXT = struct ["VkStructureType  sType",
                                                     "void * pNext",
-                                                    "uint16_t  pciDomain",
-                                                    "uint8_t  pciBus",
-                                                    "uint8_t  pciDevice",
-                                                    "uint8_t  pciFunction"]
+                                                    "uint32_t  pciDomain",
+                                                    "uint32_t  pciBus",
+                                                    "uint32_t  pciDevice",
+                                                    "uint32_t  pciFunction"]
+
+  VkPhysicalDevicePageableDeviceLocalMemoryFeaturesEXT = struct ["VkStructureType  sType",
+                                                                 "void * pNext",
+                                                                 "VkBool32  pageableDeviceLocalMemory"]
+
+  VkPhysicalDevicePerformanceQueryFeaturesKHR = struct ["VkStructureType  sType",
+                                                        "void * pNext",
+                                                        "VkBool32  performanceCounterQueryPools",
+                                                        "VkBool32  performanceCounterMultipleQueryPools"]
+
+  VkPhysicalDevicePerformanceQueryPropertiesKHR = struct ["VkStructureType  sType",
+                                                          "void * pNext",
+                                                          "VkBool32  allowCommandBufferQueryCopies"]
+
+  VkPhysicalDevicePipelineCreationCacheControlFeatures = struct ["VkStructureType  sType",
+                                                                 "void * pNext",
+                                                                 "VkBool32  pipelineCreationCacheControl"]
+
+  VkPhysicalDevicePipelineCreationCacheControlFeaturesEXT = VkPhysicalDevicePipelineCreationCacheControlFeatures
+
+  VkPhysicalDevicePipelineExecutablePropertiesFeaturesKHR = struct ["VkStructureType  sType",
+                                                                    "void * pNext",
+                                                                    "VkBool32  pipelineExecutableInfo"]
 
   VkPhysicalDevicePointClippingProperties = struct ["VkStructureType  sType",
                                                     "void * pNext",
                                                     "VkPointClippingBehavior  pointClippingBehavior"]
 
   VkPhysicalDevicePointClippingPropertiesKHR = VkPhysicalDevicePointClippingProperties
+
+  VkPhysicalDevicePortabilitySubsetFeaturesKHR = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "VkBool32  constantAlphaColorBlendFactors",
+                                                         "VkBool32  events",
+                                                         "VkBool32  imageViewFormatReinterpretation",
+                                                         "VkBool32  imageViewFormatSwizzle",
+                                                         "VkBool32  imageView2DOn3DImage",
+                                                         "VkBool32  multisampleArrayImage",
+                                                         "VkBool32  mutableComparisonSamplers",
+                                                         "VkBool32  pointPolygons",
+                                                         "VkBool32  samplerMipLodBias",
+                                                         "VkBool32  separateStencilMaskRef",
+                                                         "VkBool32  shaderSampleRateInterpolationFunctions",
+                                                         "VkBool32  tessellationIsolines",
+                                                         "VkBool32  tessellationPointMode",
+                                                         "VkBool32  triangleFans",
+                                                         "VkBool32  vertexAttributeAccessBeyondStride"]
+
+  VkPhysicalDevicePortabilitySubsetPropertiesKHR = struct ["VkStructureType  sType",
+                                                           "void * pNext",
+                                                           "uint32_t  minVertexInputBindingStrideAlignment"]
+
+  VkPhysicalDevicePresentIdFeaturesKHR = struct ["VkStructureType  sType",
+                                                 "void * pNext",
+                                                 "VkBool32  presentId"]
+
+  VkPhysicalDevicePresentWaitFeaturesKHR = struct ["VkStructureType  sType",
+                                                   "void * pNext",
+                                                   "VkBool32  presentWait"]
+
+  VkPhysicalDevicePresentationPropertiesANDROID = struct ["VkStructureType  sType",
+                                                          "void * pNext",
+                                                          "VkBool32  sharedImage"]
+
+  VkPhysicalDevicePrimitiveTopologyListRestartFeaturesEXT = struct ["VkStructureType  sType",
+                                                                    "void * pNext",
+                                                                    "VkBool32  primitiveTopologyListRestart",
+                                                                    "VkBool32  primitiveTopologyPatchListRestart"]
+
+  VkPhysicalDevicePrivateDataFeatures = struct ["VkStructureType  sType",
+                                                "void * pNext",
+                                                "VkBool32  privateData"]
+
+  VkPhysicalDevicePrivateDataFeaturesEXT = VkPhysicalDevicePrivateDataFeatures
 
   VkPhysicalDeviceSparseProperties = struct ["VkBool32  residencyStandard2DBlockShape",
                                              "VkBool32  residencyStandard2DMultisampleBlockShape",
@@ -1897,9 +3090,57 @@ module Vulkan
                                                       "void * pNext",
                                                       "VkBool32  protectedNoFault"]
 
+  VkPhysicalDeviceProvokingVertexFeaturesEXT = struct ["VkStructureType  sType",
+                                                       "void * pNext",
+                                                       "VkBool32  provokingVertexLast",
+                                                       "VkBool32  transformFeedbackPreservesProvokingVertex"]
+
+  VkPhysicalDeviceProvokingVertexPropertiesEXT = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "VkBool32  provokingVertexModePerPipeline",
+                                                         "VkBool32  transformFeedbackPreservesTriangleFanProvokingVertex"]
+
   VkPhysicalDevicePushDescriptorPropertiesKHR = struct ["VkStructureType  sType",
                                                         "void * pNext",
                                                         "uint32_t  maxPushDescriptors"]
+
+  VkPhysicalDeviceRGBA10X6FormatsFeaturesEXT = struct ["VkStructureType  sType",
+                                                       "void * pNext",
+                                                       "VkBool32  formatRgba10x6WithoutYCbCrSampler"]
+
+  VkPhysicalDeviceRasterizationOrderAttachmentAccessFeaturesARM = struct ["VkStructureType  sType",
+                                                                          "void * pNext",
+                                                                          "VkBool32  rasterizationOrderColorAttachmentAccess",
+                                                                          "VkBool32  rasterizationOrderDepthAttachmentAccess",
+                                                                          "VkBool32  rasterizationOrderStencilAttachmentAccess"]
+
+  VkPhysicalDeviceRayQueryFeaturesKHR = struct ["VkStructureType  sType",
+                                                "void * pNext",
+                                                "VkBool32  rayQuery"]
+
+  VkPhysicalDeviceRayTracingMotionBlurFeaturesNV = struct ["VkStructureType  sType",
+                                                           "void * pNext",
+                                                           "VkBool32  rayTracingMotionBlur",
+                                                           "VkBool32  rayTracingMotionBlurPipelineTraceRaysIndirect"]
+
+  VkPhysicalDeviceRayTracingPipelineFeaturesKHR = struct ["VkStructureType  sType",
+                                                          "void * pNext",
+                                                          "VkBool32  rayTracingPipeline",
+                                                          "VkBool32  rayTracingPipelineShaderGroupHandleCaptureReplay",
+                                                          "VkBool32  rayTracingPipelineShaderGroupHandleCaptureReplayMixed",
+                                                          "VkBool32  rayTracingPipelineTraceRaysIndirect",
+                                                          "VkBool32  rayTraversalPrimitiveCulling"]
+
+  VkPhysicalDeviceRayTracingPipelinePropertiesKHR = struct ["VkStructureType  sType",
+                                                            "void * pNext",
+                                                            "uint32_t  shaderGroupHandleSize",
+                                                            "uint32_t  maxRayRecursionDepth",
+                                                            "uint32_t  maxShaderGroupStride",
+                                                            "uint32_t  shaderGroupBaseAlignment",
+                                                            "uint32_t  shaderGroupHandleCaptureReplaySize",
+                                                            "uint32_t  maxRayDispatchInvocationCount",
+                                                            "uint32_t  shaderGroupHandleAlignment",
+                                                            "uint32_t  maxRayHitAttributeSize"]
 
   VkPhysicalDeviceRayTracingPropertiesNV = struct ["VkStructureType  sType",
                                                    "void * pNext",
@@ -1916,6 +3157,17 @@ module Vulkan
                                                                  "void * pNext",
                                                                  "VkBool32  representativeFragmentTest"]
 
+  VkPhysicalDeviceRobustness2FeaturesEXT = struct ["VkStructureType  sType",
+                                                   "void * pNext",
+                                                   "VkBool32  robustBufferAccess2",
+                                                   "VkBool32  robustImageAccess2",
+                                                   "VkBool32  nullDescriptor"]
+
+  VkPhysicalDeviceRobustness2PropertiesEXT = struct ["VkStructureType  sType",
+                                                     "void * pNext",
+                                                     "VkDeviceSize  robustStorageBufferAccessSizeAlignment",
+                                                     "VkDeviceSize  robustUniformBufferAccessSizeAlignment"]
+
   VkPhysicalDeviceSampleLocationsPropertiesEXT = struct ["VkStructureType  sType",
                                                          "void * pNext",
                                                          "VkSampleCountFlags  sampleLocationSampleCounts",
@@ -1924,10 +3176,12 @@ module Vulkan
                                                          "uint32_t  sampleLocationSubPixelBits",
                                                          "VkBool32  variableSampleLocations"]
 
-  VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT = struct ["VkStructureType  sType",
-                                                             "void * pNext",
-                                                             "VkBool32  filterMinmaxSingleComponentFormats",
-                                                             "VkBool32  filterMinmaxImageComponentMapping"]
+  VkPhysicalDeviceSamplerFilterMinmaxProperties = struct ["VkStructureType  sType",
+                                                          "void * pNext",
+                                                          "VkBool32  filterMinmaxSingleComponentFormats",
+                                                          "VkBool32  filterMinmaxImageComponentMapping"]
+
+  VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT = VkPhysicalDeviceSamplerFilterMinmaxProperties
 
   VkPhysicalDeviceSamplerYcbcrConversionFeatures = struct ["VkStructureType  sType",
                                                            "void * pNext",
@@ -1935,10 +3189,64 @@ module Vulkan
 
   VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR = VkPhysicalDeviceSamplerYcbcrConversionFeatures
 
-  VkPhysicalDeviceShaderAtomicInt64FeaturesKHR = struct ["VkStructureType  sType",
+  VkPhysicalDeviceScalarBlockLayoutFeatures = struct ["VkStructureType  sType",
+                                                      "void * pNext",
+                                                      "VkBool32  scalarBlockLayout"]
+
+  VkPhysicalDeviceScalarBlockLayoutFeaturesEXT = VkPhysicalDeviceScalarBlockLayoutFeatures
+
+  VkPhysicalDeviceSeparateDepthStencilLayoutsFeatures = struct ["VkStructureType  sType",
+                                                                "void * pNext",
+                                                                "VkBool32  separateDepthStencilLayouts"]
+
+  VkPhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR = VkPhysicalDeviceSeparateDepthStencilLayoutsFeatures
+
+  VkPhysicalDeviceShaderAtomicFloat2FeaturesEXT = struct ["VkStructureType  sType",
+                                                          "void * pNext",
+                                                          "VkBool32  shaderBufferFloat16Atomics",
+                                                          "VkBool32  shaderBufferFloat16AtomicAdd",
+                                                          "VkBool32  shaderBufferFloat16AtomicMinMax",
+                                                          "VkBool32  shaderBufferFloat32AtomicMinMax",
+                                                          "VkBool32  shaderBufferFloat64AtomicMinMax",
+                                                          "VkBool32  shaderSharedFloat16Atomics",
+                                                          "VkBool32  shaderSharedFloat16AtomicAdd",
+                                                          "VkBool32  shaderSharedFloat16AtomicMinMax",
+                                                          "VkBool32  shaderSharedFloat32AtomicMinMax",
+                                                          "VkBool32  shaderSharedFloat64AtomicMinMax",
+                                                          "VkBool32  shaderImageFloat32AtomicMinMax",
+                                                          "VkBool32  sparseImageFloat32AtomicMinMax"]
+
+  VkPhysicalDeviceShaderAtomicFloatFeaturesEXT = struct ["VkStructureType  sType",
                                                          "void * pNext",
-                                                         "VkBool32  shaderBufferInt64Atomics",
-                                                         "VkBool32  shaderSharedInt64Atomics"]
+                                                         "VkBool32  shaderBufferFloat32Atomics",
+                                                         "VkBool32  shaderBufferFloat32AtomicAdd",
+                                                         "VkBool32  shaderBufferFloat64Atomics",
+                                                         "VkBool32  shaderBufferFloat64AtomicAdd",
+                                                         "VkBool32  shaderSharedFloat32Atomics",
+                                                         "VkBool32  shaderSharedFloat32AtomicAdd",
+                                                         "VkBool32  shaderSharedFloat64Atomics",
+                                                         "VkBool32  shaderSharedFloat64AtomicAdd",
+                                                         "VkBool32  shaderImageFloat32Atomics",
+                                                         "VkBool32  shaderImageFloat32AtomicAdd",
+                                                         "VkBool32  sparseImageFloat32Atomics",
+                                                         "VkBool32  sparseImageFloat32AtomicAdd"]
+
+  VkPhysicalDeviceShaderAtomicInt64Features = struct ["VkStructureType  sType",
+                                                      "void * pNext",
+                                                      "VkBool32  shaderBufferInt64Atomics",
+                                                      "VkBool32  shaderSharedInt64Atomics"]
+
+  VkPhysicalDeviceShaderAtomicInt64FeaturesKHR = VkPhysicalDeviceShaderAtomicInt64Features
+
+  VkPhysicalDeviceShaderClockFeaturesKHR = struct ["VkStructureType  sType",
+                                                   "void * pNext",
+                                                   "VkBool32  shaderSubgroupClock",
+                                                   "VkBool32  shaderDeviceClock"]
+
+  VkPhysicalDeviceShaderCoreProperties2AMD = struct ["VkStructureType  sType",
+                                                     "void * pNext",
+                                                     "VkShaderCorePropertiesFlagsAMD  shaderCoreFeatures",
+                                                     "uint32_t  activeComputeUnitCount"]
 
   VkPhysicalDeviceShaderCorePropertiesAMD = struct ["VkStructureType  sType",
                                                     "void * pNext",
@@ -1957,13 +3265,97 @@ module Vulkan
                                                     "uint32_t  maxVgprAllocation",
                                                     "uint32_t  vgprAllocationGranularity"]
 
-  VkPhysicalDeviceShaderDrawParameterFeatures = struct ["VkStructureType  sType",
-                                                        "void * pNext",
-                                                        "VkBool32  shaderDrawParameters"]
+  VkPhysicalDeviceShaderDemoteToHelperInvocationFeatures = struct ["VkStructureType  sType",
+                                                                   "void * pNext",
+                                                                   "VkBool32  shaderDemoteToHelperInvocation"]
+
+  VkPhysicalDeviceShaderDemoteToHelperInvocationFeaturesEXT = VkPhysicalDeviceShaderDemoteToHelperInvocationFeatures
+
+  VkPhysicalDeviceShaderDrawParametersFeatures = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "VkBool32  shaderDrawParameters"]
+  VkPhysicalDeviceShaderDrawParameterFeatures = VkPhysicalDeviceShaderDrawParametersFeatures
+
+  VkPhysicalDeviceShaderFloat16Int8FeaturesKHR = VkPhysicalDeviceShaderFloat16Int8Features
+
+  VkPhysicalDeviceShaderImageAtomicInt64FeaturesEXT = struct ["VkStructureType  sType",
+                                                              "void * pNext",
+                                                              "VkBool32  shaderImageInt64Atomics",
+                                                              "VkBool32  sparseImageInt64Atomics"]
 
   VkPhysicalDeviceShaderImageFootprintFeaturesNV = struct ["VkStructureType  sType",
                                                            "void * pNext",
                                                            "VkBool32  imageFootprint"]
+
+  VkPhysicalDeviceShaderIntegerDotProductFeatures = struct ["VkStructureType  sType",
+                                                            "void * pNext",
+                                                            "VkBool32  shaderIntegerDotProduct"]
+
+  VkPhysicalDeviceShaderIntegerDotProductFeaturesKHR = VkPhysicalDeviceShaderIntegerDotProductFeatures
+
+  VkPhysicalDeviceShaderIntegerDotProductProperties = struct ["VkStructureType  sType",
+                                                              "void * pNext",
+                                                              "VkBool32  integerDotProduct8BitUnsignedAccelerated",
+                                                              "VkBool32  integerDotProduct8BitSignedAccelerated",
+                                                              "VkBool32  integerDotProduct8BitMixedSignednessAccelerated",
+                                                              "VkBool32  integerDotProduct4x8BitPackedUnsignedAccelerated",
+                                                              "VkBool32  integerDotProduct4x8BitPackedSignedAccelerated",
+                                                              "VkBool32  integerDotProduct4x8BitPackedMixedSignednessAccelerated",
+                                                              "VkBool32  integerDotProduct16BitUnsignedAccelerated",
+                                                              "VkBool32  integerDotProduct16BitSignedAccelerated",
+                                                              "VkBool32  integerDotProduct16BitMixedSignednessAccelerated",
+                                                              "VkBool32  integerDotProduct32BitUnsignedAccelerated",
+                                                              "VkBool32  integerDotProduct32BitSignedAccelerated",
+                                                              "VkBool32  integerDotProduct32BitMixedSignednessAccelerated",
+                                                              "VkBool32  integerDotProduct64BitUnsignedAccelerated",
+                                                              "VkBool32  integerDotProduct64BitSignedAccelerated",
+                                                              "VkBool32  integerDotProduct64BitMixedSignednessAccelerated",
+                                                              "VkBool32  integerDotProductAccumulatingSaturating8BitUnsignedAccelerated",
+                                                              "VkBool32  integerDotProductAccumulatingSaturating8BitSignedAccelerated",
+                                                              "VkBool32  integerDotProductAccumulatingSaturating8BitMixedSignednessAccelerated",
+                                                              "VkBool32  integerDotProductAccumulatingSaturating4x8BitPackedUnsignedAccelerated",
+                                                              "VkBool32  integerDotProductAccumulatingSaturating4x8BitPackedSignedAccelerated",
+                                                              "VkBool32  integerDotProductAccumulatingSaturating4x8BitPackedMixedSignednessAccelerated",
+                                                              "VkBool32  integerDotProductAccumulatingSaturating16BitUnsignedAccelerated",
+                                                              "VkBool32  integerDotProductAccumulatingSaturating16BitSignedAccelerated",
+                                                              "VkBool32  integerDotProductAccumulatingSaturating16BitMixedSignednessAccelerated",
+                                                              "VkBool32  integerDotProductAccumulatingSaturating32BitUnsignedAccelerated",
+                                                              "VkBool32  integerDotProductAccumulatingSaturating32BitSignedAccelerated",
+                                                              "VkBool32  integerDotProductAccumulatingSaturating32BitMixedSignednessAccelerated",
+                                                              "VkBool32  integerDotProductAccumulatingSaturating64BitUnsignedAccelerated",
+                                                              "VkBool32  integerDotProductAccumulatingSaturating64BitSignedAccelerated",
+                                                              "VkBool32  integerDotProductAccumulatingSaturating64BitMixedSignednessAccelerated"]
+
+  VkPhysicalDeviceShaderIntegerDotProductPropertiesKHR = VkPhysicalDeviceShaderIntegerDotProductProperties
+
+  VkPhysicalDeviceShaderIntegerFunctions2FeaturesINTEL = struct ["VkStructureType  sType",
+                                                                 "void * pNext",
+                                                                 "VkBool32  shaderIntegerFunctions2"]
+
+  VkPhysicalDeviceShaderSMBuiltinsFeaturesNV = struct ["VkStructureType  sType",
+                                                       "void * pNext",
+                                                       "VkBool32  shaderSMBuiltins"]
+
+  VkPhysicalDeviceShaderSMBuiltinsPropertiesNV = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "uint32_t  shaderSMCount",
+                                                         "uint32_t  shaderWarpsPerSM"]
+
+  VkPhysicalDeviceShaderSubgroupExtendedTypesFeatures = struct ["VkStructureType  sType",
+                                                                "void * pNext",
+                                                                "VkBool32  shaderSubgroupExtendedTypes"]
+
+  VkPhysicalDeviceShaderSubgroupExtendedTypesFeaturesKHR = VkPhysicalDeviceShaderSubgroupExtendedTypesFeatures
+
+  VkPhysicalDeviceShaderSubgroupUniformControlFlowFeaturesKHR = struct ["VkStructureType  sType",
+                                                                        "void * pNext",
+                                                                        "VkBool32  shaderSubgroupUniformControlFlow"]
+
+  VkPhysicalDeviceShaderTerminateInvocationFeatures = struct ["VkStructureType  sType",
+                                                              "void * pNext",
+                                                              "VkBool32  shaderTerminateInvocation"]
+
+  VkPhysicalDeviceShaderTerminateInvocationFeaturesKHR = VkPhysicalDeviceShaderTerminateInvocationFeatures
 
   VkPhysicalDeviceShadingRateImageFeaturesNV = struct ["VkStructureType  sType",
                                                        "void * pNext",
@@ -1993,9 +3385,80 @@ module Vulkan
                                                "VkSubgroupFeatureFlags  supportedOperations",
                                                "VkBool32  quadOperationsInAllStages"]
 
+  VkPhysicalDeviceSubgroupSizeControlFeatures = struct ["VkStructureType  sType",
+                                                        "void * pNext",
+                                                        "VkBool32  subgroupSizeControl",
+                                                        "VkBool32  computeFullSubgroups"]
+
+  VkPhysicalDeviceSubgroupSizeControlFeaturesEXT = VkPhysicalDeviceSubgroupSizeControlFeatures
+
+  VkPhysicalDeviceSubgroupSizeControlProperties = struct ["VkStructureType  sType",
+                                                          "void * pNext",
+                                                          "uint32_t  minSubgroupSize",
+                                                          "uint32_t  maxSubgroupSize",
+                                                          "uint32_t  maxComputeWorkgroupSubgroups",
+                                                          "VkShaderStageFlags  requiredSubgroupSizeStages"]
+
+  VkPhysicalDeviceSubgroupSizeControlPropertiesEXT = VkPhysicalDeviceSubgroupSizeControlProperties
+
+  VkPhysicalDeviceSubpassShadingFeaturesHUAWEI = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "VkBool32  subpassShading"]
+
+  VkPhysicalDeviceSubpassShadingPropertiesHUAWEI = struct ["VkStructureType  sType",
+                                                           "void * pNext",
+                                                           "uint32_t  maxSubpassShadingWorkgroupSizeAspectRatio"]
+
   VkPhysicalDeviceSurfaceInfo2KHR = struct ["VkStructureType  sType",
                                             "void * pNext",
                                             "VkSurfaceKHR  surface"]
+
+  VkPhysicalDeviceSynchronization2Features = struct ["VkStructureType  sType",
+                                                     "void * pNext",
+                                                     "VkBool32  synchronization2"]
+
+  VkPhysicalDeviceSynchronization2FeaturesKHR = VkPhysicalDeviceSynchronization2Features
+
+  VkPhysicalDeviceTexelBufferAlignmentFeaturesEXT = struct ["VkStructureType  sType",
+                                                            "void * pNext",
+                                                            "VkBool32  texelBufferAlignment"]
+
+  VkPhysicalDeviceTexelBufferAlignmentProperties = struct ["VkStructureType  sType",
+                                                           "void * pNext",
+                                                           "VkDeviceSize  storageTexelBufferOffsetAlignmentBytes",
+                                                           "VkBool32  storageTexelBufferOffsetSingleTexelAlignment",
+                                                           "VkDeviceSize  uniformTexelBufferOffsetAlignmentBytes",
+                                                           "VkBool32  uniformTexelBufferOffsetSingleTexelAlignment"]
+
+  VkPhysicalDeviceTexelBufferAlignmentPropertiesEXT = VkPhysicalDeviceTexelBufferAlignmentProperties
+
+  VkPhysicalDeviceTextureCompressionASTCHDRFeatures = struct ["VkStructureType  sType",
+                                                              "void * pNext",
+                                                              "VkBool32  textureCompressionASTC_HDR"]
+
+  VkPhysicalDeviceTextureCompressionASTCHDRFeaturesEXT = VkPhysicalDeviceTextureCompressionASTCHDRFeatures
+
+  VkPhysicalDeviceTimelineSemaphoreFeatures = struct ["VkStructureType  sType",
+                                                      "void * pNext",
+                                                      "VkBool32  timelineSemaphore"]
+
+  VkPhysicalDeviceTimelineSemaphoreFeaturesKHR = VkPhysicalDeviceTimelineSemaphoreFeatures
+
+  VkPhysicalDeviceTimelineSemaphoreProperties = struct ["VkStructureType  sType",
+                                                        "void * pNext",
+                                                        "uint64_t  maxTimelineSemaphoreValueDifference"]
+
+  VkPhysicalDeviceTimelineSemaphorePropertiesKHR = VkPhysicalDeviceTimelineSemaphoreProperties
+
+  VkPhysicalDeviceToolProperties = struct ["VkStructureType  sType",
+                                           "void * pNext",
+                                           "char  name[#{VK_MAX_EXTENSION_NAME_SIZE}]",
+                                           "char  version[#{VK_MAX_EXTENSION_NAME_SIZE}]",
+                                           "VkToolPurposeFlags  purposes",
+                                           "char  description[#{VK_MAX_DESCRIPTION_SIZE}]",
+                                           "char  layer[#{VK_MAX_EXTENSION_NAME_SIZE}]"]
+
+  VkPhysicalDeviceToolPropertiesEXT = VkPhysicalDeviceToolProperties
 
   VkPhysicalDeviceTransformFeedbackFeaturesEXT = struct ["VkStructureType  sType",
                                                          "void * pNext",
@@ -2015,12 +3478,21 @@ module Vulkan
                                                            "VkBool32  transformFeedbackRasterizationStreamSelect",
                                                            "VkBool32  transformFeedbackDraw"]
 
-  VkPhysicalDeviceVariablePointerFeatures = struct ["VkStructureType  sType",
-                                                    "void * pNext",
-                                                    "VkBool32  variablePointersStorageBuffer",
-                                                    "VkBool32  variablePointers"]
+  VkPhysicalDeviceUniformBufferStandardLayoutFeatures = struct ["VkStructureType  sType",
+                                                                "void * pNext",
+                                                                "VkBool32  uniformBufferStandardLayout"]
 
-  VkPhysicalDeviceVariablePointerFeaturesKHR = VkPhysicalDeviceVariablePointerFeatures
+  VkPhysicalDeviceUniformBufferStandardLayoutFeaturesKHR = VkPhysicalDeviceUniformBufferStandardLayoutFeatures
+
+  VkPhysicalDeviceVariablePointersFeatures = struct ["VkStructureType  sType",
+                                                     "void * pNext",
+                                                     "VkBool32  variablePointersStorageBuffer",
+                                                     "VkBool32  variablePointers"]
+  VkPhysicalDeviceVariablePointerFeatures = VkPhysicalDeviceVariablePointersFeatures
+
+  VkPhysicalDeviceVariablePointerFeaturesKHR = VkPhysicalDeviceVariablePointersFeatures
+
+  VkPhysicalDeviceVariablePointersFeaturesKHR = VkPhysicalDeviceVariablePointersFeatures
 
   VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT = struct ["VkStructureType  sType",
                                                               "void * pNext",
@@ -2031,10 +3503,257 @@ module Vulkan
                                                                 "void * pNext",
                                                                 "uint32_t  maxVertexAttribDivisor"]
 
-  VkPhysicalDeviceVulkanMemoryModelFeaturesKHR = struct ["VkStructureType  sType",
-                                                         "void * pNext",
-                                                         "VkBool32  vulkanMemoryModel",
-                                                         "VkBool32  vulkanMemoryModelDeviceScope"]
+  VkPhysicalDeviceVertexInputDynamicStateFeaturesEXT = struct ["VkStructureType  sType",
+                                                               "void * pNext",
+                                                               "VkBool32  vertexInputDynamicState"]
+
+  VkVideoProfileKHR = struct ["VkStructureType  sType",
+                              "void * pNext",
+                              "VkVideoCodecOperationFlagBitsKHR  videoCodecOperation",
+                              "VkVideoChromaSubsamplingFlagsKHR  chromaSubsampling",
+                              "VkVideoComponentBitDepthFlagsKHR  lumaBitDepth",
+                              "VkVideoComponentBitDepthFlagsKHR  chromaBitDepth"]
+  VkVideoProfilesKHR = struct ["VkStructureType  sType",
+                               "void * pNext",
+                               "uint32_t  profileCount",
+                               "VkVideoProfileKHR * pProfiles"]
+  VkPhysicalDeviceVideoFormatInfoKHR = struct ["VkStructureType  sType",
+                                               "void * pNext",
+                                               "VkImageUsageFlags  imageUsage",
+                                               "VkVideoProfilesKHR * pVideoProfiles"]
+
+  VkPhysicalDeviceVulkan11Features = struct ["VkStructureType  sType",
+                                             "void * pNext",
+                                             "VkBool32  storageBuffer16BitAccess",
+                                             "VkBool32  uniformAndStorageBuffer16BitAccess",
+                                             "VkBool32  storagePushConstant16",
+                                             "VkBool32  storageInputOutput16",
+                                             "VkBool32  multiview",
+                                             "VkBool32  multiviewGeometryShader",
+                                             "VkBool32  multiviewTessellationShader",
+                                             "VkBool32  variablePointersStorageBuffer",
+                                             "VkBool32  variablePointers",
+                                             "VkBool32  protectedMemory",
+                                             "VkBool32  samplerYcbcrConversion",
+                                             "VkBool32  shaderDrawParameters"]
+
+  VkPhysicalDeviceVulkan11Properties = struct ["VkStructureType  sType",
+                                               "void * pNext",
+                                               "uint8_t  deviceUUID[#{VK_UUID_SIZE}]",
+                                               "uint8_t  driverUUID[#{VK_UUID_SIZE}]",
+                                               "uint8_t  deviceLUID[#{VK_LUID_SIZE}]",
+                                               "uint32_t  deviceNodeMask",
+                                               "VkBool32  deviceLUIDValid",
+                                               "uint32_t  subgroupSize",
+                                               "VkShaderStageFlags  subgroupSupportedStages",
+                                               "VkSubgroupFeatureFlags  subgroupSupportedOperations",
+                                               "VkBool32  subgroupQuadOperationsInAllStages",
+                                               "VkPointClippingBehavior  pointClippingBehavior",
+                                               "uint32_t  maxMultiviewViewCount",
+                                               "uint32_t  maxMultiviewInstanceIndex",
+                                               "VkBool32  protectedNoFault",
+                                               "uint32_t  maxPerSetDescriptors",
+                                               "VkDeviceSize  maxMemoryAllocationSize"]
+
+  VkPhysicalDeviceVulkan12Features = struct ["VkStructureType  sType",
+                                             "void * pNext",
+                                             "VkBool32  samplerMirrorClampToEdge",
+                                             "VkBool32  drawIndirectCount",
+                                             "VkBool32  storageBuffer8BitAccess",
+                                             "VkBool32  uniformAndStorageBuffer8BitAccess",
+                                             "VkBool32  storagePushConstant8",
+                                             "VkBool32  shaderBufferInt64Atomics",
+                                             "VkBool32  shaderSharedInt64Atomics",
+                                             "VkBool32  shaderFloat16",
+                                             "VkBool32  shaderInt8",
+                                             "VkBool32  descriptorIndexing",
+                                             "VkBool32  shaderInputAttachmentArrayDynamicIndexing",
+                                             "VkBool32  shaderUniformTexelBufferArrayDynamicIndexing",
+                                             "VkBool32  shaderStorageTexelBufferArrayDynamicIndexing",
+                                             "VkBool32  shaderUniformBufferArrayNonUniformIndexing",
+                                             "VkBool32  shaderSampledImageArrayNonUniformIndexing",
+                                             "VkBool32  shaderStorageBufferArrayNonUniformIndexing",
+                                             "VkBool32  shaderStorageImageArrayNonUniformIndexing",
+                                             "VkBool32  shaderInputAttachmentArrayNonUniformIndexing",
+                                             "VkBool32  shaderUniformTexelBufferArrayNonUniformIndexing",
+                                             "VkBool32  shaderStorageTexelBufferArrayNonUniformIndexing",
+                                             "VkBool32  descriptorBindingUniformBufferUpdateAfterBind",
+                                             "VkBool32  descriptorBindingSampledImageUpdateAfterBind",
+                                             "VkBool32  descriptorBindingStorageImageUpdateAfterBind",
+                                             "VkBool32  descriptorBindingStorageBufferUpdateAfterBind",
+                                             "VkBool32  descriptorBindingUniformTexelBufferUpdateAfterBind",
+                                             "VkBool32  descriptorBindingStorageTexelBufferUpdateAfterBind",
+                                             "VkBool32  descriptorBindingUpdateUnusedWhilePending",
+                                             "VkBool32  descriptorBindingPartiallyBound",
+                                             "VkBool32  descriptorBindingVariableDescriptorCount",
+                                             "VkBool32  runtimeDescriptorArray",
+                                             "VkBool32  samplerFilterMinmax",
+                                             "VkBool32  scalarBlockLayout",
+                                             "VkBool32  imagelessFramebuffer",
+                                             "VkBool32  uniformBufferStandardLayout",
+                                             "VkBool32  shaderSubgroupExtendedTypes",
+                                             "VkBool32  separateDepthStencilLayouts",
+                                             "VkBool32  hostQueryReset",
+                                             "VkBool32  timelineSemaphore",
+                                             "VkBool32  bufferDeviceAddress",
+                                             "VkBool32  bufferDeviceAddressCaptureReplay",
+                                             "VkBool32  bufferDeviceAddressMultiDevice",
+                                             "VkBool32  vulkanMemoryModel",
+                                             "VkBool32  vulkanMemoryModelDeviceScope",
+                                             "VkBool32  vulkanMemoryModelAvailabilityVisibilityChains",
+                                             "VkBool32  shaderOutputViewportIndex",
+                                             "VkBool32  shaderOutputLayer",
+                                             "VkBool32  subgroupBroadcastDynamicId"]
+
+  VkPhysicalDeviceVulkan12Properties = struct ["VkStructureType  sType",
+                                               "void * pNext",
+                                               "VkDriverId  driverID",
+                                               "char  driverName[#{VK_MAX_DRIVER_NAME_SIZE}]",
+                                               "char  driverInfo[#{VK_MAX_DRIVER_INFO_SIZE}]",
+                                               { "conformanceVersion" => VkConformanceVersion },
+                                               "VkShaderFloatControlsIndependence  denormBehaviorIndependence",
+                                               "VkShaderFloatControlsIndependence  roundingModeIndependence",
+                                               "VkBool32  shaderSignedZeroInfNanPreserveFloat16",
+                                               "VkBool32  shaderSignedZeroInfNanPreserveFloat32",
+                                               "VkBool32  shaderSignedZeroInfNanPreserveFloat64",
+                                               "VkBool32  shaderDenormPreserveFloat16",
+                                               "VkBool32  shaderDenormPreserveFloat32",
+                                               "VkBool32  shaderDenormPreserveFloat64",
+                                               "VkBool32  shaderDenormFlushToZeroFloat16",
+                                               "VkBool32  shaderDenormFlushToZeroFloat32",
+                                               "VkBool32  shaderDenormFlushToZeroFloat64",
+                                               "VkBool32  shaderRoundingModeRTEFloat16",
+                                               "VkBool32  shaderRoundingModeRTEFloat32",
+                                               "VkBool32  shaderRoundingModeRTEFloat64",
+                                               "VkBool32  shaderRoundingModeRTZFloat16",
+                                               "VkBool32  shaderRoundingModeRTZFloat32",
+                                               "VkBool32  shaderRoundingModeRTZFloat64",
+                                               "uint32_t  maxUpdateAfterBindDescriptorsInAllPools",
+                                               "VkBool32  shaderUniformBufferArrayNonUniformIndexingNative",
+                                               "VkBool32  shaderSampledImageArrayNonUniformIndexingNative",
+                                               "VkBool32  shaderStorageBufferArrayNonUniformIndexingNative",
+                                               "VkBool32  shaderStorageImageArrayNonUniformIndexingNative",
+                                               "VkBool32  shaderInputAttachmentArrayNonUniformIndexingNative",
+                                               "VkBool32  robustBufferAccessUpdateAfterBind",
+                                               "VkBool32  quadDivergentImplicitLod",
+                                               "uint32_t  maxPerStageDescriptorUpdateAfterBindSamplers",
+                                               "uint32_t  maxPerStageDescriptorUpdateAfterBindUniformBuffers",
+                                               "uint32_t  maxPerStageDescriptorUpdateAfterBindStorageBuffers",
+                                               "uint32_t  maxPerStageDescriptorUpdateAfterBindSampledImages",
+                                               "uint32_t  maxPerStageDescriptorUpdateAfterBindStorageImages",
+                                               "uint32_t  maxPerStageDescriptorUpdateAfterBindInputAttachments",
+                                               "uint32_t  maxPerStageUpdateAfterBindResources",
+                                               "uint32_t  maxDescriptorSetUpdateAfterBindSamplers",
+                                               "uint32_t  maxDescriptorSetUpdateAfterBindUniformBuffers",
+                                               "uint32_t  maxDescriptorSetUpdateAfterBindUniformBuffersDynamic",
+                                               "uint32_t  maxDescriptorSetUpdateAfterBindStorageBuffers",
+                                               "uint32_t  maxDescriptorSetUpdateAfterBindStorageBuffersDynamic",
+                                               "uint32_t  maxDescriptorSetUpdateAfterBindSampledImages",
+                                               "uint32_t  maxDescriptorSetUpdateAfterBindStorageImages",
+                                               "uint32_t  maxDescriptorSetUpdateAfterBindInputAttachments",
+                                               "VkResolveModeFlags  supportedDepthResolveModes",
+                                               "VkResolveModeFlags  supportedStencilResolveModes",
+                                               "VkBool32  independentResolveNone",
+                                               "VkBool32  independentResolve",
+                                               "VkBool32  filterMinmaxSingleComponentFormats",
+                                               "VkBool32  filterMinmaxImageComponentMapping",
+                                               "uint64_t  maxTimelineSemaphoreValueDifference",
+                                               "VkSampleCountFlags  framebufferIntegerColorSampleCounts"]
+
+  VkPhysicalDeviceVulkan13Features = struct ["VkStructureType  sType",
+                                             "void * pNext",
+                                             "VkBool32  robustImageAccess",
+                                             "VkBool32  inlineUniformBlock",
+                                             "VkBool32  descriptorBindingInlineUniformBlockUpdateAfterBind",
+                                             "VkBool32  pipelineCreationCacheControl",
+                                             "VkBool32  privateData",
+                                             "VkBool32  shaderDemoteToHelperInvocation",
+                                             "VkBool32  shaderTerminateInvocation",
+                                             "VkBool32  subgroupSizeControl",
+                                             "VkBool32  computeFullSubgroups",
+                                             "VkBool32  synchronization2",
+                                             "VkBool32  textureCompressionASTC_HDR",
+                                             "VkBool32  shaderZeroInitializeWorkgroupMemory",
+                                             "VkBool32  dynamicRendering",
+                                             "VkBool32  shaderIntegerDotProduct",
+                                             "VkBool32  maintenance4"]
+
+  VkPhysicalDeviceVulkan13Properties = struct ["VkStructureType  sType",
+                                               "void * pNext",
+                                               "uint32_t  minSubgroupSize",
+                                               "uint32_t  maxSubgroupSize",
+                                               "uint32_t  maxComputeWorkgroupSubgroups",
+                                               "VkShaderStageFlags  requiredSubgroupSizeStages",
+                                               "uint32_t  maxInlineUniformBlockSize",
+                                               "uint32_t  maxPerStageDescriptorInlineUniformBlocks",
+                                               "uint32_t  maxPerStageDescriptorUpdateAfterBindInlineUniformBlocks",
+                                               "uint32_t  maxDescriptorSetInlineUniformBlocks",
+                                               "uint32_t  maxDescriptorSetUpdateAfterBindInlineUniformBlocks",
+                                               "uint32_t  maxInlineUniformTotalSize",
+                                               "VkBool32  integerDotProduct8BitUnsignedAccelerated",
+                                               "VkBool32  integerDotProduct8BitSignedAccelerated",
+                                               "VkBool32  integerDotProduct8BitMixedSignednessAccelerated",
+                                               "VkBool32  integerDotProduct4x8BitPackedUnsignedAccelerated",
+                                               "VkBool32  integerDotProduct4x8BitPackedSignedAccelerated",
+                                               "VkBool32  integerDotProduct4x8BitPackedMixedSignednessAccelerated",
+                                               "VkBool32  integerDotProduct16BitUnsignedAccelerated",
+                                               "VkBool32  integerDotProduct16BitSignedAccelerated",
+                                               "VkBool32  integerDotProduct16BitMixedSignednessAccelerated",
+                                               "VkBool32  integerDotProduct32BitUnsignedAccelerated",
+                                               "VkBool32  integerDotProduct32BitSignedAccelerated",
+                                               "VkBool32  integerDotProduct32BitMixedSignednessAccelerated",
+                                               "VkBool32  integerDotProduct64BitUnsignedAccelerated",
+                                               "VkBool32  integerDotProduct64BitSignedAccelerated",
+                                               "VkBool32  integerDotProduct64BitMixedSignednessAccelerated",
+                                               "VkBool32  integerDotProductAccumulatingSaturating8BitUnsignedAccelerated",
+                                               "VkBool32  integerDotProductAccumulatingSaturating8BitSignedAccelerated",
+                                               "VkBool32  integerDotProductAccumulatingSaturating8BitMixedSignednessAccelerated",
+                                               "VkBool32  integerDotProductAccumulatingSaturating4x8BitPackedUnsignedAccelerated",
+                                               "VkBool32  integerDotProductAccumulatingSaturating4x8BitPackedSignedAccelerated",
+                                               "VkBool32  integerDotProductAccumulatingSaturating4x8BitPackedMixedSignednessAccelerated",
+                                               "VkBool32  integerDotProductAccumulatingSaturating16BitUnsignedAccelerated",
+                                               "VkBool32  integerDotProductAccumulatingSaturating16BitSignedAccelerated",
+                                               "VkBool32  integerDotProductAccumulatingSaturating16BitMixedSignednessAccelerated",
+                                               "VkBool32  integerDotProductAccumulatingSaturating32BitUnsignedAccelerated",
+                                               "VkBool32  integerDotProductAccumulatingSaturating32BitSignedAccelerated",
+                                               "VkBool32  integerDotProductAccumulatingSaturating32BitMixedSignednessAccelerated",
+                                               "VkBool32  integerDotProductAccumulatingSaturating64BitUnsignedAccelerated",
+                                               "VkBool32  integerDotProductAccumulatingSaturating64BitSignedAccelerated",
+                                               "VkBool32  integerDotProductAccumulatingSaturating64BitMixedSignednessAccelerated",
+                                               "VkDeviceSize  storageTexelBufferOffsetAlignmentBytes",
+                                               "VkBool32  storageTexelBufferOffsetSingleTexelAlignment",
+                                               "VkDeviceSize  uniformTexelBufferOffsetAlignmentBytes",
+                                               "VkBool32  uniformTexelBufferOffsetSingleTexelAlignment",
+                                               "VkDeviceSize  maxBufferSize"]
+
+  VkPhysicalDeviceVulkanMemoryModelFeatures = struct ["VkStructureType  sType",
+                                                      "void * pNext",
+                                                      "VkBool32  vulkanMemoryModel",
+                                                      "VkBool32  vulkanMemoryModelDeviceScope",
+                                                      "VkBool32  vulkanMemoryModelAvailabilityVisibilityChains"]
+
+  VkPhysicalDeviceVulkanMemoryModelFeaturesKHR = VkPhysicalDeviceVulkanMemoryModelFeatures
+
+  VkPhysicalDeviceWorkgroupMemoryExplicitLayoutFeaturesKHR = struct ["VkStructureType  sType",
+                                                                     "void * pNext",
+                                                                     "VkBool32  workgroupMemoryExplicitLayout",
+                                                                     "VkBool32  workgroupMemoryExplicitLayoutScalarBlockLayout",
+                                                                     "VkBool32  workgroupMemoryExplicitLayout8BitAccess",
+                                                                     "VkBool32  workgroupMemoryExplicitLayout16BitAccess"]
+
+  VkPhysicalDeviceYcbcr2Plane444FormatsFeaturesEXT = struct ["VkStructureType  sType",
+                                                             "void * pNext",
+                                                             "VkBool32  ycbcr2plane444Formats"]
+
+  VkPhysicalDeviceYcbcrImageArraysFeaturesEXT = struct ["VkStructureType  sType",
+                                                        "void * pNext",
+                                                        "VkBool32  ycbcrImageArrays"]
+
+  VkPhysicalDeviceZeroInitializeWorkgroupMemoryFeatures = struct ["VkStructureType  sType",
+                                                                  "void * pNext",
+                                                                  "VkBool32  shaderZeroInitializeWorkgroupMemory"]
+
+  VkPhysicalDeviceZeroInitializeWorkgroupMemoryFeaturesKHR = VkPhysicalDeviceZeroInitializeWorkgroupMemoryFeatures
 
   VkPipelineCacheCreateInfo = struct ["VkStructureType  sType",
                                       "void * pNext",
@@ -2042,11 +3761,26 @@ module Vulkan
                                       "size_t  initialDataSize",
                                       "void * pInitialData"]
 
+  VkPipelineCacheHeaderVersionOne = struct ["uint32_t  headerSize",
+                                            "VkPipelineCacheHeaderVersion  headerVersion",
+                                            "uint32_t  vendorID",
+                                            "uint32_t  deviceID",
+                                            "uint8_t  pipelineCacheUUID[#{VK_UUID_SIZE}]"]
+
   VkPipelineColorBlendAdvancedStateCreateInfoEXT = struct ["VkStructureType  sType",
                                                            "void * pNext",
                                                            "VkBool32  srcPremultiplied",
                                                            "VkBool32  dstPremultiplied",
                                                            "VkBlendOverlapEXT  blendOverlap"]
+
+  VkPipelineColorWriteCreateInfoEXT = struct ["VkStructureType  sType",
+                                              "void * pNext",
+                                              "uint32_t  attachmentCount",
+                                              "VkBool32 * pColorWriteEnables"]
+
+  VkPipelineCompilerControlCreateInfoAMD = struct ["VkStructureType  sType",
+                                                   "void * pNext",
+                                                   "VkPipelineCompilerControlFlagsAMD  compilerControlFlags"]
 
   VkPipelineCoverageModulationStateCreateInfoNV = struct ["VkStructureType  sType",
                                                           "void * pNext",
@@ -2056,11 +3790,29 @@ module Vulkan
                                                           "uint32_t  coverageModulationTableCount",
                                                           "float * pCoverageModulationTable"]
 
+  VkPipelineCoverageReductionStateCreateInfoNV = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "VkPipelineCoverageReductionStateCreateFlagsNV  flags",
+                                                         "VkCoverageReductionModeNV  coverageReductionMode"]
+
   VkPipelineCoverageToColorStateCreateInfoNV = struct ["VkStructureType  sType",
                                                        "void * pNext",
                                                        "VkPipelineCoverageToColorStateCreateFlagsNV  flags",
                                                        "VkBool32  coverageToColorEnable",
                                                        "uint32_t  coverageToColorLocation"]
+
+  VkPipelineCreationFeedback = struct ["VkPipelineCreationFeedbackFlags  flags",
+                                       "uint64_t  duration"]
+
+  VkPipelineCreationFeedbackCreateInfo = struct ["VkStructureType  sType",
+                                                 "void * pNext",
+                                                 "VkPipelineCreationFeedback * pPipelineCreationFeedback",
+                                                 "uint32_t  pipelineStageCreationFeedbackCount",
+                                                 "VkPipelineCreationFeedback * pPipelineStageCreationFeedbacks"]
+
+  VkPipelineCreationFeedbackCreateInfoEXT = VkPipelineCreationFeedbackCreateInfo
+
+  VkPipelineCreationFeedbackEXT = VkPipelineCreationFeedback
 
   VkPipelineDiscardRectangleStateCreateInfoEXT = struct ["VkStructureType  sType",
                                                          "void * pNext",
@@ -2068,6 +3820,52 @@ module Vulkan
                                                          "VkDiscardRectangleModeEXT  discardRectangleMode",
                                                          "uint32_t  discardRectangleCount",
                                                          "VkRect2D * pDiscardRectangles"]
+
+  VkPipelineExecutableInfoKHR = struct ["VkStructureType  sType",
+                                        "void * pNext",
+                                        "VkPipeline  pipeline",
+                                        "uint32_t  executableIndex"]
+
+  VkPipelineExecutableInternalRepresentationKHR = struct ["VkStructureType  sType",
+                                                          "void * pNext",
+                                                          "char  name[#{VK_MAX_DESCRIPTION_SIZE}]",
+                                                          "char  description[#{VK_MAX_DESCRIPTION_SIZE}]",
+                                                          "VkBool32  isText",
+                                                          "size_t  dataSize",
+                                                          "void * pData"]
+
+  VkPipelineExecutablePropertiesKHR = struct ["VkStructureType  sType",
+                                              "void * pNext",
+                                              "VkShaderStageFlags  stages",
+                                              "char  name[#{VK_MAX_DESCRIPTION_SIZE}]",
+                                              "char  description[#{VK_MAX_DESCRIPTION_SIZE}]",
+                                              "uint32_t  subgroupSize"]
+
+  VkPipelineExecutableStatisticValueKHR = union ["VkBool32  b32",
+                                                 "int64_t  i64",
+                                                 "uint64_t  u64",
+                                                 "double  f64"]
+  VkPipelineExecutableStatisticKHR = struct ["VkStructureType  sType",
+                                             "void * pNext",
+                                             "char  name[#{VK_MAX_DESCRIPTION_SIZE}]",
+                                             "char  description[#{VK_MAX_DESCRIPTION_SIZE}]",
+                                             "VkPipelineExecutableStatisticFormatKHR  format",
+                                             { "value" => VkPipelineExecutableStatisticValueKHR }]
+
+  VkPipelineFragmentShadingRateEnumStateCreateInfoNV = struct ["VkStructureType  sType",
+                                                               "void * pNext",
+                                                               "VkFragmentShadingRateTypeNV  shadingRateType",
+                                                               "VkFragmentShadingRateNV  shadingRate",
+                                                               "VkFragmentShadingRateCombinerOpKHR  combinerOps [2]"]
+
+  VkPipelineFragmentShadingRateStateCreateInfoKHR = struct ["VkStructureType  sType",
+                                                            "void * pNext",
+                                                            { "fragmentSize" => VkExtent2D },
+                                                            "VkFragmentShadingRateCombinerOpKHR  combinerOps [2]"]
+
+  VkPipelineInfoKHR = struct ["VkStructureType  sType",
+                              "void * pNext",
+                              "VkPipeline  pipeline"]
 
   VkPushConstantRange = struct ["VkShaderStageFlags  stageFlags",
                                 "uint32_t  offset",
@@ -2080,11 +3878,32 @@ module Vulkan
                                        "uint32_t  pushConstantRangeCount",
                                        "VkPushConstantRange * pPushConstantRanges"]
 
+  VkPipelineLibraryCreateInfoKHR = struct ["VkStructureType  sType",
+                                           "void * pNext",
+                                           "uint32_t  libraryCount",
+                                           "VkPipeline * pLibraries"]
+
   VkPipelineRasterizationConservativeStateCreateInfoEXT = struct ["VkStructureType  sType",
                                                                   "void * pNext",
                                                                   "VkPipelineRasterizationConservativeStateCreateFlagsEXT  flags",
                                                                   "VkConservativeRasterizationModeEXT  conservativeRasterizationMode",
                                                                   "float  extraPrimitiveOverestimationSize"]
+
+  VkPipelineRasterizationDepthClipStateCreateInfoEXT = struct ["VkStructureType  sType",
+                                                               "void * pNext",
+                                                               "VkPipelineRasterizationDepthClipStateCreateFlagsEXT  flags",
+                                                               "VkBool32  depthClipEnable"]
+
+  VkPipelineRasterizationLineStateCreateInfoEXT = struct ["VkStructureType  sType",
+                                                          "void * pNext",
+                                                          "VkLineRasterizationModeEXT  lineRasterizationMode",
+                                                          "VkBool32  stippledLineEnable",
+                                                          "uint32_t  lineStippleFactor",
+                                                          "uint16_t  lineStipplePattern"]
+
+  VkPipelineRasterizationProvokingVertexStateCreateInfoEXT = struct ["VkStructureType  sType",
+                                                                     "void * pNext",
+                                                                     "VkProvokingVertexModeEXT  provokingVertexMode"]
 
   VkPipelineRasterizationStateRasterizationOrderAMD = struct ["VkStructureType  sType",
                                                               "void * pNext",
@@ -2095,6 +3914,16 @@ module Vulkan
                                                             "VkPipelineRasterizationStateStreamCreateFlagsEXT  flags",
                                                             "uint32_t  rasterizationStream"]
 
+  VkPipelineRenderingCreateInfo = struct ["VkStructureType  sType",
+                                          "void * pNext",
+                                          "uint32_t  viewMask",
+                                          "uint32_t  colorAttachmentCount",
+                                          "VkFormat * pColorAttachmentFormats",
+                                          "VkFormat  depthAttachmentFormat",
+                                          "VkFormat  stencilAttachmentFormat"]
+
+  VkPipelineRenderingCreateInfoKHR = VkPipelineRenderingCreateInfo
+
   VkPipelineRepresentativeFragmentTestStateCreateInfoNV = struct ["VkStructureType  sType",
                                                                   "void * pNext",
                                                                   "VkBool32  representativeFragmentTestEnable"]
@@ -2103,6 +3932,12 @@ module Vulkan
                                                         "void * pNext",
                                                         "VkBool32  sampleLocationsEnable",
                                                         { "sampleLocationsInfo" => VkSampleLocationsInfoEXT }]
+
+  VkPipelineShaderStageRequiredSubgroupSizeCreateInfo = struct ["VkStructureType  sType",
+                                                                "void * pNext",
+                                                                "uint32_t  requiredSubgroupSize"]
+
+  VkPipelineShaderStageRequiredSubgroupSizeCreateInfoEXT = VkPipelineShaderStageRequiredSubgroupSizeCreateInfo
 
   VkPipelineTessellationDomainOriginStateCreateInfo = struct ["VkStructureType  sType",
                                                               "void * pNext",
@@ -2122,6 +3957,10 @@ module Vulkan
                                                                  "VkCoarseSampleOrderTypeNV  sampleOrderType",
                                                                  "uint32_t  customSampleOrderCount",
                                                                  "VkCoarseSampleOrderCustomNV * pCustomSampleOrders"]
+
+  VkPipelineViewportDepthClipControlCreateInfoEXT = struct ["VkStructureType  sType",
+                                                            "void * pNext",
+                                                            "VkBool32  negativeOneToOne"]
 
   VkPipelineViewportExclusiveScissorStateCreateInfoNV = struct ["VkStructureType  sType",
                                                                 "void * pNext",
@@ -2154,6 +3993,15 @@ module Vulkan
                                                         "uint32_t  viewportCount",
                                                         "VkViewportWScalingNV * pViewportWScalings"]
 
+  VkPresentFrameTokenGGP = struct ["VkStructureType  sType",
+                                   "void * pNext",
+                                   "GgpFrameToken  frameToken"]
+
+  VkPresentIdKHR = struct ["VkStructureType  sType",
+                           "void * pNext",
+                           "uint32_t  swapchainCount",
+                           "uint64_t * pPresentIds"]
+
   VkPresentInfoKHR = struct ["VkStructureType  sType",
                              "void * pNext",
                              "uint32_t  waitSemaphoreCount",
@@ -2182,6 +4030,12 @@ module Vulkan
                                      "uint32_t  swapchainCount",
                                      "VkPresentTimeGOOGLE * pTimes"]
 
+  VkPrivateDataSlotCreateInfo = struct ["VkStructureType  sType",
+                                        "void * pNext",
+                                        "VkPrivateDataSlotCreateFlags  flags"]
+
+  VkPrivateDataSlotCreateInfoEXT = VkPrivateDataSlotCreateInfo
+
   VkProtectedSubmitInfo = struct ["VkStructureType  sType",
                                   "void * pNext",
                                   "VkBool32  protectedSubmit"]
@@ -2193,9 +4047,30 @@ module Vulkan
                                   "uint32_t  queryCount",
                                   "VkQueryPipelineStatisticFlags  pipelineStatistics"]
 
+  VkQueryPoolPerformanceQueryCreateInfoINTEL = struct ["VkStructureType  sType",
+                                                       "void * pNext",
+                                                       "VkQueryPoolSamplingModeINTEL  performanceCountersSampling"]
+  VkQueryPoolCreateInfoINTEL = VkQueryPoolPerformanceQueryCreateInfoINTEL
+
+  VkQueryPoolPerformanceCreateInfoKHR = struct ["VkStructureType  sType",
+                                                "void * pNext",
+                                                "uint32_t  queueFamilyIndex",
+                                                "uint32_t  counterIndexCount",
+                                                "uint32_t * pCounterIndices"]
+
+  VkQueueFamilyCheckpointProperties2NV = struct ["VkStructureType  sType",
+                                                 "void * pNext",
+                                                 "VkPipelineStageFlags2  checkpointExecutionStageMask"]
+
   VkQueueFamilyCheckpointPropertiesNV = struct ["VkStructureType  sType",
                                                 "void * pNext",
                                                 "VkPipelineStageFlags  checkpointExecutionStageMask"]
+
+  VkQueueFamilyGlobalPriorityPropertiesKHR = struct ["VkStructureType  sType",
+                                                     "void * pNext",
+                                                     "uint32_t  priorityCount",
+                                                     "VkQueueGlobalPriorityKHR  priorities[#{VK_MAX_GLOBAL_PRIORITY_SIZE_KHR}]"]
+  VkQueueFamilyGlobalPriorityPropertiesEXT = VkQueueFamilyGlobalPriorityPropertiesKHR
 
   VkQueueFamilyProperties = struct ["VkQueueFlags  queueFlags",
                                     "uint32_t  queueCount",
@@ -2208,9 +4083,40 @@ module Vulkan
 
   VkQueueFamilyProperties2KHR = VkQueueFamilyProperties2
 
+  VkQueueFamilyQueryResultStatusProperties2KHR = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "VkBool32  supported"]
+
+  VkRayTracingShaderGroupCreateInfoKHR = struct ["VkStructureType  sType",
+                                                 "void * pNext",
+                                                 "VkRayTracingShaderGroupTypeKHR  type",
+                                                 "uint32_t  generalShader",
+                                                 "uint32_t  closestHitShader",
+                                                 "uint32_t  anyHitShader",
+                                                 "uint32_t  intersectionShader",
+                                                 "void * pShaderGroupCaptureReplayHandle"]
+  VkRayTracingPipelineInterfaceCreateInfoKHR = struct ["VkStructureType  sType",
+                                                       "void * pNext",
+                                                       "uint32_t  maxPipelineRayPayloadSize",
+                                                       "uint32_t  maxPipelineRayHitAttributeSize"]
+  VkRayTracingPipelineCreateInfoKHR = struct ["VkStructureType  sType",
+                                              "void * pNext",
+                                              "VkPipelineCreateFlags  flags",
+                                              "uint32_t  stageCount",
+                                              "VkPipelineShaderStageCreateInfo * pStages",
+                                              "uint32_t  groupCount",
+                                              "VkRayTracingShaderGroupCreateInfoKHR * pGroups",
+                                              "uint32_t  maxPipelineRayRecursionDepth",
+                                              "VkPipelineLibraryCreateInfoKHR * pLibraryInfo",
+                                              "VkRayTracingPipelineInterfaceCreateInfoKHR * pLibraryInterface",
+                                              "VkPipelineDynamicStateCreateInfo * pDynamicState",
+                                              "VkPipelineLayout  layout",
+                                              "VkPipeline  basePipelineHandle",
+                                              "int32_t  basePipelineIndex"]
+
   VkRayTracingShaderGroupCreateInfoNV = struct ["VkStructureType  sType",
                                                 "void * pNext",
-                                                "VkRayTracingShaderGroupTypeNV  type",
+                                                "VkRayTracingShaderGroupTypeKHR  type",
                                                 "uint32_t  generalShader",
                                                 "uint32_t  closestHitShader",
                                                 "uint32_t  anyHitShader",
@@ -2228,6 +4134,13 @@ module Vulkan
                                              "int32_t  basePipelineIndex"]
 
   VkRefreshCycleDurationGOOGLE = struct ["uint64_t  refreshDuration"]
+
+  VkRenderPassAttachmentBeginInfo = struct ["VkStructureType  sType",
+                                            "void * pNext",
+                                            "uint32_t  attachmentCount",
+                                            "VkImageView * pAttachments"]
+
+  VkRenderPassAttachmentBeginInfoKHR = VkRenderPassAttachmentBeginInfo
 
   VkRenderPassBeginInfo = struct ["VkStructureType  sType",
                                   "void * pNext",
@@ -2264,40 +4177,46 @@ module Vulkan
                                    "uint32_t  dependencyCount",
                                    "VkSubpassDependency * pDependencies"]
 
-  VkSubpassDescription2KHR = struct ["VkStructureType  sType",
-                                     "void * pNext",
-                                     "VkSubpassDescriptionFlags  flags",
-                                     "VkPipelineBindPoint  pipelineBindPoint",
-                                     "uint32_t  viewMask",
-                                     "uint32_t  inputAttachmentCount",
-                                     "VkAttachmentReference2KHR * pInputAttachments",
-                                     "uint32_t  colorAttachmentCount",
-                                     "VkAttachmentReference2KHR * pColorAttachments",
-                                     "VkAttachmentReference2KHR * pResolveAttachments",
-                                     "VkAttachmentReference2KHR * pDepthStencilAttachment",
-                                     "uint32_t  preserveAttachmentCount",
-                                     "uint32_t * pPreserveAttachments"]
-  VkSubpassDependency2KHR = struct ["VkStructureType  sType",
+  VkSubpassDescription2 = struct ["VkStructureType  sType",
+                                  "void * pNext",
+                                  "VkSubpassDescriptionFlags  flags",
+                                  "VkPipelineBindPoint  pipelineBindPoint",
+                                  "uint32_t  viewMask",
+                                  "uint32_t  inputAttachmentCount",
+                                  "VkAttachmentReference2 * pInputAttachments",
+                                  "uint32_t  colorAttachmentCount",
+                                  "VkAttachmentReference2 * pColorAttachments",
+                                  "VkAttachmentReference2 * pResolveAttachments",
+                                  "VkAttachmentReference2 * pDepthStencilAttachment",
+                                  "uint32_t  preserveAttachmentCount",
+                                  "uint32_t * pPreserveAttachments"]
+  VkSubpassDependency2 = struct ["VkStructureType  sType",
+                                 "void * pNext",
+                                 "uint32_t  srcSubpass",
+                                 "uint32_t  dstSubpass",
+                                 "VkPipelineStageFlags  srcStageMask",
+                                 "VkPipelineStageFlags  dstStageMask",
+                                 "VkAccessFlags  srcAccessMask",
+                                 "VkAccessFlags  dstAccessMask",
+                                 "VkDependencyFlags  dependencyFlags",
+                                 "int32_t  viewOffset"]
+  VkRenderPassCreateInfo2 = struct ["VkStructureType  sType",
                                     "void * pNext",
-                                    "uint32_t  srcSubpass",
-                                    "uint32_t  dstSubpass",
-                                    "VkPipelineStageFlags  srcStageMask",
-                                    "VkPipelineStageFlags  dstStageMask",
-                                    "VkAccessFlags  srcAccessMask",
-                                    "VkAccessFlags  dstAccessMask",
-                                    "VkDependencyFlags  dependencyFlags",
-                                    "int32_t  viewOffset"]
-  VkRenderPassCreateInfo2KHR = struct ["VkStructureType  sType",
-                                       "void * pNext",
-                                       "VkRenderPassCreateFlags  flags",
-                                       "uint32_t  attachmentCount",
-                                       "VkAttachmentDescription2KHR * pAttachments",
-                                       "uint32_t  subpassCount",
-                                       "VkSubpassDescription2KHR * pSubpasses",
-                                       "uint32_t  dependencyCount",
-                                       "VkSubpassDependency2KHR * pDependencies",
-                                       "uint32_t  correlatedViewMaskCount",
-                                       "uint32_t * pCorrelatedViewMasks"]
+                                    "VkRenderPassCreateFlags  flags",
+                                    "uint32_t  attachmentCount",
+                                    "VkAttachmentDescription2 * pAttachments",
+                                    "uint32_t  subpassCount",
+                                    "VkSubpassDescription2 * pSubpasses",
+                                    "uint32_t  dependencyCount",
+                                    "VkSubpassDependency2 * pDependencies",
+                                    "uint32_t  correlatedViewMaskCount",
+                                    "uint32_t * pCorrelatedViewMasks"]
+
+  VkRenderPassCreateInfo2KHR = VkRenderPassCreateInfo2
+
+  VkRenderPassFragmentDensityMapCreateInfoEXT = struct ["VkStructureType  sType",
+                                                        "void * pNext",
+                                                        { "fragmentDensityMapAttachment" => VkAttachmentReference }]
 
   VkRenderPassInputAttachmentAspectCreateInfo = struct ["VkStructureType  sType",
                                                         "void * pNext",
@@ -2326,6 +4245,63 @@ module Vulkan
                                                     "uint32_t  postSubpassSampleLocationsCount",
                                                     "VkSubpassSampleLocationsEXT * pPostSubpassSampleLocations"]
 
+  VkRenderPassTransformBeginInfoQCOM = struct ["VkStructureType  sType",
+                                               "void * pNext",
+                                               "VkSurfaceTransformFlagBitsKHR  transform"]
+
+  VkRenderingAttachmentInfo = struct ["VkStructureType  sType",
+                                      "void * pNext",
+                                      "VkImageView  imageView",
+                                      "VkImageLayout  imageLayout",
+                                      "VkResolveModeFlagBits  resolveMode",
+                                      "VkImageView  resolveImageView",
+                                      "VkImageLayout  resolveImageLayout",
+                                      "VkAttachmentLoadOp  loadOp",
+                                      "VkAttachmentStoreOp  storeOp",
+                                      { "clearValue" => VkClearValue }]
+
+  VkRenderingAttachmentInfoKHR = VkRenderingAttachmentInfo
+
+  VkRenderingFragmentDensityMapAttachmentInfoEXT = struct ["VkStructureType  sType",
+                                                           "void * pNext",
+                                                           "VkImageView  imageView",
+                                                           "VkImageLayout  imageLayout"]
+
+  VkRenderingFragmentShadingRateAttachmentInfoKHR = struct ["VkStructureType  sType",
+                                                            "void * pNext",
+                                                            "VkImageView  imageView",
+                                                            "VkImageLayout  imageLayout",
+                                                            { "shadingRateAttachmentTexelSize" => VkExtent2D }]
+
+  VkRenderingInfo = struct ["VkStructureType  sType",
+                            "void * pNext",
+                            "VkRenderingFlags  flags",
+                            { "renderArea" => VkRect2D },
+                            "uint32_t  layerCount",
+                            "uint32_t  viewMask",
+                            "uint32_t  colorAttachmentCount",
+                            "VkRenderingAttachmentInfo * pColorAttachments",
+                            "VkRenderingAttachmentInfo * pDepthAttachment",
+                            "VkRenderingAttachmentInfo * pStencilAttachment"]
+
+  VkRenderingInfoKHR = VkRenderingInfo
+
+  VkResolveImageInfo2 = struct ["VkStructureType  sType",
+                                "void * pNext",
+                                "VkImage  srcImage",
+                                "VkImageLayout  srcImageLayout",
+                                "VkImage  dstImage",
+                                "VkImageLayout  dstImageLayout",
+                                "uint32_t  regionCount",
+                                "VkImageResolve2 * pRegions"]
+
+  VkResolveImageInfo2KHR = VkResolveImageInfo2
+
+  VkSamplerBorderColorComponentMappingCreateInfoEXT = struct ["VkStructureType  sType",
+                                                              "void * pNext",
+                                                              { "components" => VkComponentMapping },
+                                                              "VkBool32  srgb"]
+
   VkSamplerCreateInfo = struct ["VkStructureType  sType",
                                 "void * pNext",
                                 "VkSamplerCreateFlags  flags",
@@ -2345,9 +4321,16 @@ module Vulkan
                                 "VkBorderColor  borderColor",
                                 "VkBool32  unnormalizedCoordinates"]
 
-  VkSamplerReductionModeCreateInfoEXT = struct ["VkStructureType  sType",
-                                                "void * pNext",
-                                                "VkSamplerReductionModeEXT  reductionMode"]
+  VkSamplerCustomBorderColorCreateInfoEXT = struct ["VkStructureType  sType",
+                                                    "void * pNext",
+                                                    { "customBorderColor" => VkClearColorValue },
+                                                    "VkFormat  format"]
+
+  VkSamplerReductionModeCreateInfo = struct ["VkStructureType  sType",
+                                             "void * pNext",
+                                             "VkSamplerReductionMode  reductionMode"]
+
+  VkSamplerReductionModeCreateInfoEXT = VkSamplerReductionModeCreateInfo
 
   VkSamplerYcbcrConversionCreateInfo = struct ["VkStructureType  sType",
                                                "void * pNext",
@@ -2374,6 +4357,12 @@ module Vulkan
 
   VkSamplerYcbcrConversionInfoKHR = VkSamplerYcbcrConversionInfo
 
+  VkScreenSurfaceCreateInfoQNX = struct ["VkStructureType  sType",
+                                         "void * pNext",
+                                         "VkScreenSurfaceCreateFlagsQNX  flags",
+                                         "_screen_context * context",
+                                         "_screen_window * window"]
+
   VkSemaphoreCreateInfo = struct ["VkStructureType  sType",
                                   "void * pNext",
                                   "VkSemaphoreCreateFlags  flags"]
@@ -2387,6 +4376,45 @@ module Vulkan
                                              "void * pNext",
                                              "VkSemaphore  semaphore",
                                              "VkExternalSemaphoreHandleTypeFlagBits  handleType"]
+
+  VkSemaphoreGetZirconHandleInfoFUCHSIA = struct ["VkStructureType  sType",
+                                                  "void * pNext",
+                                                  "VkSemaphore  semaphore",
+                                                  "VkExternalSemaphoreHandleTypeFlagBits  handleType"]
+
+  VkSemaphoreSignalInfo = struct ["VkStructureType  sType",
+                                  "void * pNext",
+                                  "VkSemaphore  semaphore",
+                                  "uint64_t  value"]
+
+  VkSemaphoreSignalInfoKHR = VkSemaphoreSignalInfo
+
+  VkSemaphoreSubmitInfo = struct ["VkStructureType  sType",
+                                  "void * pNext",
+                                  "VkSemaphore  semaphore",
+                                  "uint64_t  value",
+                                  "VkPipelineStageFlags2  stageMask",
+                                  "uint32_t  deviceIndex"]
+
+  VkSemaphoreSubmitInfoKHR = VkSemaphoreSubmitInfo
+
+  VkSemaphoreTypeCreateInfo = struct ["VkStructureType  sType",
+                                      "void * pNext",
+                                      "VkSemaphoreType  semaphoreType",
+                                      "uint64_t  initialValue"]
+
+  VkSemaphoreTypeCreateInfoKHR = VkSemaphoreTypeCreateInfo
+
+  VkSemaphoreWaitInfo = struct ["VkStructureType  sType",
+                                "void * pNext",
+                                "VkSemaphoreWaitFlags  flags",
+                                "uint32_t  semaphoreCount",
+                                "VkSemaphore * pSemaphores",
+                                "uint64_t * pValues"]
+
+  VkSemaphoreWaitInfoKHR = VkSemaphoreWaitInfo
+
+  VkSetStateFlagsIndirectCommandNV = struct ["uint32_t  data"]
 
   VkShaderModuleCreateInfo = struct ["VkStructureType  sType",
                                      "void * pNext",
@@ -2438,6 +4466,15 @@ module Vulkan
 
   VkSparseImageMemoryRequirements2KHR = VkSparseImageMemoryRequirements2
 
+  VkStreamDescriptorSurfaceCreateInfoGGP = struct ["VkStructureType  sType",
+                                                   "void * pNext",
+                                                   "VkStreamDescriptorSurfaceCreateFlagsGGP  flags",
+                                                   "GgpStreamDescriptor  streamDescriptor"]
+
+  VkStridedDeviceAddressRegionKHR = struct ["VkDeviceAddress  deviceAddress",
+                                            "VkDeviceSize  stride",
+                                            "VkDeviceSize  size"]
+
   VkSubmitInfo = struct ["VkStructureType  sType",
                          "void * pNext",
                          "uint32_t  waitSemaphoreCount",
@@ -2448,12 +4485,50 @@ module Vulkan
                          "uint32_t  signalSemaphoreCount",
                          "VkSemaphore * pSignalSemaphores"]
 
-  VkSubpassBeginInfoKHR = struct ["VkStructureType  sType",
-                                  "void * pNext",
-                                  "VkSubpassContents  contents"]
+  VkSubmitInfo2 = struct ["VkStructureType  sType",
+                          "void * pNext",
+                          "VkSubmitFlags  flags",
+                          "uint32_t  waitSemaphoreInfoCount",
+                          "VkSemaphoreSubmitInfo * pWaitSemaphoreInfos",
+                          "uint32_t  commandBufferInfoCount",
+                          "VkCommandBufferSubmitInfo * pCommandBufferInfos",
+                          "uint32_t  signalSemaphoreInfoCount",
+                          "VkSemaphoreSubmitInfo * pSignalSemaphoreInfos"]
 
-  VkSubpassEndInfoKHR = struct ["VkStructureType  sType",
-                                "void * pNext"]
+  VkSubmitInfo2KHR = VkSubmitInfo2
+
+  VkSubpassBeginInfo = struct ["VkStructureType  sType",
+                               "void * pNext",
+                               "VkSubpassContents  contents"]
+
+  VkSubpassBeginInfoKHR = VkSubpassBeginInfo
+
+  VkSubpassDependency2KHR = VkSubpassDependency2
+
+  VkSubpassDescription2KHR = VkSubpassDescription2
+
+  VkSubpassDescriptionDepthStencilResolve = struct ["VkStructureType  sType",
+                                                    "void * pNext",
+                                                    "VkResolveModeFlagBits  depthResolveMode",
+                                                    "VkResolveModeFlagBits  stencilResolveMode",
+                                                    "VkAttachmentReference2 * pDepthStencilResolveAttachment"]
+
+  VkSubpassDescriptionDepthStencilResolveKHR = VkSubpassDescriptionDepthStencilResolve
+
+  VkSubpassEndInfo = struct ["VkStructureType  sType",
+                             "void * pNext"]
+
+  VkSubpassEndInfoKHR = VkSubpassEndInfo
+
+  VkSubpassFragmentDensityMapOffsetEndInfoQCOM = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "uint32_t  fragmentDensityOffsetCount",
+                                                         "VkOffset2D * pFragmentDensityOffsets"]
+
+  VkSubpassShadingPipelineCreateInfoHUAWEI = struct ["VkStructureType  sType",
+                                                     "void * pNext",
+                                                     "VkRenderPass  renderPass",
+                                                     "uint32_t  subpass"]
 
   VkSurfaceCapabilities2EXT = struct ["VkStructureType  sType",
                                       "void * pNext",
@@ -2483,11 +4558,27 @@ module Vulkan
                                       "void * pNext",
                                       { "surfaceCapabilities" => VkSurfaceCapabilitiesKHR }]
 
+  VkSurfaceCapabilitiesFullScreenExclusiveEXT = struct ["VkStructureType  sType",
+                                                        "void * pNext",
+                                                        "VkBool32  fullScreenExclusiveSupported"]
+
   VkSurfaceFormatKHR = struct ["VkFormat  format",
                                "VkColorSpaceKHR  colorSpace"]
   VkSurfaceFormat2KHR = struct ["VkStructureType  sType",
                                 "void * pNext",
                                 { "surfaceFormat" => VkSurfaceFormatKHR }]
+
+  VkSurfaceFullScreenExclusiveInfoEXT = struct ["VkStructureType  sType",
+                                                "void * pNext",
+                                                "VkFullScreenExclusiveEXT  fullScreenExclusive"]
+
+  VkSurfaceFullScreenExclusiveWin32InfoEXT = struct ["VkStructureType  sType",
+                                                     "void * pNext",
+                                                     "HMONITOR  hmonitor"]
+
+  VkSurfaceProtectedCapabilitiesKHR = struct ["VkStructureType  sType",
+                                              "void * pNext",
+                                              "VkBool32  supportsProtected"]
 
   VkSwapchainCounterCreateInfoEXT = struct ["VkStructureType  sType",
                                             "void * pNext",
@@ -2512,9 +4603,32 @@ module Vulkan
                                      "VkBool32  clipped",
                                      "VkSwapchainKHR  oldSwapchain"]
 
+  VkSwapchainDisplayNativeHdrCreateInfoAMD = struct ["VkStructureType  sType",
+                                                     "void * pNext",
+                                                     "VkBool32  localDimmingEnable"]
+
+  VkSwapchainImageCreateInfoANDROID = struct ["VkStructureType  sType",
+                                              "void * pNext",
+                                              "VkSwapchainImageUsageFlagsANDROID  usage"]
+
   VkTextureLODGatherFormatPropertiesAMD = struct ["VkStructureType  sType",
                                                   "void * pNext",
                                                   "VkBool32  supportsTextureGatherLODBiasAMD"]
+
+  VkTimelineSemaphoreSubmitInfo = struct ["VkStructureType  sType",
+                                          "void * pNext",
+                                          "uint32_t  waitSemaphoreValueCount",
+                                          "uint64_t * pWaitSemaphoreValues",
+                                          "uint32_t  signalSemaphoreValueCount",
+                                          "uint64_t * pSignalSemaphoreValues"]
+
+  VkTimelineSemaphoreSubmitInfoKHR = VkTimelineSemaphoreSubmitInfo
+
+  VkTraceRaysIndirectCommandKHR = struct ["uint32_t  width",
+                                          "uint32_t  height",
+                                          "uint32_t  depth"]
+
+  VkTransformMatrixNV = VkTransformMatrixKHR
 
   VkValidationCacheCreateInfoEXT = struct ["VkStructureType  sType",
                                            "void * pNext",
@@ -2522,15 +4636,457 @@ module Vulkan
                                            "size_t  initialDataSize",
                                            "void * pInitialData"]
 
+  VkValidationFeaturesEXT = struct ["VkStructureType  sType",
+                                    "void * pNext",
+                                    "uint32_t  enabledValidationFeatureCount",
+                                    "VkValidationFeatureEnableEXT * pEnabledValidationFeatures",
+                                    "uint32_t  disabledValidationFeatureCount",
+                                    "VkValidationFeatureDisableEXT * pDisabledValidationFeatures"]
+
   VkValidationFlagsEXT = struct ["VkStructureType  sType",
                                  "void * pNext",
                                  "uint32_t  disabledValidationCheckCount",
                                  "VkValidationCheckEXT * pDisabledValidationChecks"]
 
+  VkVertexInputAttributeDescription2EXT = struct ["VkStructureType  sType",
+                                                  "void * pNext",
+                                                  "uint32_t  location",
+                                                  "uint32_t  binding",
+                                                  "VkFormat  format",
+                                                  "uint32_t  offset"]
+
+  VkVertexInputBindingDescription2EXT = struct ["VkStructureType  sType",
+                                                "void * pNext",
+                                                "uint32_t  binding",
+                                                "uint32_t  stride",
+                                                "VkVertexInputRate  inputRate",
+                                                "uint32_t  divisor"]
+
   VkViSurfaceCreateInfoNN = struct ["VkStructureType  sType",
                                     "void * pNext",
                                     "VkViSurfaceCreateFlagsNN  flags",
                                     "void * window"]
+
+  VkVideoPictureResourceKHR = struct ["VkStructureType  sType",
+                                      "void * pNext",
+                                      { "codedOffset" => VkOffset2D },
+                                      { "codedExtent" => VkExtent2D },
+                                      "uint32_t  baseArrayLayer",
+                                      "VkImageView  imageViewBinding"]
+  VkVideoReferenceSlotKHR = struct ["VkStructureType  sType",
+                                    "void * pNext",
+                                    "int8_t  slotIndex",
+                                    "VkVideoPictureResourceKHR * pPictureResource"]
+  VkVideoBeginCodingInfoKHR = struct ["VkStructureType  sType",
+                                      "void * pNext",
+                                      "VkVideoBeginCodingFlagsKHR  flags",
+                                      "VkVideoCodingQualityPresetFlagsKHR  codecQualityPreset",
+                                      "VkVideoSessionKHR  videoSession",
+                                      "VkVideoSessionParametersKHR  videoSessionParameters",
+                                      "uint32_t  referenceSlotCount",
+                                      "VkVideoReferenceSlotKHR * pReferenceSlots"]
+
+  VkVideoBindMemoryKHR = struct ["VkStructureType  sType",
+                                 "void * pNext",
+                                 "uint32_t  memoryBindIndex",
+                                 "VkDeviceMemory  memory",
+                                 "VkDeviceSize  memoryOffset",
+                                 "VkDeviceSize  memorySize"]
+
+  VkVideoCapabilitiesKHR = struct ["VkStructureType  sType",
+                                   "void * pNext",
+                                   "VkVideoCapabilityFlagsKHR  capabilityFlags",
+                                   "VkDeviceSize  minBitstreamBufferOffsetAlignment",
+                                   "VkDeviceSize  minBitstreamBufferSizeAlignment",
+                                   { "videoPictureExtentGranularity" => VkExtent2D },
+                                   { "minExtent" => VkExtent2D },
+                                   { "maxExtent" => VkExtent2D },
+                                   "uint32_t  maxReferencePicturesSlotsCount",
+                                   "uint32_t  maxReferencePicturesActiveCount"]
+
+  VkVideoCodingControlInfoKHR = struct ["VkStructureType  sType",
+                                        "void * pNext",
+                                        "VkVideoCodingControlFlagsKHR  flags"]
+
+  VkVideoDecodeCapabilitiesKHR = struct ["VkStructureType  sType",
+                                         "void * pNext",
+                                         "VkVideoDecodeCapabilityFlagsKHR  flags"]
+
+  VkVideoDecodeH264CapabilitiesEXT = struct ["VkStructureType  sType",
+                                             "void * pNext",
+                                             "uint32_t  maxLevel",
+                                             { "fieldOffsetGranularity" => VkOffset2D },
+                                             { "stdExtensionVersion" => VkExtensionProperties }]
+
+  VkVideoDecodeH264DpbSlotInfoEXT = struct ["VkStructureType  sType",
+                                            "void * pNext",
+                                            "StdVideoDecodeH264ReferenceInfo * pStdReferenceInfo"]
+
+  VkVideoDecodeH264MvcEXT = struct ["VkStructureType  sType",
+                                    "void * pNext",
+                                    "StdVideoDecodeH264Mvc * pStdMvc"]
+
+  VkVideoDecodeH264PictureInfoEXT = struct ["VkStructureType  sType",
+                                            "void * pNext",
+                                            "StdVideoDecodeH264PictureInfo * pStdPictureInfo",
+                                            "uint32_t  slicesCount",
+                                            "uint32_t * pSlicesDataOffsets"]
+
+  VkVideoDecodeH264ProfileEXT = struct ["VkStructureType  sType",
+                                        "void * pNext",
+                                        "StdVideoH264ProfileIdc  stdProfileIdc",
+                                        "VkVideoDecodeH264PictureLayoutFlagsEXT  pictureLayout"]
+
+  VkVideoDecodeH264SessionCreateInfoEXT = struct ["VkStructureType  sType",
+                                                  "void * pNext",
+                                                  "VkVideoDecodeH264CreateFlagsEXT  flags",
+                                                  "VkExtensionProperties * pStdExtensionVersion"]
+
+  VkVideoDecodeH264SessionParametersAddInfoEXT = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "uint32_t  spsStdCount",
+                                                         "StdVideoH264SequenceParameterSet * pSpsStd",
+                                                         "uint32_t  ppsStdCount",
+                                                         "StdVideoH264PictureParameterSet * pPpsStd"]
+
+  VkVideoDecodeH264SessionParametersCreateInfoEXT = struct ["VkStructureType  sType",
+                                                            "void * pNext",
+                                                            "uint32_t  maxSpsStdCount",
+                                                            "uint32_t  maxPpsStdCount",
+                                                            "VkVideoDecodeH264SessionParametersAddInfoEXT * pParametersAddInfo"]
+
+  VkVideoDecodeH265CapabilitiesEXT = struct ["VkStructureType  sType",
+                                             "void * pNext",
+                                             "uint32_t  maxLevel",
+                                             { "stdExtensionVersion" => VkExtensionProperties }]
+
+  VkVideoDecodeH265DpbSlotInfoEXT = struct ["VkStructureType  sType",
+                                            "void * pNext",
+                                            "StdVideoDecodeH265ReferenceInfo * pStdReferenceInfo"]
+
+  VkVideoDecodeH265PictureInfoEXT = struct ["VkStructureType  sType",
+                                            "void * pNext",
+                                            "StdVideoDecodeH265PictureInfo * pStdPictureInfo",
+                                            "uint32_t  slicesCount",
+                                            "uint32_t * pSlicesDataOffsets"]
+
+  VkVideoDecodeH265ProfileEXT = struct ["VkStructureType  sType",
+                                        "void * pNext",
+                                        "StdVideoH265ProfileIdc  stdProfileIdc"]
+
+  VkVideoDecodeH265SessionCreateInfoEXT = struct ["VkStructureType  sType",
+                                                  "void * pNext",
+                                                  "VkVideoDecodeH265CreateFlagsEXT  flags",
+                                                  "VkExtensionProperties * pStdExtensionVersion"]
+
+  VkVideoDecodeH265SessionParametersAddInfoEXT = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "uint32_t  spsStdCount",
+                                                         "StdVideoH265SequenceParameterSet * pSpsStd",
+                                                         "uint32_t  ppsStdCount",
+                                                         "StdVideoH265PictureParameterSet * pPpsStd"]
+
+  VkVideoDecodeH265SessionParametersCreateInfoEXT = struct ["VkStructureType  sType",
+                                                            "void * pNext",
+                                                            "uint32_t  maxSpsStdCount",
+                                                            "uint32_t  maxPpsStdCount",
+                                                            "VkVideoDecodeH265SessionParametersAddInfoEXT * pParametersAddInfo"]
+
+  VkVideoDecodeInfoKHR = struct ["VkStructureType  sType",
+                                 "void * pNext",
+                                 "VkVideoDecodeFlagsKHR  flags",
+                                 { "codedOffset" => VkOffset2D },
+                                 { "codedExtent" => VkExtent2D },
+                                 "VkBuffer  srcBuffer",
+                                 "VkDeviceSize  srcBufferOffset",
+                                 "VkDeviceSize  srcBufferRange",
+                                 { "dstPictureResource" => VkVideoPictureResourceKHR },
+                                 "VkVideoReferenceSlotKHR * pSetupReferenceSlot",
+                                 "uint32_t  referenceSlotCount",
+                                 "VkVideoReferenceSlotKHR * pReferenceSlots"]
+
+  VkVideoEncodeCapabilitiesKHR = struct ["VkStructureType  sType",
+                                         "void * pNext",
+                                         "VkVideoEncodeCapabilityFlagsKHR  flags",
+                                         "VkVideoEncodeRateControlModeFlagsKHR  rateControlModes",
+                                         "uint8_t  rateControlLayerCount",
+                                         "uint8_t  qualityLevelCount",
+                                         { "inputImageDataFillAlignment" => VkExtent2D }]
+
+  VkVideoEncodeH264CapabilitiesEXT = struct ["VkStructureType  sType",
+                                             "void * pNext",
+                                             "VkVideoEncodeH264CapabilityFlagsEXT  flags",
+                                             "VkVideoEncodeH264InputModeFlagsEXT  inputModeFlags",
+                                             "VkVideoEncodeH264OutputModeFlagsEXT  outputModeFlags",
+                                             "uint8_t  maxPPictureL0ReferenceCount",
+                                             "uint8_t  maxBPictureL0ReferenceCount",
+                                             "uint8_t  maxL1ReferenceCount",
+                                             "VkBool32  motionVectorsOverPicBoundariesFlag",
+                                             "uint32_t  maxBytesPerPicDenom",
+                                             "uint32_t  maxBitsPerMbDenom",
+                                             "uint32_t  log2MaxMvLengthHorizontal",
+                                             "uint32_t  log2MaxMvLengthVertical",
+                                             { "stdExtensionVersion" => VkExtensionProperties }]
+
+  VkVideoEncodeH264DpbSlotInfoEXT = struct ["VkStructureType  sType",
+                                            "void * pNext",
+                                            "int8_t  slotIndex",
+                                            "StdVideoEncodeH264ReferenceInfo * pStdReferenceInfo"]
+
+  VkVideoEncodeH264EmitPictureParametersEXT = struct ["VkStructureType  sType",
+                                                      "void * pNext",
+                                                      "uint8_t  spsId",
+                                                      "VkBool32  emitSpsEnable",
+                                                      "uint32_t  ppsIdEntryCount",
+                                                      "uint8_t * ppsIdEntries"]
+
+  VkVideoEncodeH264FrameSizeEXT = struct ["uint32_t  frameISize",
+                                          "uint32_t  framePSize",
+                                          "uint32_t  frameBSize"]
+
+  VkVideoEncodeH264ReferenceListsEXT = struct ["VkStructureType  sType",
+                                               "void * pNext",
+                                               "uint8_t  referenceList0EntryCount",
+                                               "VkVideoEncodeH264DpbSlotInfoEXT * pReferenceList0Entries",
+                                               "uint8_t  referenceList1EntryCount",
+                                               "VkVideoEncodeH264DpbSlotInfoEXT * pReferenceList1Entries",
+                                               "StdVideoEncodeH264RefMemMgmtCtrlOperations * pMemMgmtCtrlOperations"]
+  VkVideoEncodeH264NaluSliceEXT = struct ["VkStructureType  sType",
+                                          "void * pNext",
+                                          "uint32_t  mbCount",
+                                          "VkVideoEncodeH264ReferenceListsEXT * pReferenceFinalLists",
+                                          "StdVideoEncodeH264SliceHeader * pSliceHeaderStd"]
+
+  VkVideoEncodeH264ProfileEXT = struct ["VkStructureType  sType",
+                                        "void * pNext",
+                                        "StdVideoH264ProfileIdc  stdProfileIdc"]
+
+  VkVideoEncodeH264QpEXT = struct ["int32_t  qpI",
+                                   "int32_t  qpP",
+                                   "int32_t  qpB"]
+
+  VkVideoEncodeH264RateControlInfoEXT = struct ["VkStructureType  sType",
+                                                "void * pNext",
+                                                "uint32_t  gopFrameCount",
+                                                "uint32_t  idrPeriod",
+                                                "uint32_t  consecutiveBFrameCount",
+                                                "VkVideoEncodeH264RateControlStructureFlagBitsEXT  rateControlStructure",
+                                                "uint8_t  temporalLayerCount"]
+
+  VkVideoEncodeH264RateControlLayerInfoEXT = struct ["VkStructureType  sType",
+                                                     "void * pNext",
+                                                     "uint8_t  temporalLayerId",
+                                                     "VkBool32  useInitialRcQp",
+                                                     { "initialRcQp" => VkVideoEncodeH264QpEXT },
+                                                     "VkBool32  useMinQp",
+                                                     { "minQp" => VkVideoEncodeH264QpEXT },
+                                                     "VkBool32  useMaxQp",
+                                                     { "maxQp" => VkVideoEncodeH264QpEXT },
+                                                     "VkBool32  useMaxFrameSize",
+                                                     { "maxFrameSize" => VkVideoEncodeH264FrameSizeEXT }]
+
+  VkVideoEncodeH264SessionCreateInfoEXT = struct ["VkStructureType  sType",
+                                                  "void * pNext",
+                                                  "VkVideoEncodeH264CreateFlagsEXT  flags",
+                                                  { "maxPictureSizeInMbs" => VkExtent2D },
+                                                  "VkExtensionProperties * pStdExtensionVersion"]
+
+  VkVideoEncodeH264SessionParametersAddInfoEXT = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "uint32_t  spsStdCount",
+                                                         "StdVideoH264SequenceParameterSet * pSpsStd",
+                                                         "uint32_t  ppsStdCount",
+                                                         "StdVideoH264PictureParameterSet * pPpsStd"]
+
+  VkVideoEncodeH264SessionParametersCreateInfoEXT = struct ["VkStructureType  sType",
+                                                            "void * pNext",
+                                                            "uint32_t  maxSpsStdCount",
+                                                            "uint32_t  maxPpsStdCount",
+                                                            "VkVideoEncodeH264SessionParametersAddInfoEXT * pParametersAddInfo"]
+
+  VkVideoEncodeH264VclFrameInfoEXT = struct ["VkStructureType  sType",
+                                             "void * pNext",
+                                             "VkVideoEncodeH264ReferenceListsEXT * pReferenceFinalLists",
+                                             "uint32_t  naluSliceEntryCount",
+                                             "VkVideoEncodeH264NaluSliceEXT * pNaluSliceEntries",
+                                             "StdVideoEncodeH264PictureInfo * pCurrentPictureInfo"]
+
+  VkVideoEncodeH265CapabilitiesEXT = struct ["VkStructureType  sType",
+                                             "void * pNext",
+                                             "VkVideoEncodeH265CapabilityFlagsEXT  flags",
+                                             "VkVideoEncodeH265InputModeFlagsEXT  inputModeFlags",
+                                             "VkVideoEncodeH265OutputModeFlagsEXT  outputModeFlags",
+                                             "VkVideoEncodeH265CtbSizeFlagsEXT  ctbSizes",
+                                             "VkVideoEncodeH265TransformBlockSizeFlagsEXT  transformBlockSizes",
+                                             "uint8_t  maxPPictureL0ReferenceCount",
+                                             "uint8_t  maxBPictureL0ReferenceCount",
+                                             "uint8_t  maxL1ReferenceCount",
+                                             "uint8_t  maxSubLayersCount",
+                                             "uint8_t  minLog2MinLumaCodingBlockSizeMinus3",
+                                             "uint8_t  maxLog2MinLumaCodingBlockSizeMinus3",
+                                             "uint8_t  minLog2MinLumaTransformBlockSizeMinus2",
+                                             "uint8_t  maxLog2MinLumaTransformBlockSizeMinus2",
+                                             "uint8_t  minMaxTransformHierarchyDepthInter",
+                                             "uint8_t  maxMaxTransformHierarchyDepthInter",
+                                             "uint8_t  minMaxTransformHierarchyDepthIntra",
+                                             "uint8_t  maxMaxTransformHierarchyDepthIntra",
+                                             "uint8_t  maxDiffCuQpDeltaDepth",
+                                             "uint8_t  minMaxNumMergeCand",
+                                             "uint8_t  maxMaxNumMergeCand",
+                                             { "stdExtensionVersion" => VkExtensionProperties }]
+
+  VkVideoEncodeH265DpbSlotInfoEXT = struct ["VkStructureType  sType",
+                                            "void * pNext",
+                                            "int8_t  slotIndex",
+                                            "StdVideoEncodeH265ReferenceInfo * pStdReferenceInfo"]
+
+  VkVideoEncodeH265EmitPictureParametersEXT = struct ["VkStructureType  sType",
+                                                      "void * pNext",
+                                                      "uint8_t  vpsId",
+                                                      "uint8_t  spsId",
+                                                      "VkBool32  emitVpsEnable",
+                                                      "VkBool32  emitSpsEnable",
+                                                      "uint32_t  ppsIdEntryCount",
+                                                      "uint8_t * ppsIdEntries"]
+
+  VkVideoEncodeH265FrameSizeEXT = struct ["uint32_t  frameISize",
+                                          "uint32_t  framePSize",
+                                          "uint32_t  frameBSize"]
+
+  VkVideoEncodeH265ReferenceListsEXT = struct ["VkStructureType  sType",
+                                               "void * pNext",
+                                               "uint8_t  referenceList0EntryCount",
+                                               "VkVideoEncodeH265DpbSlotInfoEXT * pReferenceList0Entries",
+                                               "uint8_t  referenceList1EntryCount",
+                                               "VkVideoEncodeH265DpbSlotInfoEXT * pReferenceList1Entries",
+                                               "StdVideoEncodeH265ReferenceModifications * pReferenceModifications"]
+  VkVideoEncodeH265NaluSliceSegmentEXT = struct ["VkStructureType  sType",
+                                                 "void * pNext",
+                                                 "uint32_t  ctbCount",
+                                                 "VkVideoEncodeH265ReferenceListsEXT * pReferenceFinalLists",
+                                                 "StdVideoEncodeH265SliceSegmentHeader * pSliceSegmentHeaderStd"]
+
+  VkVideoEncodeH265ProfileEXT = struct ["VkStructureType  sType",
+                                        "void * pNext",
+                                        "StdVideoH265ProfileIdc  stdProfileIdc"]
+
+  VkVideoEncodeH265QpEXT = struct ["int32_t  qpI",
+                                   "int32_t  qpP",
+                                   "int32_t  qpB"]
+
+  VkVideoEncodeH265RateControlInfoEXT = struct ["VkStructureType  sType",
+                                                "void * pNext",
+                                                "uint32_t  gopFrameCount",
+                                                "uint32_t  idrPeriod",
+                                                "uint32_t  consecutiveBFrameCount",
+                                                "VkVideoEncodeH265RateControlStructureFlagBitsEXT  rateControlStructure",
+                                                "uint8_t  subLayerCount"]
+
+  VkVideoEncodeH265RateControlLayerInfoEXT = struct ["VkStructureType  sType",
+                                                     "void * pNext",
+                                                     "uint8_t  temporalId",
+                                                     "VkBool32  useInitialRcQp",
+                                                     { "initialRcQp" => VkVideoEncodeH265QpEXT },
+                                                     "VkBool32  useMinQp",
+                                                     { "minQp" => VkVideoEncodeH265QpEXT },
+                                                     "VkBool32  useMaxQp",
+                                                     { "maxQp" => VkVideoEncodeH265QpEXT },
+                                                     "VkBool32  useMaxFrameSize",
+                                                     { "maxFrameSize" => VkVideoEncodeH265FrameSizeEXT }]
+
+  VkVideoEncodeH265SessionCreateInfoEXT = struct ["VkStructureType  sType",
+                                                  "void * pNext",
+                                                  "VkVideoEncodeH265CreateFlagsEXT  flags",
+                                                  "VkExtensionProperties * pStdExtensionVersion"]
+
+  VkVideoEncodeH265SessionParametersAddInfoEXT = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "uint32_t  vpsStdCount",
+                                                         "StdVideoH265VideoParameterSet * pVpsStd",
+                                                         "uint32_t  spsStdCount",
+                                                         "StdVideoH265SequenceParameterSet * pSpsStd",
+                                                         "uint32_t  ppsStdCount",
+                                                         "StdVideoH265PictureParameterSet * pPpsStd"]
+
+  VkVideoEncodeH265SessionParametersCreateInfoEXT = struct ["VkStructureType  sType",
+                                                            "void * pNext",
+                                                            "uint32_t  maxVpsStdCount",
+                                                            "uint32_t  maxSpsStdCount",
+                                                            "uint32_t  maxPpsStdCount",
+                                                            "VkVideoEncodeH265SessionParametersAddInfoEXT * pParametersAddInfo"]
+
+  VkVideoEncodeH265VclFrameInfoEXT = struct ["VkStructureType  sType",
+                                             "void * pNext",
+                                             "VkVideoEncodeH265ReferenceListsEXT * pReferenceFinalLists",
+                                             "uint32_t  naluSliceSegmentEntryCount",
+                                             "VkVideoEncodeH265NaluSliceSegmentEXT * pNaluSliceSegmentEntries",
+                                             "StdVideoEncodeH265PictureInfo * pCurrentPictureInfo"]
+
+  VkVideoEncodeInfoKHR = struct ["VkStructureType  sType",
+                                 "void * pNext",
+                                 "VkVideoEncodeFlagsKHR  flags",
+                                 "uint32_t  qualityLevel",
+                                 { "codedExtent" => VkExtent2D },
+                                 "VkBuffer  dstBitstreamBuffer",
+                                 "VkDeviceSize  dstBitstreamBufferOffset",
+                                 "VkDeviceSize  dstBitstreamBufferMaxRange",
+                                 { "srcPictureResource" => VkVideoPictureResourceKHR },
+                                 "VkVideoReferenceSlotKHR * pSetupReferenceSlot",
+                                 "uint32_t  referenceSlotCount",
+                                 "VkVideoReferenceSlotKHR * pReferenceSlots",
+                                 "uint32_t  precedingExternallyEncodedBytes"]
+
+  VkVideoEncodeRateControlLayerInfoKHR = struct ["VkStructureType  sType",
+                                                 "void * pNext",
+                                                 "uint32_t  averageBitrate",
+                                                 "uint32_t  maxBitrate",
+                                                 "uint32_t  frameRateNumerator",
+                                                 "uint32_t  frameRateDenominator",
+                                                 "uint32_t  virtualBufferSizeInMs",
+                                                 "uint32_t  initialVirtualBufferSizeInMs"]
+  VkVideoEncodeRateControlInfoKHR = struct ["VkStructureType  sType",
+                                            "void * pNext",
+                                            "VkVideoEncodeRateControlFlagsKHR  flags",
+                                            "VkVideoEncodeRateControlModeFlagBitsKHR  rateControlMode",
+                                            "uint8_t  layerCount",
+                                            "VkVideoEncodeRateControlLayerInfoKHR * pLayerConfigs"]
+
+  VkVideoEndCodingInfoKHR = struct ["VkStructureType  sType",
+                                    "void * pNext",
+                                    "VkVideoEndCodingFlagsKHR  flags"]
+
+  VkVideoFormatPropertiesKHR = struct ["VkStructureType  sType",
+                                       "void * pNext",
+                                       "VkFormat  format"]
+
+  VkVideoGetMemoryPropertiesKHR = struct ["VkStructureType  sType",
+                                          "void * pNext",
+                                          "uint32_t  memoryBindIndex",
+                                          "VkMemoryRequirements2 * pMemoryRequirements"]
+
+  VkVideoQueueFamilyProperties2KHR = struct ["VkStructureType  sType",
+                                             "void * pNext",
+                                             "VkVideoCodecOperationFlagsKHR  videoCodecOperations"]
+
+  VkVideoSessionCreateInfoKHR = struct ["VkStructureType  sType",
+                                        "void * pNext",
+                                        "uint32_t  queueFamilyIndex",
+                                        "VkVideoSessionCreateFlagsKHR  flags",
+                                        "VkVideoProfileKHR * pVideoProfile",
+                                        "VkFormat  pictureFormat",
+                                        { "maxCodedExtent" => VkExtent2D },
+                                        "VkFormat  referencePicturesFormat",
+                                        "uint32_t  maxReferencePicturesSlotsCount",
+                                        "uint32_t  maxReferencePicturesActiveCount"]
+
+  VkVideoSessionParametersCreateInfoKHR = struct ["VkStructureType  sType",
+                                                  "void * pNext",
+                                                  "VkVideoSessionParametersKHR  videoSessionParametersTemplate",
+                                                  "VkVideoSessionKHR  videoSession"]
+
+  VkVideoSessionParametersUpdateInfoKHR = struct ["VkStructureType  sType",
+                                                  "void * pNext",
+                                                  "uint32_t  updateSequenceCount"]
 
   VkWaylandSurfaceCreateInfoKHR = struct ["VkStructureType  sType",
                                           "void * pNext",
@@ -2575,15 +5131,22 @@ module Vulkan
                                  "VkDescriptorBufferInfo * pBufferInfo",
                                  "VkBufferView * pTexelBufferView"]
 
+  VkWriteDescriptorSetAccelerationStructureKHR = struct ["VkStructureType  sType",
+                                                         "void * pNext",
+                                                         "uint32_t  accelerationStructureCount",
+                                                         "VkAccelerationStructureKHR * pAccelerationStructures"]
+
   VkWriteDescriptorSetAccelerationStructureNV = struct ["VkStructureType  sType",
                                                         "void * pNext",
                                                         "uint32_t  accelerationStructureCount",
                                                         "VkAccelerationStructureNV * pAccelerationStructures"]
 
-  VkWriteDescriptorSetInlineUniformBlockEXT = struct ["VkStructureType  sType",
-                                                      "void * pNext",
-                                                      "uint32_t  dataSize",
-                                                      "void * pData"]
+  VkWriteDescriptorSetInlineUniformBlock = struct ["VkStructureType  sType",
+                                                   "void * pNext",
+                                                   "uint32_t  dataSize",
+                                                   "void * pData"]
+
+  VkWriteDescriptorSetInlineUniformBlockEXT = VkWriteDescriptorSetInlineUniformBlock
 
   VkXcbSurfaceCreateInfoKHR = struct ["VkStructureType  sType",
                                       "void * pNext",

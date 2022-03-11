@@ -54,8 +54,19 @@ module Vulkan
                else next
                end
       key = $1.downcase
-      raise 'BUG: two identical constant names? %s => %s' % [name, key] if output.include?(key)
-      output[key.to_sym] = output[key] = Vulkan.const_get(name)
+      value = Vulkan.const_get(name)
+      if output.include?(key)
+        # constants can alias one another, such as
+        # VK_PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_NV which is an alias of
+        # VK_PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR. We do want to report
+        # on duplicate constants, but if their values are the same, it doesn't
+        # actually matter.
+        if output[key] != value
+          raise "BUG: two identical constant names? "+
+                "#{name}:#{value.inspect} conflicts with #{key}:#{output[key].inspect}"
+        end
+      end
+      output[key.to_sym] = output[key] = value
     end
 
     def sym_to_present_mode(sym)

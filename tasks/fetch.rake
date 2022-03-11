@@ -4,6 +4,7 @@ task :fetch do
   require 'openssl'
   require 'vulkan/version'
   open(vk_xml_path, 'wb') do |file|
-    file << open("https://raw.githubusercontent.com/KhronosGroup/Vulkan-Headers/master/registry/vk.xml", :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE).read
+    file << URI.open("https://raw.githubusercontent.com/KhronosGroup/Vulkan-Docs/main/xml/vk.xml",
+                     :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE).read
   end
 end

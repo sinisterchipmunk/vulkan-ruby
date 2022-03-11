@@ -34,12 +34,12 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler",       "~> 2.1"
   spec.add_development_dependency "rake",          "~> 13.0"
   spec.add_development_dependency "minitest",      "~> 5.15"
+  spec.add_development_dependency 'simplecov',     '~> 0.16'
   spec.add_development_dependency "nokogiri",      '~> 1.8' # used to process vk.xml
   spec.add_development_dependency 'sdl2_vulkan',   '~> 0.1' # used by the examples
-  spec.add_development_dependency 'cglm',          '~> 0.1'
-  spec.add_development_dependency 'simplecov',     '~> 0.16'
-  spec.add_development_dependency 'chunky_png',    '~> 1.3'
-  spec.add_development_dependency 'oily_png',      '~> 1.2'
-  spec.add_development_dependency 'tiny_obj',      '~> 0.2'
+  spec.add_development_dependency 'cglm',          '~> 0.1' # used by the examples
+  spec.add_development_dependency 'chunky_png',    '~> 1.3' # used by the examples
+  spec.add_development_dependency 'oily_png',      '~> 1.2' # used by the examples
+  spec.add_development_dependency 'tiny_obj',      '~> 0.2' # used by the examples
   spec.add_dependency 'sorted_set'
 end

@@ -1,3 +1,10 @@
+require 'vulkan/generated/version'
+
 module Vulkan
-  VERSION = "0.1.0"
+  VULKAN_RUBY_VERSION = [ 1 ]
+
+  VERSION = [ VK_API_VERSION_MAJOR,
+              VK_API_VERSION_MINOR,
+              VK_API_VERSION_PATCH,
+              *VULKAN_RUBY_VERSION ].join('.')
 end
