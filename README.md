@@ -8,7 +8,7 @@ Higher level abstractions must be evaluated on a case by case basis and are not 
 
 ## Screenshots
 
-![VT10 - Multisampling](https://github.com/sinisterchipmunk/vulkan-ruby/blob/master/examples/screenshots/vt10.png)
+![VT10 - Multisampling - Viking Room](https://github.com/sinisterchipmunk/vulkan-ruby/blob/master/examples/screenshots/vt10-viking_room.png)
 
 
 ## Installation

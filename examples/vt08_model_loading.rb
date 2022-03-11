@@ -17,7 +17,7 @@ $model_matrix       = Mat4.new(addr: $ubo.to_ptr + UniformBufferStruct.offsetof(
 $view_matrix        = Mat4.new(addr: $ubo.to_ptr + UniformBufferStruct.offsetof('view'))
 $projection_matrix  = Mat4.new(addr: $ubo.to_ptr + UniformBufferStruct.offsetof('proj'))
 
-obj = TinyOBJ.load(File.expand_path('models/chalet.obj', __dir__))
+obj = TinyOBJ.load(File.expand_path('models/viking_room.obj', __dir__))
 NUM_INDICES = obj.num_indices
 Vertex = Vulkan.struct(['float pos[3]', 'float color[3]', 'float texcoords[2]'])
 IndexData = Fiddle::Pointer.malloc(Fiddle::SIZEOF_INT * NUM_INDICES)
@@ -101,7 +101,7 @@ graphics_queue.submit([vertex_transfer_buffer, index_transfer_buffer])
 
 UniformBuffers = []
 
-png = ChunkyPNG::Image.from_file(File.expand_path('textures/chalet.png', __dir__))
+png = ChunkyPNG::Image.from_file(File.expand_path('textures/viking_room.png', __dir__))
 image_data = png.to_rgba_stream
 image_data_buffer = device.create_buffer size: image_data.size,
                                          usage: Vulkan::VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
