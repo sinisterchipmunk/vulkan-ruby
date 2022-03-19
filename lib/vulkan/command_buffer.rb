@@ -67,8 +67,10 @@ module Vulkan
     end
 
     def copy_buffer(src, dst, regions: [{size: src.size}])
-      copy_regions_p = Vulkan.struct("regions[#{regions.size}]" => VkBufferCopy).malloc
-      @refs << copy_regions_p
+      @copy_buffer_copy_regions_p ||= {}
+      copy_regions_p = @copy_buffer_copy_regions_p[regions.size] ||=
+                       Vulkan.struct("regions[#{regions.size}]" => VkBufferCopy).malloc
+      # @refs << copy_regions_p
       regions.each_with_index do |region, i|
         copy_regions_p.regions[i].srcOffset = region[:src_offset] if region[:src_offset]
         copy_regions_p.regions[i].dstOffset = region[:dst_offset] if region[:dst_offset]
@@ -324,7 +326,9 @@ module Vulkan
       offsets ||= vertex_buffers.map { 0 }
       @refs.concat vertex_buffers
       buffers_p = array_of_pointers(vertex_buffers)
-      offsets_p = Vulkan.struct("VkDeviceSize offsets[#{offsets.size}]").malloc
+      @bind_vertex_buffers_offsets_p ||= {}
+      offsets_p = @bind_vertex_buffers_offsets_p[offsets.size] ||=
+                  Vulkan.struct("VkDeviceSize offsets[#{offsets.size}]").malloc
       offsets.each_with_index { |o, i| offsets_p.offsets[i] = o }
       @vk.vkCmdBindVertexBuffers(to_ptr, first_binding, binding_count, buffers_p, offsets_p)
     end
