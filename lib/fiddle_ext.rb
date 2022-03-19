@@ -8,7 +8,7 @@ module Fiddle
     # whichever is smaller.
     def copy_from(other)
       size = self.size > other.size ? other.size : self.size
-      self[0, size] = other[0, size]
+      self[0, size] = other
       self
     end
   end
