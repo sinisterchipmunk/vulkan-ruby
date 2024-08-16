@@ -50,4 +50,4 @@ DEPENDENCIES
   vulkan-ruby!
 
 BUNDLED WITH
-   2.2.0.rc.1
+   2.5.17
