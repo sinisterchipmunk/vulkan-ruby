@@ -38,8 +38,8 @@ module Vulkan
       @scissor = {
         left: 0,
         top: 0,
-        width: 0xffffffff,
-        height: 0xffffffff
+        width: 0x7fffffff,
+        height: 0x7fffffff
       }.merge(scissor)
       @rasterizer = {
         depth_clamp: false,
@@ -189,8 +189,8 @@ module Vulkan
       scissor = VkRect2D.malloc
       scissor.offset.x      = @scissor[:left]
       scissor.offset.y      = @scissor[:top]
-      scissor.extent.width  = @scissor[:width]
-      scissor.extent.height = @scissor[:height]
+      scissor.extent.width  = @scissor[:width]  == 0x7fffffff ? 0x7fffffff - @scissor[:left] : @scissor[:width]
+      scissor.extent.height = @scissor[:height] == 0x7fffffff ? 0x7fffffff - @scissor[:top] : @scissor[:height]
 
       viewport_state = VkPipelineViewportStateCreateInfo.malloc
       viewport_state.sType         = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO
