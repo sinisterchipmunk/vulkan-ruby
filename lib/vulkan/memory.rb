@@ -107,7 +107,9 @@ module Vulkan
     #
     # See https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkInvalidateMappedMemoryRanges.html
     def invalidate_all(ranges)
-      @vk.vkInvalidateMappedMemoryRanges(@vk.device, ranges.size, memory_ranges(ranges))
+      if mapped?
+        @vk.vkInvalidateMappedMemoryRanges(@vk.device, ranges.size, memory_ranges(ranges))
+      end
     end
 
     # Provides a pointer to an array of memory ranges for e.g. flushing memory
