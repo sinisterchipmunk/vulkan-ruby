@@ -3,7 +3,7 @@ require "test_helper"
 class PipelinesTest < Minitest::Test
   def setup
     @instance = Vulkan::Instance.new extensions: []
-    @device = @instance.physical_devices.first.create queues: [], extensions: []
+    @device = @instance.physical_devices.first.create queues: [], extensions: ['VK_KHR_push_descriptor']
   end
 
   def test_descriptors_and_layouts

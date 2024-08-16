@@ -30,9 +30,10 @@ class BarriersTest < Minitest::Test
     assert_equal 32, barrier.size
 
     # make sure it can be used
-    command_pool = @device.create_command_pool queue_family: :ignored
+    command_pool = @device.create_command_pool queue_family: 0
     command_buffer = command_pool.create_command_buffer
     command_buffer.record do |buf|
+
       buf.pipeline_barriers buffer_barriers: [barrier],
                             src_stages: :transfer,
                             dst_stages: :vertex_input
