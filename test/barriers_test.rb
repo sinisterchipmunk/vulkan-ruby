@@ -19,8 +19,15 @@ class BarriersTest < Minitest::Test
                                                                                      buffer: @buffer)
 
     barrier = @buffer.create_barrier src_access: :transfer_write,
-                                     dst_access: :vertex_attribute_read
+                                     dst_access: :vertex_attribute_read,
+                                     offset: 2,
+                                     size: 32
     assert_kind_of Vulkan::BufferMemoryBarrier, barrier
+    assert_equal :transfer_write, barrier.src_access
+    assert_equal :vertex_attribute_read, barrier.dst_access
+    assert_equal @buffer, barrier.buffer
+    assert_equal 2, barrier.offset
+    assert_equal 32, barrier.size
 
     # make sure it can be used
     command_pool = @device.create_command_pool queue_family: :ignored
@@ -33,7 +40,10 @@ class BarriersTest < Minitest::Test
   end
 
   def test_memory_barrier
-    assert_kind_of Vulkan::MemoryBarrier, @device.create_memory_barrier(src_access: :transfer_write,
-                                                                        dst_access: :vertex_attribute_read)
+    barrier = @device.create_memory_barrier src_access: :transfer_write,
+                                            dst_access: :vertex_attribute_read
+    assert_kind_of Vulkan::MemoryBarrier, barrier
+    assert_equal :transfer_write, barrier.src_access
+    assert_equal :vertex_attribute_read, barrier.dst_access
   end
 end

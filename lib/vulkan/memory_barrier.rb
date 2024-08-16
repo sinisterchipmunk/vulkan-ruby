@@ -6,11 +6,14 @@ module Vulkan
                    dst_access:)
       @struct = VkMemoryBarrier.malloc
       @struct.sType = VK_STRUCTURE_TYPE_MEMORY_BARRIER
-      @struct.srcAccessMask = syms_to_access_mask(src_access)
-      @struct.dstAccessMask = syms_to_access_mask(dst_access)
-      # @struct.srcStagesMask = syms_to_pipeline_stage_flags(src_stages)
-      # @struct.dstStagesMask = syms_to_pipeline_stage_flags(dst_stages)
+      self.src_access = src_access
+      self.dst_access = dst_access
     end
+
+    def src_access; @src_access; end
+    def src_access=(s); @src_access = s; @struct.srcAccessMask = syms_to_access_mask(s); end
+    def dst_access; @dst_access; end
+    def dst_access=(s); @dst_access = s; @struct.dstAccessMask = syms_to_access_mask(s); end
 
     def to_ptr
       @struct.to_ptr
