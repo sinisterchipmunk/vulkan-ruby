@@ -15,6 +15,7 @@ module Vulkan
       @physical_device = physical_device
 
       extensions.concat ENV['DEVICE_EXTENSIONS'].split(/\:\s/) if ENV['DEVICE_EXTENSIONS']
+      extensions << 'VK_KHR_portability_subset' if physical_device.extension_names.include?('VK_KHR_portability_subset')
 
       if queues.size == 0
         # take the first available queue, to satisfy the spec (must request a queue)
