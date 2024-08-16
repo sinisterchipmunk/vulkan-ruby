@@ -7,14 +7,11 @@ module Vulkan
     attr_reader :requirements
     attr_reader :physical_device
 
-    def initialize(vk, physical_device,
-                       owner:,
-                       properties: [:host_visible])
+    def initialize(vk, physical_device, properties: [:host_visible])
       @range_array = nil
       @vk = vk
       @physical_device = physical_device
       @properties = syms_to_memory_properties(properties)
-      @owner = owner
       @mapped = Vulkan.create_value('void *', nil)
 
       @requirements = query_memory_requirements

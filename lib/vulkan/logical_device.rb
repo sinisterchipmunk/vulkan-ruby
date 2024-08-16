@@ -154,6 +154,18 @@ module Vulkan
       Vulkan::Framebuffer.new(@vk, **args)
     end
 
+    def create_buffer_memory_barrier(**args)
+      Vulkan::BufferMemoryBarrier.new(**args)
+    end
+
+    def create_memory(**args)
+      Vulkan::Memory.new(@vk, physical_device, **args)
+    end
+
+    def create_memory_barrier(**args)
+      Vulkan::MemoryBarrier.new(**args)
+    end
+
     def hexaddr
       to_ptr.to_i.to_s(16)
     end

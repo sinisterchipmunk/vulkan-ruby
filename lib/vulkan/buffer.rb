@@ -31,6 +31,10 @@ module Vulkan
       finalize_with @vk, :vkDestroyBuffer, vk.device, @handle, nil
     end
 
+    def create_barrier(**args)
+      @memory.create_barrier(**args)
+    end
+
     def map(*args, &block)
       memory.map(*args, &block)
     end
