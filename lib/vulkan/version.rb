@@ -1,7 +1,7 @@
 require 'vulkan/generated/version'
 
 module Vulkan
-  VULKAN_RUBY_VERSION = [ 2 ]
+  VULKAN_RUBY_VERSION = [ 3 ]
 
   VERSION = [ VK_API_VERSION_MAJOR,
               VK_API_VERSION_MINOR,
