@@ -115,6 +115,18 @@ module Vulkan
       finalize_with @vk, :vkDestroyInstance, @handle, nil
     end
 
+    def finalized=(b)
+      @finalized = b
+    end
+
+    def finalized?
+      !!@finalized
+    end
+
+    def to_i
+      to_ptr.to_i
+    end
+
     def on_log(&cb)
       @log_callback = cb
     end

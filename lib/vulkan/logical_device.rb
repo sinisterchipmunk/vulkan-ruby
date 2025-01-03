@@ -91,6 +91,18 @@ module Vulkan
       end
     end
 
+    def finalized=(b)
+      @finalized = b
+    end
+
+    def finalized?
+      !!@finalized
+    end
+
+    def to_i
+      to_ptr.to_i
+    end
+
     def max_samples
       physical_device.max_samples
     end
